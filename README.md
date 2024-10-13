@@ -24,10 +24,12 @@ The app uses these technologies;
     - Datastore - for data persistence in the app.
     - Room - for storing schedules.
     - worker - for managing app data.
+    - navigation component
 - Coroutines - Used to make asynchronous calls.
 - Splash screen Api - For creating a splash screen on app starting.
 - [RichEditorCompose](https://mohamedrejeb.github.io/compose-rich-editor/) - Library to display different text formats.
-- Reftrofit - For networking
+- Reftrofit - For networking.
+- Koin - A lighweight dependency injection framework.
 - GeminiAI
 - Coil - For loading Images
 - Firebase - For authentication, storage
