@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.Plitso" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/background</item>
+    </style>
+
+    <style name="Theme.Plitso.NoActionBar">
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.Plitso.AppBarOverlay" parent="Theme.Plitso.NoActionBar" />
+
+    <style name="Theme.Plitso.PopupOverlay" parent="Theme.Plitso.NoActionBar" />
+</resources>

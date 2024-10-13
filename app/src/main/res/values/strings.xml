@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Plitso</string>
+    <string name="web_client_id">467783773422-55d2gmdn5q0pfof95lqld6aaqhksu295.apps.googleusercontent.com</string>
+    <string name="notification_permission_request">Notification Permission Request</string>
+    <string name="permission_is_required_to_show_app_notifications">Permission is required to show app notifications</string>
+</resources>
