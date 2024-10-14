@@ -25,5 +25,5 @@ val aiModule = module {
 
     single<AiAnswerDao> { get<PlitsoDatabase>().aiAnswerDao }
     single { AiData(get(), get()) }
-    viewModel { AiViewModel(get(), get(), get(), get()) }
+    viewModel { AiViewModel(get(), get(), get()) }
 }

@@ -10,6 +10,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.loki.plitso.PlitsoViewModel
 import com.loki.plitso.presentation.account.AccountScreen
 import com.loki.plitso.presentation.account.AccountViewModel
 import com.loki.plitso.presentation.ai.AIScreen
@@ -38,7 +39,8 @@ import org.koin.core.parameter.parametersOf
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun Navigation(
-    appState: AppState
+    appState: AppState,
+    plitsoViewModel: PlitsoViewModel
 ) {
 
     val documentViewModel = koinViewModel<DocumentViewModel>()
@@ -149,6 +151,7 @@ fun Navigation(
                 val aiViewModel = koinViewModel<AiViewModel>()
                 AIScreen(
                     aiViewModel = aiViewModel,
+                    plitsoViewModel = plitsoViewModel,
                     navigateToLogin = {
                         appState.navigate(Screen.LoginScreen)
                     },
@@ -172,6 +175,7 @@ fun Navigation(
                 val accountViewModel = koinViewModel<AccountViewModel>()
                 val accountState by accountViewModel.state.collectAsStateWithLifecycle()
                 AccountScreen(
+                    plitsoViewModel = plitsoViewModel,
                     accountState = accountState,
                     onThemeChange = accountViewModel::onChangeTheme,
                     onLogOut = accountViewModel::logOut,

@@ -21,7 +21,6 @@ class AccountViewModel(
 
     init {
         getTheme()
-        getUserDetails()
     }
 
     private fun getTheme() {
@@ -29,19 +28,6 @@ class AccountViewModel(
             datastoreStorage.getAppTheme().collect { theme ->
                 _state.value = _state.value.copy(
                     theme = theme
-                )
-            }
-        }
-    }
-
-    private fun getUserDetails() {
-        viewModelScope.launch {
-            datastoreStorage.getLocalUser().collect { user ->
-                _state.value = _state.value.copy(
-                    email = user.email,
-                    username = user.username,
-                    imageUrl = user.imageUrl,
-                    isLoggedIn = user.isLoggedIn
                 )
             }
         }

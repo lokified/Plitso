@@ -38,6 +38,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -59,8 +60,8 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        installSplashScreen()
         enableEdgeToEdge()
-        actionBar?.hide()
         setContent {
             val theme by plitsoViewModel.theme.collectAsStateWithLifecycle()
             PlitsoTheme(
@@ -104,14 +105,16 @@ class MainActivity : ComponentActivity() {
                     )
                 }
 
-                MainApp()
+                MainApp(plitsoViewModel = plitsoViewModel)
             }
         }
     }
 }
 
 @Composable
-fun MainApp() {
+fun MainApp(
+    plitsoViewModel: PlitsoViewModel
+) {
     val appState = rememberAppState()
 
     Scaffold(
@@ -159,7 +162,10 @@ fun MainApp() {
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.background)
         ) {
-            Navigation(appState = appState)
+            Navigation(
+                appState = appState,
+                plitsoViewModel = plitsoViewModel
+            )
         }
     }
 }

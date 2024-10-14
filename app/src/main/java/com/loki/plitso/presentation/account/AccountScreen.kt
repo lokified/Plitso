@@ -35,6 +35,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.loki.plitso.PlitsoViewModel
 import com.loki.plitso.data.local.datastore.Theme
 import com.loki.plitso.util.noIndication
 import com.loki.plitso.util.showToast
@@ -42,6 +44,7 @@ import java.util.Locale
 
 @Composable
 fun AccountScreen(
+    plitsoViewModel: PlitsoViewModel,
     accountState: AccountState,
     onThemeChange: (theme: String) -> Unit,
     onLogOut: () -> Unit,
@@ -50,6 +53,7 @@ fun AccountScreen(
 
     var isThemeDialogVisible by remember { mutableStateOf(false) }
     val context = LocalContext.current
+    val user by plitsoViewModel.user.collectAsStateWithLifecycle()
 
     LaunchedEffect(accountState.message) {
         if (accountState.message.isNotBlank()) {
@@ -90,7 +94,7 @@ fun AccountScreen(
                 .verticalScroll(rememberScrollState())
         ) {
 
-            if (!accountState.isLoggedIn) {
+            if (!user.isLoggedIn) {
                 LoginContainer(
                     modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp),
                     onLoginClick = navigateToSignIn
@@ -102,10 +106,10 @@ fun AccountScreen(
                     itemList = listOf(
                         SettingItem(
                             icon = Icons.Default.AccountCircle,
-                            content = accountState.username,
-                            imageUrl = accountState.imageUrl,
+                            content = user.username,
+                            imageUrl = user.imageUrl,
                             subContent = {
-                                TextSubContent(content = accountState.email)
+                                TextSubContent(content = user.email)
                             }
                         )
                     )
@@ -129,7 +133,7 @@ fun AccountScreen(
                 }
             )
 
-            if (accountState.isLoggedIn) {
+            if (user.isLoggedIn) {
                 SettingItem(
                     modifier = Modifier.padding(top = 12.dp),
                     itemList = listOf(

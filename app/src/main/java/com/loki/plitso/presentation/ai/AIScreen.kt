@@ -36,6 +36,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.loki.plitso.PlitsoViewModel
 import com.loki.plitso.presentation.ai.components.ChatContent
 import com.loki.plitso.presentation.ai.components.FirstOpenContent
 import com.loki.plitso.presentation.ai.components.GenerativeContent
@@ -51,10 +52,11 @@ enum class AiScreenContent {
 @Composable
 fun AIScreen(
     aiViewModel: AiViewModel,
+    plitsoViewModel: PlitsoViewModel,
     navigateToLogin: () -> Unit,
     navigateBack: () -> Unit
 ) {
-    val user by aiViewModel.user.collectAsStateWithLifecycle()
+    val user by plitsoViewModel.user.collectAsStateWithLifecycle()
     val aiState by aiViewModel.state.collectAsStateWithLifecycle()
 
     var aiScreenContent by rememberSaveable {

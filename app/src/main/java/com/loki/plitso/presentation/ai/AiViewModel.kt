@@ -17,7 +17,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class AiViewModel(
-    private val datastoreStorage: DatastoreStorage,
     private val aiAnswerDao: AiAnswerDao,
     private val generativeModel: GenerativeModel,
     val aiData: AiData
@@ -25,13 +24,6 @@ class AiViewModel(
 
     private val _state = MutableStateFlow(AiState())
     val state = _state.asStateFlow()
-
-    val user = datastoreStorage.getLocalUser()
-        .stateIn(
-            viewModelScope,
-            SharingStarted.WhileSubscribed(5000L),
-            LocalUser()
-        )
 
     private val _parameters = MutableStateFlow(GenerativeParameters())
     val parameters = _parameters.asStateFlow()
