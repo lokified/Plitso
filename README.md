@@ -1,4 +1,4 @@
-# Opt
+# Plitso
 This is an offline first recipe android app. Lists different recipes from the [MealDB API](https://www.themealdb.com/api.php). One can document their
 daily meals in the app and use AI to generate meal suggestions.
 
@@ -45,7 +45,7 @@ Setup your own firebase and provide `google-services.json`.
 - Add these variables to your **local.properties** file.
 ```
 geminiApiKey=  ## This your retrive from google gemini
-serverId=  ## This your retrieve frome your firebase console
+serverID=  ## This your retrieve frome your firebase console
 ```
 
 ## Known Bugs
