@@ -45,7 +45,7 @@ Setup your own firebase and provide `google-services.json`.
 - Add these variables to your **local.properties** file.
 ```
 geminiApiKey=  ## This your retrive from google gemini
-serverID=  ## This your retrieve frome your firebase console
+serverID=  ## This your retrieve from your firebase console
 ```
 
 ## Known Bugs
