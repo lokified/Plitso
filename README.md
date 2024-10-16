@@ -44,8 +44,8 @@ The app uses these technologies;
 Setup your own firebase and provide `google-services.json`.
 - Add these variables to your **local.properties** file.
 ```
-geminiApiKey=  ## This your retrive from google gemini
-serverID=  ## This your retrieve from your firebase console
+geminiApiKey=  ## retrive this from google gemini
+serverID=  ## retrieve OAuth ClientID from your google console follow the link and replace projectname link= `https://console.cloud.google.com/apis/credentials?authuser=0&hl=en&project= ##projectname`
 ```
 
 ## Known Bugs
