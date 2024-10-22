@@ -14,17 +14,17 @@ import kotlinx.coroutines.withContext
 
 class HomeViewModel(
     private val recipeRepository: RecipeRepository,
-    private val randomDao: RandomDao
+    private val randomDao: RandomDao,
 ) : ViewModel() {
-
     private val _state = MutableStateFlow(HomeState())
     val state = _state.asStateFlow()
 
-    val dayRecipe = recipeRepository.getDayRecipe().stateIn(
-        viewModelScope,
-        SharingStarted.WhileSubscribed(5000L),
-        null
-    )
+    val dayRecipe =
+        recipeRepository.getDayRecipe().stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5000L),
+            null,
+        )
 
     init {
         showRandomRecipe()
@@ -39,10 +39,11 @@ class HomeViewModel(
 
             randomDao.getRandomRecipe().collect { random ->
                 if (random.isNotEmpty()) {
-                    _state.value = _state.value.copy(
-                        randomRecipeImage = random[0].image,
-                        randomRecipeId = random[0].recipeId
-                    )
+                    _state.value =
+                        _state.value.copy(
+                            randomRecipeImage = random[0].image,
+                            randomRecipeId = random[0].recipeId,
+                        )
                 }
             }
         }
@@ -51,9 +52,10 @@ class HomeViewModel(
     private fun getCategories() {
         viewModelScope.launch {
             recipeRepository.categories.collect { categories ->
-                _state.value = _state.value.copy(
-                    categories = categories
-                )
+                _state.value =
+                    _state.value.copy(
+                        categories = categories,
+                    )
             }
         }
     }

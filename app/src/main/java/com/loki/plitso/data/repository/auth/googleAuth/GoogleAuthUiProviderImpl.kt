@@ -1,4 +1,4 @@
-package com.loki.plitso.data.repository.auth.google_auth
+package com.loki.plitso.data.repository.auth.googleAuth
 
 import android.content.Context
 import androidx.credentials.Credential
@@ -15,15 +15,16 @@ import timber.log.Timber
 class GoogleAuthUiProviderImpl(
     private val context: Context,
     private val credentialManager: CredentialManager,
-    private val credentials: GoogleAuthCredentials
+    private val credentials: GoogleAuthCredentials,
 ) : GoogleAuthUiProvider {
-
-    override suspend fun signIn(): User? {
-        return try {
-            val credential = credentialManager.getCredential(
-                context = context,
-                request = getCredentialRequest()
-            ).credential
+    override suspend fun signIn(): User? =
+        try {
+            val credential =
+                credentialManager
+                    .getCredential(
+                        context = context,
+                        request = getCredentialRequest(),
+                    ).credential
 
             getGoogleUserFromCredential(credential)
         } catch (e: GetCredentialException) {
@@ -33,11 +34,11 @@ class GoogleAuthUiProviderImpl(
             Timber.d(e.message)
             null
         }
-    }
 
-    private fun getGoogleUserFromCredential(credential: Credential): User? {
-        return when {
-            credential is CustomCredential && credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL -> {
+    private fun getGoogleUserFromCredential(credential: Credential): User? =
+        when {
+            credential is CustomCredential &&
+                credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL -> {
                 try {
                     val googleIdTokenCredential =
                         GoogleIdTokenCredential.createFrom(credential.data)
@@ -55,19 +56,18 @@ class GoogleAuthUiProviderImpl(
 
             else -> null
         }
-    }
 
-    private fun getCredentialRequest(): GetCredentialRequest {
-        return GetCredentialRequest.Builder()
+    private fun getCredentialRequest(): GetCredentialRequest =
+        GetCredentialRequest
+            .Builder()
             .addCredentialOption(getGoogleIdOptions(credentials.serverId))
             .build()
-    }
 
-    private fun getGoogleIdOptions(serverClientId: String): GetGoogleIdOption {
-        return GetGoogleIdOption.Builder()
+    private fun getGoogleIdOptions(serverClientId: String): GetGoogleIdOption =
+        GetGoogleIdOption
+            .Builder()
             .setFilterByAuthorizedAccounts(false)
             .setAutoSelectEnabled(true)
             .setServerClientId(serverClientId)
             .build()
-    }
 }

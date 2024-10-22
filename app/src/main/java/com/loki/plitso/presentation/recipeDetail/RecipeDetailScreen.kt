@@ -1,4 +1,4 @@
-package com.loki.plitso.presentation.recipe_detail
+package com.loki.plitso.presentation.recipeDetail
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedVisibilityScope
@@ -50,7 +50,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.SubcomposeAsyncImage
-import com.loki.plitso.data.remote.mealdb.models.RecipeDetailDto
 import com.loki.plitso.util.noIndication
 
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -59,34 +58,34 @@ fun SharedTransitionScope.RecipeDetailScreen(
     animatedVisibilityScope: AnimatedVisibilityScope,
     recipeDetailState: RecipeDetailState,
     navigateBack: () -> Unit,
-    onAddToBookmark: () -> Unit
+    onAddToBookmark: () -> Unit,
 ) {
-
     if (recipeDetailState.recipeDetail == null) {
         Box(
             modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
         ) {
             Text(
                 text = "Data loading. Please wait ...",
-                color = MaterialTheme.colorScheme.onBackground.copy(.5f)
+                color = MaterialTheme.colorScheme.onBackground.copy(.5f),
             )
         }
     } else {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState()),
         ) {
             TopSection(
                 animatedVisibilityScope = animatedVisibilityScope,
                 recipeDetailState = recipeDetailState,
                 navigateBack = navigateBack,
-                onAddToBookmark = onAddToBookmark
+                onAddToBookmark = onAddToBookmark,
             )
             ContentSection(
                 animatedVisibilityScope = animatedVisibilityScope,
-                recipeDetailState = recipeDetailState
+                recipeDetailState = recipeDetailState,
             )
         }
     }
@@ -99,57 +98,61 @@ private fun SharedTransitionScope.TopSection(
     animatedVisibilityScope: AnimatedVisibilityScope,
     recipeDetailState: RecipeDetailState,
     navigateBack: () -> Unit,
-    onAddToBookmark: () -> Unit
+    onAddToBookmark: () -> Unit,
 ) {
     Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(350.dp)
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .height(350.dp),
     ) {
-
         recipeDetailState.recipeDetail?.let { recipe ->
             SubcomposeAsyncImage(
                 model = recipe.image,
                 contentDescription = recipe.title,
                 contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .sharedElement(
-                        state = rememberSharedContentState(key = "image/${recipe.recipeId}"),
-                        animatedVisibilityScope = animatedVisibilityScope,
-                        boundsTransform = { _, _ ->
-                            tween(durationMillis = 200)
-                        }
-                    )
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .sharedElement(
+                            state = rememberSharedContentState(key = "image/${recipe.recipeId}"),
+                            animatedVisibilityScope = animatedVisibilityScope,
+                            boundsTransform = { _, _ ->
+                                tween(durationMillis = 200)
+                            },
+                        ),
             )
 
             Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight()
-                    .height(100.dp)
-                    .background(
-                        brush = Brush.verticalGradient(
-                            listOf(
-                                Color.Black.copy(.7f),
-                                Color.Black.copy(.4f),
-                                Color.Transparent
-                            )
-                        )
-                    )
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight()
+                        .height(100.dp)
+                        .background(
+                            brush =
+                                Brush.verticalGradient(
+                                    listOf(
+                                        Color.Black.copy(.7f),
+                                        Color.Black.copy(.4f),
+                                        Color.Transparent,
+                                    ),
+                                ),
+                        ),
             )
 
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp, horizontal = 16.dp),
-                verticalAlignment = Alignment.CenterVertically
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp, horizontal = 16.dp),
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 IconButton(onClick = navigateBack) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Default.ArrowBackIos,
                         contentDescription = null,
-                        tint = Color.White
+                        tint = Color.White,
                     )
                 }
                 Spacer(modifier = Modifier.width(8.dp))
@@ -159,24 +162,32 @@ private fun SharedTransitionScope.TopSection(
                     fontWeight = FontWeight.Bold,
                     maxLines = 2,
                     color = Color.White,
-                    modifier = Modifier
-                        .width(250.dp)
+                    modifier =
+                        Modifier
+                            .width(250.dp),
                 )
                 Spacer(modifier = Modifier.weight(1f))
                 IconButton(onClick = onAddToBookmark) {
                     val icon =
-                        if (recipeDetailState.isBookmarked) Icons.Filled.Bookmark else Icons.Outlined.BookmarkBorder
+                        if (recipeDetailState.isBookmarked) {
+                            Icons.Filled.Bookmark
+                        } else {
+                            Icons.Outlined.BookmarkBorder
+                        }
                     val color =
-                        if (recipeDetailState.isBookmarked) Color.Yellow.copy(.7f) else Color.White
+                        if (recipeDetailState.isBookmarked) {
+                            Color.Yellow.copy(.7f)
+                        } else {
+                            Color.White
+                        }
                     Icon(
                         imageVector = icon,
                         contentDescription = null,
-                        tint = color
+                        tint = color,
                     )
                 }
             }
         }
-
     }
 }
 
@@ -185,12 +196,13 @@ private fun SharedTransitionScope.TopSection(
 private fun SharedTransitionScope.ContentSection(
     modifier: Modifier = Modifier,
     animatedVisibilityScope: AnimatedVisibilityScope,
-    recipeDetailState: RecipeDetailState
+    recipeDetailState: RecipeDetailState,
 ) {
     Box(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(16.dp)
+        modifier =
+            modifier
+                .fillMaxSize()
+                .padding(16.dp),
     ) {
         Column {
             recipeDetailState.recipeDetail?.let { recipe ->
@@ -199,44 +211,47 @@ private fun SharedTransitionScope.ContentSection(
                     fontSize = 22.sp,
                     fontWeight = FontWeight.Bold,
                     maxLines = 2,
-                    modifier = Modifier
-                        .sharedElement(
-                            rememberSharedContentState(
-                                key = "text/${recipe.recipeId}"
+                    modifier =
+                        Modifier
+                            .sharedElement(
+                                rememberSharedContentState(
+                                    key = "text/${recipe.recipeId}",
+                                ),
+                                animatedVisibilityScope,
+                                boundsTransform = { _, _ ->
+                                    tween(durationMillis = 200)
+                                },
                             ),
-                            animatedVisibilityScope,
-                            boundsTransform = { _, _ ->
-                                tween(durationMillis = 200)
-                            }
-                        )
                 )
 
                 Spacer(modifier = Modifier.height(4.dp))
 
                 Box(
-                    modifier = Modifier
-                        .padding(4.dp)
-                        .border(
-                            width = 1.dp,
-                            color = MaterialTheme.colorScheme.primary.copy(.5f),
-                            shape = RoundedCornerShape(12.dp)
-                        ),
-                    contentAlignment = Alignment.Center
+                    modifier =
+                        Modifier
+                            .padding(4.dp)
+                            .border(
+                                width = 1.dp,
+                                color = MaterialTheme.colorScheme.primary.copy(.5f),
+                                shape = RoundedCornerShape(12.dp),
+                            ),
+                    contentAlignment = Alignment.Center,
                 ) {
                     Text(
                         text = recipe.country,
                         color = MaterialTheme.colorScheme.primary.copy(.5f),
-                        modifier = Modifier.padding(vertical = 2.dp, horizontal = 4.dp)
+                        modifier = Modifier.padding(vertical = 2.dp, horizontal = 4.dp),
                     )
                 }
 
                 Spacer(modifier = Modifier.height(12.dp))
 
                 Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(12.dp))
-                        .background(MaterialTheme.colorScheme.surface)
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(12.dp))
+                            .background(MaterialTheme.colorScheme.surface),
                 ) {
                     Column {
                         var isIngredientOpen by remember { mutableStateOf(false) }
@@ -244,29 +259,31 @@ private fun SharedTransitionScope.ContentSection(
                         RowActionComponent(
                             title = "Ingredients",
                             isExpanded = isIngredientOpen,
-                            onExpandedClick = { isIngredientOpen = !isIngredientOpen }
+                            onExpandedClick = { isIngredientOpen = !isIngredientOpen },
                         )
 
                         AnimatedVisibility(
                             visible = isIngredientOpen,
-                            exit = fadeOut() + shrinkVertically(
-                                tween(easing = EaseOut)
-                            ),
-                            modifier = Modifier.padding(8.dp)
+                            exit =
+                                fadeOut() +
+                                    shrinkVertically(
+                                        tween(easing = EaseOut),
+                                    ),
+                            modifier = Modifier.padding(8.dp),
                         ) {
                             Column {
                                 recipe.ingredients.forEach { ingredient ->
                                     Text(
                                         text = ingredient,
                                         fontStyle = FontStyle.Italic,
-                                        color = MaterialTheme.colorScheme.onBackground.copy(.7f)
+                                        color = MaterialTheme.colorScheme.onBackground.copy(.7f),
                                     )
                                 }
                             }
                         }
 
                         HorizontalDivider(
-                            color = MaterialTheme.colorScheme.onBackground.copy(.1f)
+                            color = MaterialTheme.colorScheme.onBackground.copy(.1f),
                         )
 
                         var isInstructionOpen by remember { mutableStateOf(true) }
@@ -276,21 +293,23 @@ private fun SharedTransitionScope.ContentSection(
                         RowActionComponent(
                             title = "Instructions",
                             isExpanded = isInstructionOpen,
-                            onExpandedClick = { isInstructionOpen = !isInstructionOpen }
+                            onExpandedClick = { isInstructionOpen = !isInstructionOpen },
                         )
 
                         AnimatedVisibility(
                             visible = isInstructionOpen,
-                            exit = fadeOut() + shrinkVertically(
-                                tween(easing = EaseOut)
-                            ),
-                            modifier = Modifier.padding(8.dp)
+                            exit =
+                                fadeOut() +
+                                    shrinkVertically(
+                                        tween(easing = EaseOut),
+                                    ),
+                            modifier = Modifier.padding(8.dp),
                         ) {
                             Column {
                                 instList.forEach { inst ->
                                     Text(
                                         text = inst,
-                                        color = MaterialTheme.colorScheme.onBackground.copy(.7f)
+                                        color = MaterialTheme.colorScheme.onBackground.copy(.7f),
                                     )
                                     Spacer(modifier = Modifier.height(4.dp))
                                 }
@@ -308,24 +327,24 @@ private fun RowActionComponent(
     modifier: Modifier = Modifier,
     title: String = "",
     isExpanded: Boolean,
-    onExpandedClick: () -> Unit
+    onExpandedClick: () -> Unit,
 ) {
-
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier
-            .padding(12.dp)
-            .fillMaxWidth()
-            .noIndication {
-                onExpandedClick()
-            }
+        modifier =
+            modifier
+                .padding(12.dp)
+                .fillMaxWidth()
+                .noIndication {
+                    onExpandedClick()
+                },
     ) {
         val icon =
             if (isExpanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown
         Text(
             text = title,
             fontSize = 18.sp,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
         )
         Spacer(modifier = Modifier.weight(1f))
         IconButton(onClick = { onExpandedClick() }) {

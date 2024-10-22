@@ -1,0 +1,32 @@
+name: Run Checks
+
+# Sets the workflow to be triggered on pull-request specifically to master branch
+on:
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  # Job that runs ktlint and detekt lint checks
+  run-lint-checks:
+    name: Lint Checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+
+      - name: Get local.properties from secrets
+        run: echo "${{secrets.ProjectSecrets }}" | base64 -di > local.properties
+
+      - name: Make CodeLinting executable
+        run: chmod +x ./codeLinting.sh
+      - name: Run lint checks
+        run: ./codeLinting.sh

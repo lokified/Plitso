@@ -29,30 +29,27 @@ fun PermissionDialog(
     @StringRes title: Int,
     @StringRes content: Int,
     onDismiss: () -> Unit,
-    onRequest: () -> Unit
+    onRequest: () -> Unit,
 ) {
-
     BasicAlertDialog(
-        onDismissRequest = onDismiss
+        onDismissRequest = onDismiss,
     ) {
-
         Column(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = modifier
-                .background(
-                    color = MaterialTheme.colorScheme.surface,
-                    shape = RoundedCornerShape(16.dp)
-                )
-                .padding(16.dp)
+            modifier =
+                modifier
+                    .background(
+                        color = MaterialTheme.colorScheme.surface,
+                        shape = RoundedCornerShape(16.dp),
+                    ).padding(16.dp),
         ) {
-
             Text(
                 text = stringResource(title),
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
-                letterSpacing = 1.sp
+                letterSpacing = 1.sp,
             )
 
             Text(
@@ -61,15 +58,15 @@ fun PermissionDialog(
                 fontWeight = FontWeight.Light,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(16.dp),
-                letterSpacing = 1.sp
+                letterSpacing = 1.sp,
             )
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.End
+                horizontalArrangement = Arrangement.End,
             ) {
                 TextButton(
-                    onClick = onRequest
+                    onClick = onRequest,
                 ) {
                     Text(text = "Request")
                 }

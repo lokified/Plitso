@@ -5,23 +5,18 @@ import androidx.lifecycle.viewModelScope
 import com.google.ai.client.generativeai.GenerativeModel
 import com.google.ai.client.generativeai.type.content
 import com.loki.plitso.data.local.dao.AiAnswerDao
-import com.loki.plitso.data.local.datastore.DatastoreStorage
-import com.loki.plitso.data.local.datastore.LocalUser
 import com.loki.plitso.data.local.models.AiAnswer
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class AiViewModel(
     private val aiAnswerDao: AiAnswerDao,
     private val generativeModel: GenerativeModel,
-    val aiData: AiData
+    val aiData: AiData,
 ) : ViewModel() {
-
     private val _state = MutableStateFlow(AiState())
     val state = _state.asStateFlow()
 
@@ -33,33 +28,38 @@ class AiViewModel(
     }
 
     fun onMealTypeChange(newValue: String) {
-        _parameters.value = _parameters.value.copy(
-            mealType = newValue
-        )
+        _parameters.value =
+            _parameters.value.copy(
+                mealType = newValue,
+            )
     }
 
     fun onCuisineChange(newValue: String) {
-        _parameters.value = _parameters.value.copy(
-            cuisine = newValue
-        )
+        _parameters.value =
+            _parameters.value.copy(
+                cuisine = newValue,
+            )
     }
 
     fun onMoodChange(newValue: String) {
-        _parameters.value = _parameters.value.copy(
-            mood = newValue
-        )
+        _parameters.value =
+            _parameters.value.copy(
+                mood = newValue,
+            )
     }
 
     fun onDietaryChange(newValue: String) {
-        _parameters.value = _parameters.value.copy(
-            dietary = newValue
-        )
+        _parameters.value =
+            _parameters.value.copy(
+                dietary = newValue,
+            )
     }
 
     fun isQuickMealChange(newValue: Boolean) {
-        _parameters.value = _parameters.value.copy(
-            isQuick = newValue
-        )
+        _parameters.value =
+            _parameters.value.copy(
+                isQuick = newValue,
+            )
     }
 
     private fun getMessages() {
@@ -67,7 +67,7 @@ class AiViewModel(
             aiAnswerDao.getAnswers().collect { data ->
                 _state.update {
                     it.copy(
-                        messages = data
+                        messages = data,
                     )
                 }
             }
@@ -75,28 +75,29 @@ class AiViewModel(
     }
 
     fun askQuestion(question: String) {
-
         viewModelScope.launch(Dispatchers.IO) {
             aiAnswerDao.insert(
                 AiAnswer(
                     role = "user",
-                    content = question
-                )
+                    content = question,
+                ),
             )
 
             _state.update {
                 it.copy(
                     isLoading = true,
-                    errorMessage = ""
+                    errorMessage = "",
                 )
             }
 
             try {
-                val chat = generativeModel.startChat(
-                    history = _state.value.messages.map { value ->
-                        content(role = value.role) { text(value.content) }
-                    }
-                )
+                val chat =
+                    generativeModel.startChat(
+                        history =
+                            _state.value.messages.map { value ->
+                                content(role = value.role) { text(value.content) }
+                            },
+                    )
 
                 val response = chat.sendMessage(question + PromptUtil.OUT_OF_CONTEXT_WARNING)
 
@@ -104,21 +105,21 @@ class AiViewModel(
                     aiAnswerDao.insert(
                         AiAnswer(
                             content = modelResponse,
-                            role = "model"
-                        )
+                            role = "model",
+                        ),
                     )
                 }
 
                 _state.update {
                     it.copy(
-                        isLoading = false
+                        isLoading = false,
                     )
                 }
             } catch (e: Exception) {
                 _state.update {
                     it.copy(
                         isLoading = false,
-                        errorMessage = e.localizedMessage ?: "Something went wrong!"
+                        errorMessage = e.localizedMessage ?: "Something went wrong!",
                     )
                 }
             }
@@ -126,45 +127,45 @@ class AiViewModel(
     }
 
     fun generateSuggestions(onSuccess: () -> Unit) {
-
         if (
             _parameters.value.mealType.isEmpty() ||
             _parameters.value.mood.isEmpty() ||
             _parameters.value.cuisine.isEmpty()
         ) {
-            _state.value = _state.value.copy(
-                errorMessage = "Please select required"
-            )
+            _state.value =
+                _state.value.copy(
+                    errorMessage = "Please select required",
+                )
             return
         }
 
         viewModelScope.launch(Dispatchers.IO) {
-
             _state.update {
                 it.copy(
                     isLoading = true,
-                    errorMessage = ""
+                    errorMessage = "",
                 )
             }
 
             try {
-                val response = generativeModel.generateContent(
-                    content {
-                        text(
-                            PromptUtil.generativePrompt(
-                                recipeData = aiData.recipes,
-                                pastMeal = aiData.pastMeals,
-                                parameters = _parameters.value
+                val response =
+                    generativeModel.generateContent(
+                        content {
+                            text(
+                                PromptUtil.generativePrompt(
+                                    recipeData = aiData.recipes,
+                                    pastMeal = aiData.pastMeals,
+                                    parameters = _parameters.value,
+                                ),
                             )
-                        )
-                    }
-                )
+                        },
+                    )
 
                 response.text?.let { modelResponse ->
                     _state.update {
                         it.copy(
                             isLoading = false,
-                            generativeAnswer = modelResponse
+                            generativeAnswer = modelResponse,
                         )
                     }
                 }
@@ -173,7 +174,7 @@ class AiViewModel(
                 _state.update {
                     it.copy(
                         isLoading = false,
-                        errorMessage = e.localizedMessage ?: "Something went wrong!"
+                        errorMessage = e.localizedMessage ?: "Something went wrong!",
                     )
                 }
             }

@@ -1,4 +1,4 @@
-package com.loki.plitso.presentation.recipe_detail
+package com.loki.plitso.presentation.recipeDetail
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
@@ -17,9 +17,8 @@ import timber.log.Timber
 class RecipeDetailViewModel(
     private val recipeRepository: RecipeRepository,
     private val savedStateHandle: SavedStateHandle,
-    private val bookmarkDao: BookmarkDao
+    private val bookmarkDao: BookmarkDao,
 ) : ViewModel() {
-
     private val _state = MutableStateFlow(RecipeDetailState())
     val state = _state.asStateFlow()
 
@@ -39,14 +38,16 @@ class RecipeDetailViewModel(
         viewModelScope.launch {
             if (_state.value.isBookmarked) {
                 bookmarkDao.delete(recipe!!.toBookmark())
-                _state.value = _state.value.copy(
-                    isBookmarked = false
-                )
+                _state.value =
+                    _state.value.copy(
+                        isBookmarked = false,
+                    )
             } else {
                 bookmarkDao.insert(recipe!!.toBookmark())
-                _state.value = _state.value.copy(
-                    isBookmarked = true
-                )
+                _state.value =
+                    _state.value.copy(
+                        isBookmarked = true,
+                    )
             }
         }
     }
@@ -55,10 +56,11 @@ class RecipeDetailViewModel(
         viewModelScope.launch {
             try {
                 recipeRepository.getRecipeDetail(id).collect { recipe ->
-                    _state.value = _state.value.copy(
-                        recipeDetail = recipe,
-                        isBookmarked = bookmarked.value?.recipeId == recipe.recipeId
-                    )
+                    _state.value =
+                        _state.value.copy(
+                            recipeDetail = recipe,
+                            isBookmarked = bookmarked.value?.recipeId == recipe.recipeId,
+                        )
                 }
             } catch (e: Exception) {
                 Timber.tag("vm recipe detail").d(e)

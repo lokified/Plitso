@@ -17,14 +17,20 @@ fun TypeWriterTextEffect(
     minCharacterChunk: Int = 1,
     maxCharacterChunk: Int = 5,
     onEffectComplete: () -> Unit,
-    displayTextContent: @Composable (displayedText: String) -> Unit
+    displayTextContent: @Composable (displayedText: String) -> Unit,
 ) {
     require(minDelayInMillis <= maxDelayInMillis) {
-        "TypeWriterTextEffect: Invalid delay range. minDelayInMillis ($minDelayInMillis) must be less than or equal to maxDelayInMillis ($maxDelayInMillis)"
+        """
+        TypeWriterTextEffect: Invalid delay range. minDelayInMillis ($minDelayInMillis)
+         must be less than or equal to maxDelayInMillis ($maxDelayInMillis)
+        """.trimIndent()
     }
 
     require(minCharacterChunk <= maxCharacterChunk) {
-        "TypeWriterTextEffect: Invalid chunk range. minCharacterChunk ($minCharacterChunk) must be less than or equal to maxCharacterChunk ($maxCharacterChunk)"
+        """
+            TypeWriterTextEffect: Invalid chunk range. minCharacterChunk ($minCharacterChunk)
+            must be less than or equal to maxCharacterChunk ($maxCharacterChunk)
+        """
     }
 
     var displayedText by remember { mutableStateOf("") }
@@ -34,10 +40,11 @@ fun TypeWriterTextEffect(
         var endIndex = 0
 
         while (endIndex < textLength) {
-            endIndex = minOf(
-                endIndex + Random.nextInt(minCharacterChunk, maxCharacterChunk + 1),
-                textLength
-            )
+            endIndex =
+                minOf(
+                    endIndex + Random.nextInt(minCharacterChunk, maxCharacterChunk + 1),
+                    textLength,
+                )
             displayedText = text.substring(startIndex = 0, endIndex = endIndex)
             delay(Random.nextLong(minDelayInMillis, maxDelayInMillis))
         }

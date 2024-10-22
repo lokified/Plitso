@@ -14,9 +14,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class SearchViewModel(
-    private val recipeDetailDao: RecipeDetailDao
+    private val recipeDetailDao: RecipeDetailDao,
 ) : ViewModel() {
-
     private val _recipes = MutableStateFlow<List<RecipeDetail>>(emptyList())
     val recipes = _recipes.asStateFlow()
 
@@ -49,15 +48,16 @@ class SearchViewModel(
 
     private fun searchRecipe(searchTerm: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            val response = if (filtered.isEmpty()) {
-                recipeDetailDao.searchRecipe(searchTerm)
-            } else {
-                recipeDetailDao.searchRecipe(
-                    title = if (filtered.contains("title")) searchTerm else null,
-                    cuisine = if (filtered.contains("cuisine")) searchTerm else null,
-                    ingredient = if (filtered.contains("ingredient")) searchTerm else null
-                )
-            }
+            val response =
+                if (filtered.isEmpty()) {
+                    recipeDetailDao.searchRecipe(searchTerm)
+                } else {
+                    recipeDetailDao.searchRecipe(
+                        title = if (filtered.contains("title")) searchTerm else null,
+                        cuisine = if (filtered.contains("cuisine")) searchTerm else null,
+                        ingredient = if (filtered.contains("ingredient")) searchTerm else null,
+                    )
+                }
 
             response.collect { data ->
                 if (_searchTerm.value.isEmpty()) {

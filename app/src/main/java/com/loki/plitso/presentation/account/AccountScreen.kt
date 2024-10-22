@@ -50,7 +50,6 @@ fun AccountScreen(
     onLogOut: () -> Unit,
     navigateToSignIn: () -> Unit,
 ) {
-
     var isThemeDialogVisible by remember { mutableStateOf(false) }
     val context = LocalContext.current
     val user by plitsoViewModel.user.collectAsStateWithLifecycle()
@@ -62,89 +61,92 @@ fun AccountScreen(
     }
 
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
     ) {
-
         if (isThemeDialogVisible) {
             ThemeDialog(
                 themeSelected = accountState.theme,
                 onThemeChange = onThemeChange,
                 onDismiss = {
                     isThemeDialogVisible = false
-                }
+                },
             )
         }
 
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp, horizontal = 16.dp),
-            verticalAlignment = Alignment.CenterVertically
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp, horizontal = 16.dp),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
                 text = "Account",
                 fontSize = 22.sp,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
         }
 
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState()),
         ) {
-
             if (!user.isLoggedIn) {
                 LoginContainer(
                     modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp),
-                    onLoginClick = navigateToSignIn
+                    onLoginClick = navigateToSignIn,
                 )
             } else {
                 TitleHeader(title = "Profile")
 
                 SettingItem(
-                    itemList = listOf(
-                        SettingItem(
-                            icon = Icons.Default.AccountCircle,
-                            content = user.username,
-                            imageUrl = user.imageUrl,
-                            subContent = {
-                                TextSubContent(content = user.email)
-                            }
-                        )
-                    )
+                    itemList =
+                        listOf(
+                            SettingItem(
+                                icon = Icons.Default.AccountCircle,
+                                content = user.username,
+                                imageUrl = user.imageUrl,
+                                subContent = {
+                                    TextSubContent(content = user.email)
+                                },
+                            ),
+                        ),
                 )
             }
 
             TitleHeader(title = "Settings")
 
             SettingItem(
-                itemList = listOf(
-                    SettingItem(
-                        icon = Icons.Default.Palette,
-                        content = "Select Theme",
-                        subContent = {
-                            TextSubContent(content = accountState.theme)
-                        }
-                    )
-                ),
+                itemList =
+                    listOf(
+                        SettingItem(
+                            icon = Icons.Default.Palette,
+                            content = "Select Theme",
+                            subContent = {
+                                TextSubContent(content = accountState.theme)
+                            },
+                        ),
+                    ),
                 onItemClick = { itemIndex ->
                     isThemeDialogVisible = true
-                }
+                },
             )
 
             if (user.isLoggedIn) {
                 SettingItem(
                     modifier = Modifier.padding(top = 12.dp),
-                    itemList = listOf(
-                        SettingItem(
-                            icon = Icons.AutoMirrored.Filled.Logout,
-                            content = "Logout"
-                        )
-                    ),
+                    itemList =
+                        listOf(
+                            SettingItem(
+                                icon = Icons.AutoMirrored.Filled.Logout,
+                                content = "Logout",
+                            ),
+                        ),
                     onItemClick = {
                         onLogOut()
-                    }
+                    },
                 )
             }
         }
@@ -152,11 +154,14 @@ fun AccountScreen(
 }
 
 @Composable
-private fun TextSubContent(modifier: Modifier = Modifier, content: String) {
+private fun TextSubContent(
+    modifier: Modifier = Modifier,
+    content: String,
+) {
     Text(
         text = content,
         color = MaterialTheme.colorScheme.onBackground.copy(.5f),
-        modifier = modifier
+        modifier = modifier,
     )
 }
 
@@ -165,30 +170,28 @@ fun ThemeDialog(
     modifier: Modifier = Modifier,
     themeSelected: String,
     onThemeChange: (theme: String) -> Unit,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
 ) {
-
     Dialog(
         onDismissRequest = onDismiss,
-        properties = DialogProperties()
+        properties = DialogProperties(),
     ) {
         Box(
-            modifier = modifier
-                .width(300.dp)
-                .background(
-                    color = MaterialTheme.colorScheme.background,
-                    shape = RoundedCornerShape(8.dp)
-                )
-                .padding(16.dp)
+            modifier =
+                modifier
+                    .width(300.dp)
+                    .background(
+                        color = MaterialTheme.colorScheme.background,
+                        shape = RoundedCornerShape(8.dp),
+                    ).padding(16.dp),
         ) {
-
             Column(
-                Modifier.fillMaxWidth()
+                Modifier.fillMaxWidth(),
             ) {
                 Text(
                     text = "Select Theme",
                     fontWeight = FontWeight.Bold,
-                    fontSize = 22.sp
+                    fontSize = 22.sp,
                 )
 
                 Theme.entries.forEach { theme ->
@@ -196,38 +199,44 @@ fun ThemeDialog(
                     val selected = themeSelected == theme.name
 
                     Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .noIndication {
-                                onThemeChange(theme.name)
-                            }
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .noIndication {
+                                    onThemeChange(theme.name)
+                                },
                     ) {
-
                         Row(
-                            verticalAlignment = Alignment.CenterVertically
+                            verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Text(
-                                text = theme.name.replaceFirstChar {
-                                    if (it.isLowerCase()) it.titlecase(
-                                        Locale.ROOT
-                                    ) else it.toString()
-                                },
-                                modifier = Modifier.padding(16.dp)
+                                text =
+                                    theme.name.replaceFirstChar {
+                                        if (it.isLowerCase()) {
+                                            it.titlecase(
+                                                Locale.ROOT,
+                                            )
+                                        } else {
+                                            it.toString()
+                                        }
+                                    },
+                                modifier = Modifier.padding(16.dp),
                             )
                             Spacer(modifier = Modifier.weight(1f))
                             RadioButton(
                                 selected = selected,
                                 onClick = {
                                     onThemeChange(theme.name)
-                                }
+                                },
                             )
                         }
                     }
                 }
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .align(Alignment.End)
+                    modifier =
+                        Modifier
+                            .align(Alignment.End),
                 ) {
                     TextButton(onClick = onDismiss) {
                         Text(text = "Cancel")
@@ -239,19 +248,19 @@ fun ThemeDialog(
                 }
             }
         }
-
     }
 }
 
 @Composable
 fun TitleHeader(
     modifier: Modifier = Modifier,
-    title: String
+    title: String,
 ) {
     Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp, horizontal = 20.dp)
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp, horizontal = 20.dp),
     ) {
         Text(text = title, fontSize = 16.sp)
     }
@@ -260,29 +269,28 @@ fun TitleHeader(
 @Composable
 fun LoginContainer(
     modifier: Modifier = Modifier,
-    onLoginClick: () -> Unit
+    onLoginClick: () -> Unit,
 ) {
-
     Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .border(
-                width = .5.dp,
-                color = MaterialTheme.colorScheme.surface,
-                shape = RoundedCornerShape(12.dp)
-            )
-            .background(
-                color = MaterialTheme.colorScheme.surface.copy(.5f),
-                shape = RoundedCornerShape(12.dp)
-            )
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .border(
+                    width = .5.dp,
+                    color = MaterialTheme.colorScheme.surface,
+                    shape = RoundedCornerShape(12.dp),
+                ).background(
+                    color = MaterialTheme.colorScheme.surface.copy(.5f),
+                    shape = RoundedCornerShape(12.dp),
+                ),
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(12.dp)
+            modifier = Modifier.padding(12.dp),
         ) {
             Text(
                 text = "Login to your account",
-                color = MaterialTheme.colorScheme.primary.copy(.8f)
+                color = MaterialTheme.colorScheme.primary.copy(.8f),
             )
             Spacer(modifier = Modifier.weight(1f))
             TextButton(onClick = onLoginClick) {

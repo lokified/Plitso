@@ -1,7 +1,6 @@
 package com.loki.plitso.util
 
 import android.os.Build
-import androidx.annotation.RequiresApi
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -12,7 +11,6 @@ import java.util.Date
 import java.util.Locale
 
 object TimeUtil {
-
     fun formatDateTime(input: String): String {
         var formattedTime: String? = null
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -23,11 +21,14 @@ object TimeUtil {
                 val today = LocalDate.now()
                 val inputDate = dateTime.toLocalDate()
 
-                formattedTime = when {
-                    inputDate.isEqual(today) -> "Today, ${dateTime.toLocalTime()}"
-                    inputDate.isEqual(today.minusDays(1)) -> "Yesterday, ${dateTime.toLocalTime()}"
-                    else -> dateTime.format(DateTimeFormatter.ofPattern("dd MMM yyyy, HH:mm"))
-                }
+                formattedTime =
+                    when {
+                        inputDate.isEqual(today) -> "Today, ${dateTime.toLocalTime()}"
+                        inputDate.isEqual(
+                            today.minusDays(1),
+                        ) -> "Yesterday, ${dateTime.toLocalTime()}"
+                        else -> dateTime.format(DateTimeFormatter.ofPattern("dd MMM yyyy, HH:mm"))
+                    }
             } catch (e: DateTimeParseException) {
                 Timber.tag("Format time err").d("Invalid date format")
             }

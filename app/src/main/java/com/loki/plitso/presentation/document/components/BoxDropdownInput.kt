@@ -23,36 +23,36 @@ import com.loki.plitso.util.noIndication
 fun BoxDropdownInput(
     modifier: Modifier = Modifier,
     selectedOption: String,
-    onChangeOption: (String) -> Unit
+    onChangeOption: (String) -> Unit,
 ) {
-
     var expanded by remember { mutableStateOf(false) }
     val icon = MealType.entries.find { it.name == selectedOption } ?: MealType.BREAKFAST
 
     Column(
-        modifier = modifier
-            .fillMaxWidth()
+        modifier =
+            modifier
+                .fillMaxWidth(),
     ) {
         BoxInput(
             value = selectedOption,
             onValueChange = onChangeOption,
             icon = icon.image,
             placeholder = "Select Meal Time",
-            modifier = Modifier.noIndication { expanded = !expanded }
+            modifier = Modifier.noIndication { expanded = !expanded },
         )
 
         AnimatedVisibility(
             visible = expanded,
-            modifier = Modifier
-                .clip(
-                    RoundedCornerShape(
-                        topStart = 8.dp,
-                        topEnd = 8.dp,
-                        bottomStart = 12.dp,
-                        bottomEnd = 12.dp
-                    )
-                )
-                .background(MaterialTheme.colorScheme.surface)
+            modifier =
+                Modifier
+                    .clip(
+                        RoundedCornerShape(
+                            topStart = 8.dp,
+                            topEnd = 8.dp,
+                            bottomStart = 12.dp,
+                            bottomEnd = 12.dp,
+                        ),
+                    ).background(MaterialTheme.colorScheme.surface),
         ) {
             Column {
                 MealType.entries.forEach { option ->
@@ -61,7 +61,7 @@ fun BoxDropdownInput(
                         onClick = {
                             onChangeOption(option.name)
                             expanded = false
-                        }
+                        },
                     )
                 }
             }

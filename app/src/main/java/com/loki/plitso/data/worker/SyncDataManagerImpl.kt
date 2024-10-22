@@ -14,26 +14,28 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.conflate
 
 class SyncDataManagerImpl(
-    private val context: Context
+    private val context: Context,
 ) : SyncDataManager {
-
     override val isSyncing: Flow<Boolean> =
-        WorkManager.getInstance(context).getWorkInfosForUniqueWorkLiveData(SYNC_DATA_WORK_NAME)
+        WorkManager
+            .getInstance(context)
+            .getWorkInfosForUniqueWorkLiveData(SYNC_DATA_WORK_NAME)
             .map(MutableList<WorkInfo>::anyRunning)
             .asFlow()
             .conflate()
 
-
     override suspend fun startSync() {
-        val syncDataRequest = OneTimeWorkRequestBuilder<SyncDataWorker>()
-            .setConstraints(
-                Constraints.Builder()
-                    .setRequiredNetworkType(NetworkType.CONNECTED)
-                    .build()
-            )
-            .build()
+        val syncDataRequest =
+            OneTimeWorkRequestBuilder<SyncDataWorker>()
+                .setConstraints(
+                    Constraints
+                        .Builder()
+                        .setRequiredNetworkType(NetworkType.CONNECTED)
+                        .build(),
+                ).build()
         val workManager = WorkManager.getInstance(context)
-        workManager.beginUniqueWork(SYNC_DATA_WORK_NAME, ExistingWorkPolicy.KEEP, syncDataRequest)
+        workManager
+            .beginUniqueWork(SYNC_DATA_WORK_NAME, ExistingWorkPolicy.KEEP, syncDataRequest)
             .enqueue()
     }
 }

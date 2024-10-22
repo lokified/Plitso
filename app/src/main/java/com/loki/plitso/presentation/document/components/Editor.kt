@@ -66,29 +66,33 @@ fun EditorPanelButton(
     icon: ImageVector,
     tint: Color? = null,
     isSelected: Boolean = false,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     Box(
-        modifier = modifier
-            .focusProperties { canFocus = false }
-            .clip(RoundedCornerShape(10.dp))
-            .noIndication { onClick() },
-        contentAlignment = Alignment.Center
+        modifier =
+            modifier
+                .focusProperties { canFocus = false }
+                .clip(RoundedCornerShape(10.dp))
+                .noIndication { onClick() },
+        contentAlignment = Alignment.Center,
     ) {
         Icon(
             icon,
             contentDescription = icon.name,
             tint = tint ?: Color(0xFFCBCCCD),
-            modifier = Modifier
-                .background(
-                    color = if (isSelected) MaterialTheme.colorScheme.primary.copy(.1f)
-                    else Color.Transparent,
-                )
-                .padding(6.dp)
+            modifier =
+                Modifier
+                    .background(
+                        color =
+                            if (isSelected) {
+                                MaterialTheme.colorScheme.primary.copy(.1f)
+                            } else {
+                                Color.Transparent
+                            },
+                    ).padding(6.dp),
         )
     }
 }
-
 
 @Composable
 fun EditorPanel(
@@ -99,7 +103,7 @@ fun EditorPanel(
     LazyRow(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(2.dp),
-        modifier = modifier
+        modifier = modifier,
     ) {
         item {
             EditorPanelButton(
@@ -107,11 +111,11 @@ fun EditorPanel(
                     state.addParagraphStyle(
                         ParagraphStyle(
                             textAlign = TextAlign.Left,
-                        )
+                        ),
                     )
                 },
                 isSelected = state.currentParagraphStyle.textAlign == TextAlign.Left,
-                icon = Icons.AutoMirrored.Outlined.FormatAlignLeft
+                icon = Icons.AutoMirrored.Outlined.FormatAlignLeft,
             )
         }
 
@@ -120,12 +124,12 @@ fun EditorPanel(
                 onClick = {
                     state.addParagraphStyle(
                         ParagraphStyle(
-                            textAlign = TextAlign.Center
-                        )
+                            textAlign = TextAlign.Center,
+                        ),
                     )
                 },
                 isSelected = state.currentParagraphStyle.textAlign == TextAlign.Center,
-                icon = Icons.Outlined.FormatAlignCenter
+                icon = Icons.Outlined.FormatAlignCenter,
             )
         }
 
@@ -134,12 +138,12 @@ fun EditorPanel(
                 onClick = {
                     state.addParagraphStyle(
                         ParagraphStyle(
-                            textAlign = TextAlign.Right
-                        )
+                            textAlign = TextAlign.Right,
+                        ),
                     )
                 },
                 isSelected = state.currentParagraphStyle.textAlign == TextAlign.Right,
-                icon = Icons.AutoMirrored.Outlined.FormatAlignRight
+                icon = Icons.AutoMirrored.Outlined.FormatAlignRight,
             )
         }
 
@@ -148,7 +152,7 @@ fun EditorPanel(
                 Modifier
                     .height(24.dp)
                     .width(1.dp)
-                    .background(Color(0xFF393B3D))
+                    .background(Color(0xFF393B3D)),
             )
         }
 
@@ -157,12 +161,12 @@ fun EditorPanel(
                 onClick = {
                     state.toggleSpanStyle(
                         SpanStyle(
-                            fontWeight = FontWeight.Bold
-                        )
+                            fontWeight = FontWeight.Bold,
+                        ),
                     )
                 },
                 isSelected = state.currentSpanStyle.fontWeight == FontWeight.Bold,
-                icon = Icons.Outlined.FormatBold
+                icon = Icons.Outlined.FormatBold,
             )
         }
 
@@ -171,12 +175,12 @@ fun EditorPanel(
                 onClick = {
                     state.toggleSpanStyle(
                         SpanStyle(
-                            fontStyle = FontStyle.Italic
-                        )
+                            fontStyle = FontStyle.Italic,
+                        ),
                     )
                 },
                 isSelected = state.currentSpanStyle.fontStyle == FontStyle.Italic,
-                icon = Icons.Outlined.FormatItalic
+                icon = Icons.Outlined.FormatItalic,
             )
         }
 
@@ -185,12 +189,14 @@ fun EditorPanel(
                 onClick = {
                     state.toggleSpanStyle(
                         SpanStyle(
-                            textDecoration = TextDecoration.Underline
-                        )
+                            textDecoration = TextDecoration.Underline,
+                        ),
                     )
                 },
-                isSelected = state.currentSpanStyle.textDecoration?.contains(TextDecoration.Underline) == true,
-                icon = Icons.Outlined.FormatUnderlined
+                isSelected =
+                    state.currentSpanStyle.textDecoration?.contains(TextDecoration.Underline) ==
+                        true,
+                icon = Icons.Outlined.FormatUnderlined,
             )
         }
 
@@ -199,12 +205,14 @@ fun EditorPanel(
                 onClick = {
                     state.toggleSpanStyle(
                         SpanStyle(
-                            textDecoration = TextDecoration.LineThrough
-                        )
+                            textDecoration = TextDecoration.LineThrough,
+                        ),
                     )
                 },
-                isSelected = state.currentSpanStyle.textDecoration?.contains(TextDecoration.LineThrough) == true,
-                icon = Icons.Outlined.FormatStrikethrough
+                isSelected =
+                    state.currentSpanStyle.textDecoration?.contains(TextDecoration.LineThrough) ==
+                        true,
+                icon = Icons.Outlined.FormatStrikethrough,
             )
         }
 
@@ -213,7 +221,7 @@ fun EditorPanel(
                 Modifier
                     .height(24.dp)
                     .width(1.dp)
-                    .background(Color(0xFF393B3D))
+                    .background(Color(0xFF393B3D)),
             )
         }
 
@@ -223,7 +231,7 @@ fun EditorPanel(
                     onOpenDialog(true)
                 },
                 isSelected = state.isLink,
-                icon = Icons.Outlined.Link
+                icon = Icons.Outlined.Link,
             )
         }
 
@@ -232,7 +240,7 @@ fun EditorPanel(
                 Modifier
                     .height(24.dp)
                     .width(1.dp)
-                    .background(Color(0xFF393B3D))
+                    .background(Color(0xFF393B3D)),
             )
         }
 
@@ -241,12 +249,12 @@ fun EditorPanel(
                 onClick = {
                     state.toggleSpanStyle(
                         SpanStyle(
-                            fontSize = 28.sp
-                        )
+                            fontSize = 28.sp,
+                        ),
                     )
                 },
                 isSelected = state.currentSpanStyle.fontSize == 28.sp,
-                icon = Icons.Outlined.FormatSize
+                icon = Icons.Outlined.FormatSize,
             )
         }
 
@@ -255,13 +263,13 @@ fun EditorPanel(
                 onClick = {
                     state.toggleSpanStyle(
                         SpanStyle(
-                            color = Color.Red
-                        )
+                            color = Color.Red,
+                        ),
                     )
                 },
                 isSelected = state.currentSpanStyle.color == Color.Red,
                 icon = Icons.Filled.Circle,
-                tint = Color.Red
+                tint = Color.Red,
             )
         }
 
@@ -270,13 +278,13 @@ fun EditorPanel(
                 onClick = {
                     state.toggleSpanStyle(
                         SpanStyle(
-                            background = Color.Yellow
-                        )
+                            background = Color.Yellow,
+                        ),
                     )
                 },
                 isSelected = state.currentSpanStyle.background == Color.Yellow,
                 icon = Icons.Outlined.Circle,
-                tint = Color.Yellow
+                tint = Color.Yellow,
             )
         }
 
@@ -285,7 +293,7 @@ fun EditorPanel(
                 Modifier
                     .height(24.dp)
                     .width(1.dp)
-                    .background(Color(0xFF393B3D))
+                    .background(Color(0xFF393B3D)),
             )
         }
 
@@ -314,7 +322,7 @@ fun EditorPanel(
                 Modifier
                     .height(24.dp)
                     .width(1.dp)
-                    .background(Color(0xFF393B3D))
+                    .background(Color(0xFF393B3D)),
             )
         }
 
@@ -340,10 +348,11 @@ fun EditorLinkDialog(
 
     Column(
         horizontalAlignment = Alignment.Start,
-        modifier = Modifier
-            .clip(RoundedCornerShape(10.dp))
-            .background(Color(0xFF1a1d21))
-            .padding(20.dp)
+        modifier =
+            Modifier
+                .clip(RoundedCornerShape(10.dp))
+                .background(Color(0xFF1a1d21))
+                .padding(20.dp),
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -352,7 +361,7 @@ fun EditorLinkDialog(
                 text = "Add link",
                 color = Color.White,
                 fontSize = 18.sp,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
 
             Spacer(modifier = Modifier.weight(1f))
@@ -360,12 +369,12 @@ fun EditorLinkDialog(
             IconButton(
                 onClick = {
                     onDismiss(false)
-                }
+                },
             ) {
                 Icon(
                     imageVector = Icons.Outlined.Close,
                     contentDescription = "Close",
-                    tint = Color.White
+                    tint = Color.White,
                 )
             }
         }
@@ -374,30 +383,32 @@ fun EditorLinkDialog(
 
         OutlinedTextField(
             value =
-            if (state.selection.collapsed)
-                text
-            else
-                state.annotatedString.text.substring(
-                    state.selection.min,
-                    state.selection.max
-                ),
+                if (state.selection.collapsed) {
+                    text
+                } else {
+                    state.annotatedString.text.substring(
+                        state.selection.min,
+                        state.selection.max,
+                    )
+                },
             onValueChange = {
                 text = it
             },
             label = {
                 Text(
                     text = "Text",
-                    color = Color.White
+                    color = Color.White,
                 )
             },
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedTextColor = Color.White,
-                unfocusedTextColor = Color.White,
-                focusedBorderColor = Color.White,
-                unfocusedBorderColor = Color.White
-            ),
+            colors =
+                OutlinedTextFieldDefaults.colors(
+                    focusedTextColor = Color.White,
+                    unfocusedTextColor = Color.White,
+                    focusedBorderColor = Color.White,
+                    unfocusedBorderColor = Color.White,
+                ),
             enabled = state.selection.collapsed && !state.isLink,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         )
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -410,24 +421,26 @@ fun EditorLinkDialog(
             label = {
                 Text(
                     text = "Link",
-                    color = Color.White
+                    color = Color.White,
                 )
             },
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedTextColor = Color.White,
-                unfocusedTextColor = Color.White,
-                focusedBorderColor = Color.White,
-                unfocusedBorderColor = Color.White
-            ),
-            modifier = Modifier.fillMaxWidth()
+            colors =
+                OutlinedTextFieldDefaults.colors(
+                    focusedTextColor = Color.White,
+                    unfocusedTextColor = Color.White,
+                    focusedBorderColor = Color.White,
+                    unfocusedBorderColor = Color.White,
+                ),
+            modifier = Modifier.fillMaxWidth(),
         )
 
         Spacer(modifier = Modifier.height(20.dp))
 
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .align(Alignment.End)
+            modifier =
+                Modifier
+                    .align(Alignment.End),
         ) {
             if (state.isLink) {
                 OutlinedButton(
@@ -437,20 +450,22 @@ fun EditorLinkDialog(
                         text = ""
                         link = ""
                     },
-                    colors = ButtonDefaults.outlinedButtonColors(
-                        containerColor = Color.Transparent,
-                        contentColor = Color.White
-                    ),
-                    border = BorderStroke(
-                        width = 1.dp,
-                        color = Color.Red
-                    ),
+                    colors =
+                        ButtonDefaults.outlinedButtonColors(
+                            containerColor = Color.Transparent,
+                            contentColor = Color.White,
+                        ),
+                    border =
+                        BorderStroke(
+                            width = 1.dp,
+                            color = Color.Red,
+                        ),
                     shape = RoundedCornerShape(10.dp),
-                    modifier = Modifier
+                    modifier = Modifier,
                 ) {
                     Text(
                         text = "Remove",
-                        color = Color.Red
+                        color = Color.Red,
                     )
                 }
 
@@ -463,10 +478,10 @@ fun EditorLinkDialog(
                     text = ""
                     link = ""
                 },
-                modifier = Modifier
+                modifier = Modifier,
             ) {
                 Text(
-                    text = "Cancel"
+                    text = "Cancel",
                 )
             }
 
@@ -483,12 +498,12 @@ fun EditorLinkDialog(
                         state.selection.collapsed ->
                             state.addLink(
                                 text = text,
-                                url = link
+                                url = link,
                             )
 
                         else ->
                             state.addLinkToSelection(
-                                url = link
+                                url = link,
                             )
                     }
 
@@ -499,7 +514,7 @@ fun EditorLinkDialog(
                 enabled = (text.isNotEmpty() || !state.selection.collapsed) && link.isNotEmpty(),
             ) {
                 Text(
-                    text = "Save"
+                    text = "Save",
                 )
             }
         }

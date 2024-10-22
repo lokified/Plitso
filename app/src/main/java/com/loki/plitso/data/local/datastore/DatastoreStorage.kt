@@ -6,9 +6,11 @@ import kotlinx.coroutines.flow.Flow
 
 interface DatastoreStorage {
     suspend fun saveLocalUser(localUser: LocalUser)
+
     fun getLocalUser(): Flow<LocalUser>
 
     suspend fun saveAppTheme(theme: Theme)
+
     fun getAppTheme(): Flow<String>
 
     object UserPreferences {

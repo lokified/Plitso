@@ -1,4 +1,4 @@
-package com.loki.plitso.data.repository.auth.google_auth
+package com.loki.plitso.data.repository.auth.googleAuth
 
 import androidx.compose.runtime.Composable
 

@@ -39,44 +39,42 @@ import com.loki.plitso.util.noIndication
 fun SharedTransitionScope.BookmarkScreen(
     animatedVisibilityScope: AnimatedVisibilityScope,
     bookmarks: List<Bookmark>,
-    navigateToRecipeDetailScreen: (id: String) -> Unit
+    navigateToRecipeDetailScreen: (id: String) -> Unit,
 ) {
-
     Column {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp, horizontal = 16.dp),
-            verticalAlignment = Alignment.CenterVertically
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp, horizontal = 16.dp),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
                 text = "Bookmark",
                 fontSize = 22.sp,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
         }
         if (bookmarks.isEmpty()) {
             Box(
                 modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
+                contentAlignment = Alignment.Center,
             ) {
                 Text(
                     text = "Nothing to see here",
-                    color = MaterialTheme.colorScheme.onBackground.copy(.5f)
+                    color = MaterialTheme.colorScheme.onBackground.copy(.5f),
                 )
             }
         } else {
-
             LazyColumn(
                 contentPadding = PaddingValues(16.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+                verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-
                 items(bookmarks) { bookmark ->
                     BookmarkItem(
                         animatedVisibilityScope = animatedVisibilityScope,
                         bookmark = bookmark,
-                        onItemClick = { navigateToRecipeDetailScreen(bookmark.recipeId) }
+                        onItemClick = { navigateToRecipeDetailScreen(bookmark.recipeId) },
                     )
                 }
             }
@@ -90,39 +88,42 @@ private fun SharedTransitionScope.BookmarkItem(
     modifier: Modifier = Modifier,
     animatedVisibilityScope: AnimatedVisibilityScope,
     bookmark: Bookmark,
-    onItemClick: (id: String) -> Unit
+    onItemClick: (id: String) -> Unit,
 ) {
     Column(
-        modifier = Modifier.noIndication {
-            onItemClick(bookmark.recipeId)
-        }
+        modifier =
+            Modifier.noIndication {
+                onItemClick(bookmark.recipeId)
+            },
     ) {
         Box(
-            modifier = modifier
-                .fillMaxWidth()
-                .height(200.dp)
-                .clip(RoundedCornerShape(12.dp))
+            modifier =
+                modifier
+                    .fillMaxWidth()
+                    .height(200.dp)
+                    .clip(RoundedCornerShape(12.dp)),
         ) {
             SubcomposeAsyncImage(
                 model = bookmark.image,
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .sharedElement(
-                        state = rememberSharedContentState(key = "image/${bookmark.recipeId}"),
-                        animatedVisibilityScope = animatedVisibilityScope,
-                        boundsTransform = { _, _ ->
-                            tween(durationMillis = 200)
-                        }
-                    ),
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .sharedElement(
+                            state = rememberSharedContentState(key = "image/${bookmark.recipeId}"),
+                            animatedVisibilityScope = animatedVisibilityScope,
+                            boundsTransform = { _, _ ->
+                                tween(durationMillis = 200)
+                            },
+                        ),
                 loading = {
                     Icon(
                         imageVector = Icons.Filled.Fastfood,
                         contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onBackground.copy(.2f)
+                        tint = MaterialTheme.colorScheme.onBackground.copy(.2f),
                     )
-                }
+                },
             )
         }
         Spacer(modifier = Modifier.height(4.dp))
@@ -131,16 +132,17 @@ private fun SharedTransitionScope.BookmarkItem(
             maxLines = 1,
             fontWeight = FontWeight.Bold,
             fontSize = 18.sp,
-            modifier = Modifier
-                .sharedElement(
-                    rememberSharedContentState(
-                        key = "text/${bookmark.recipeId}"
+            modifier =
+                Modifier
+                    .sharedElement(
+                        rememberSharedContentState(
+                            key = "text/${bookmark.recipeId}",
+                        ),
+                        animatedVisibilityScope,
+                        boundsTransform = { _, _ ->
+                            tween(durationMillis = 200)
+                        },
                     ),
-                    animatedVisibilityScope,
-                    boundsTransform = { _, _ ->
-                        tween(durationMillis = 200)
-                    }
-                )
         )
     }
 }

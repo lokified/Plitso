@@ -32,57 +32,57 @@ import com.loki.plitso.presentation.document.MealType
 fun ParametersContent(
     modifier: Modifier = Modifier,
     aiViewModel: AiViewModel,
-    onSuggestClick: () -> Unit
+    onSuggestClick: () -> Unit,
 ) {
     val parameters by aiViewModel.parameters.collectAsStateWithLifecycle()
     val aiState by aiViewModel.state.collectAsStateWithLifecycle()
 
     Column(
-        modifier = modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-
+        modifier =
+            modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState()),
     ) {
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(16.dp),
         ) {
             TypeWriterTextEffect(
                 text = "Tune your Meal Suggestions",
                 maxDelayInMillis = 200,
-                onEffectComplete = { /*TODO*/ }
+                onEffectComplete = { /*TODO*/ },
             ) { text ->
                 Text(
                     text = text,
                     fontSize = 20.sp,
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
                 )
             }
             Spacer(modifier = Modifier.height(24.dp))
 
             MealTypeSection(
                 selectedType = parameters.mealType,
-                onChangeSelected = aiViewModel::onMealTypeChange
+                onChangeSelected = aiViewModel::onMealTypeChange,
             )
 
             CuisineSection(
                 countries = aiViewModel.aiData.countries.distinct(),
                 selectedCuisine = parameters.cuisine,
-                onChangeSelected = aiViewModel::onCuisineChange
+                onChangeSelected = aiViewModel::onCuisineChange,
             )
 
             MoodSection(
                 selectedMood = parameters.mood,
-                onChangeSelected = aiViewModel::onMoodChange
+                onChangeSelected = aiViewModel::onMoodChange,
             )
 
             DietarySection(
                 selectedDietary = parameters.dietary,
-                onChangeSelected = aiViewModel::onDietaryChange
+                onChangeSelected = aiViewModel::onDietaryChange,
             )
 
             QuickSection(
                 selectedQuick = parameters.isQuick,
-                onChangeSelected = aiViewModel::isQuickMealChange
+                onChangeSelected = aiViewModel::isQuickMealChange,
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -90,12 +90,12 @@ fun ParametersContent(
             Button(
                 onClick = onSuggestClick,
                 modifier = Modifier.align(Alignment.End),
-                enabled = !aiState.isLoading
+                enabled = !aiState.isLoading,
             ) {
-                if(aiState.isLoading) {
+                if (aiState.isLoading) {
                     CircularProgressIndicator(
                         color = Color.White,
-                        modifier = Modifier.size(20.dp)
+                        modifier = Modifier.size(20.dp),
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                 }
@@ -110,7 +110,7 @@ fun ParametersContent(
 fun MealTypeSection(
     modifier: Modifier = Modifier,
     selectedType: String,
-    onChangeSelected: (String) -> Unit
+    onChangeSelected: (String) -> Unit,
 ) {
     Column {
         Text(text = "Select Meal")
@@ -119,14 +119,14 @@ fun MealTypeSection(
         FlowRow(
             modifier = modifier,
             horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             MealType.entries.forEach {
                 val selected = it.name == selectedType
                 Selectable(
                     label = it.name,
                     selected = selected,
-                    onSelected = onChangeSelected
+                    onSelected = onChangeSelected,
                 )
             }
         }
@@ -139,7 +139,7 @@ fun CuisineSection(
     modifier: Modifier = Modifier,
     countries: List<String>,
     selectedCuisine: String,
-    onChangeSelected: (String) -> Unit
+    onChangeSelected: (String) -> Unit,
 ) {
     Column {
         Text(text = "Select Cuisine")
@@ -147,14 +147,14 @@ fun CuisineSection(
         FlowRow(
             modifier = modifier,
             horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             countries.forEach {
                 val selected = it == selectedCuisine
                 Selectable(
                     label = it,
                     selected = selected,
-                    onSelected = onChangeSelected
+                    onSelected = onChangeSelected,
                 )
             }
         }
@@ -166,7 +166,7 @@ fun CuisineSection(
 fun MoodSection(
     modifier: Modifier = Modifier,
     selectedMood: String,
-    onChangeSelected: (String) -> Unit
+    onChangeSelected: (String) -> Unit,
 ) {
     val moods = listOf("Savory", "Sweet", "Spicy", "Healthy", "Comfort")
     Column {
@@ -175,14 +175,14 @@ fun MoodSection(
         FlowRow(
             modifier = modifier,
             horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             moods.forEach {
                 val selected = it == selectedMood
                 Selectable(
                     label = it,
                     selected = selected,
-                    onSelected = onChangeSelected
+                    onSelected = onChangeSelected,
                 )
             }
         }
@@ -194,7 +194,7 @@ fun MoodSection(
 fun DietarySection(
     modifier: Modifier = Modifier,
     selectedDietary: String,
-    onChangeSelected: (String) -> Unit
+    onChangeSelected: (String) -> Unit,
 ) {
     val dietaries = listOf("Vegeterian", "Vegan", "Glutten-free", "Dairy-free")
     Column {
@@ -203,14 +203,14 @@ fun DietarySection(
         FlowRow(
             modifier = modifier,
             horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             dietaries.forEach {
                 val selected = it == selectedDietary
                 Selectable(
                     label = it,
                     selected = selected,
-                    onSelected = onChangeSelected
+                    onSelected = onChangeSelected,
                 )
             }
         }
@@ -222,7 +222,7 @@ fun DietarySection(
 fun QuickSection(
     modifier: Modifier = Modifier,
     selectedQuick: Boolean,
-    onChangeSelected: (Boolean) -> Unit
+    onChangeSelected: (Boolean) -> Unit,
 ) {
     val quicks = listOf("Yes", "No")
     Column {
@@ -231,7 +231,7 @@ fun QuickSection(
         FlowRow(
             modifier = modifier,
             horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             quicks.forEach { quick ->
                 val selected = quick == if (selectedQuick) "Yes" else "No"
@@ -240,9 +240,9 @@ fun QuickSection(
                     selected = selected,
                     onSelected = {
                         onChangeSelected(
-                            it == "Yes"
+                            it == "Yes",
                         )
-                    }
+                    },
                 )
             }
         }
@@ -254,15 +254,14 @@ fun Selectable(
     modifier: Modifier = Modifier,
     label: String,
     selected: Boolean,
-    onSelected: (text: String) -> Unit
+    onSelected: (text: String) -> Unit,
 ) {
-
     FilterChip(
         modifier = modifier,
         selected = selected,
         onClick = { onSelected(label) },
         label = {
             Text(text = label)
-        }
+        },
     )
 }

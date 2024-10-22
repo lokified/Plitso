@@ -16,17 +16,19 @@ import org.koin.dsl.module
 
 private const val USER_PREFERENCE = "user_preference"
 
-val datastoreModule = module {
-    single<DataStore<Preferences>> {
-        PreferenceDataStoreFactory.create(
-            corruptionHandler = ReplaceFileCorruptionHandler(
-                produceNewData = { emptyPreferences() }
-            ),
-            scope = CoroutineScope(Dispatchers.IO + SupervisorJob()),
-            produceFile = {
-                get<Context>().preferencesDataStoreFile(USER_PREFERENCE)
-            }
-        )
+val datastoreModule =
+    module {
+        single<DataStore<Preferences>> {
+            PreferenceDataStoreFactory.create(
+                corruptionHandler =
+                    ReplaceFileCorruptionHandler(
+                        produceNewData = { emptyPreferences() },
+                    ),
+                scope = CoroutineScope(Dispatchers.IO + SupervisorJob()),
+                produceFile = {
+                    get<Context>().preferencesDataStoreFile(USER_PREFERENCE)
+                },
+            )
+        }
+        single<DatastoreStorage> { DatastoreStorageImpl(get()) }
     }
-    single<DatastoreStorage> { DatastoreStorageImpl(get()) }
-}

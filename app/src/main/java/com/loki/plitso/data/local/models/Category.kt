@@ -8,5 +8,5 @@ data class Category(
     @PrimaryKey
     val categoryId: String,
     val title: String,
-    val image: String
+    val image: String,
 )

@@ -66,67 +66,74 @@ import com.loki.plitso.util.noIndication
 fun SharedTransitionScope.SearchScreen(
     searchViewModel: SearchViewModel,
     animatedVisibilityScope: AnimatedVisibilityScope,
-    navigateToRecipeDetailScreen: (id: String) -> Unit
+    navigateToRecipeDetailScreen: (id: String) -> Unit,
 ) {
-
     val recipes by searchViewModel.recipes.collectAsStateWithLifecycle()
     val searchTerm by searchViewModel.searchTerm.collectAsStateWithLifecycle()
 
-    if(searchTerm.isNotEmpty()) {
+    if (searchTerm.isNotEmpty()) {
         BackHandler {
             searchViewModel.onSearchTermChange("")
         }
     }
 
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
     ) {
         var showFilterOptions by rememberSaveable { mutableStateOf(false) }
-        val filterIcon = if(showFilterOptions) Icons.Filled.FilterAltOff else Icons.Filled.FilterAlt
+        val filterIcon =
+            if (showFilterOptions) {
+                Icons.Filled.FilterAltOff
+            } else {
+                Icons.Filled.FilterAlt
+            }
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .padding(16.dp)
+            modifier =
+                Modifier
+                    .padding(16.dp),
         ) {
             Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .border(
-                        width = 1.dp,
-                        color = MaterialTheme.colorScheme.onBackground.copy(.2f),
-                        shape = CircleShape
-                    )
-                    .weight(.9f)
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .border(
+                            width = 1.dp,
+                            color = MaterialTheme.colorScheme.onBackground.copy(.2f),
+                            shape = CircleShape,
+                        ).weight(.9f),
             ) {
-
-                val focusRequester = remember {
-                    FocusRequester()
-                }
+                val focusRequester =
+                    remember {
+                        FocusRequester()
+                    }
 
                 LaunchedEffect(Unit) {
-                    if(searchTerm.isEmpty()) {
+                    if (searchTerm.isEmpty()) {
                         focusRequester.requestFocus()
                     }
                 }
 
                 TextField(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .focusRequester(focusRequester),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .focusRequester(focusRequester),
                     value = searchTerm,
                     onValueChange = searchViewModel::onSearchTermChange,
                     placeholder = {
                         Text(
                             text = "Search eg. ingredients, food",
-                            color = MaterialTheme.colorScheme.onBackground.copy(.2f)
+                            color = MaterialTheme.colorScheme.onBackground.copy(.2f),
                         )
                     },
                     leadingIcon = {
                         Icon(
-                            modifier = Modifier
-                                .size(24.dp),
+                            modifier =
+                                Modifier
+                                    .size(24.dp),
                             imageVector = Icons.Outlined.Search,
-                            contentDescription = "search icon"
+                            contentDescription = "search icon",
                         )
                     },
                     trailingIcon = {
@@ -134,13 +141,14 @@ fun SharedTransitionScope.SearchScreen(
                             Icon(
                                 imageVector = Icons.Default.Clear,
                                 contentDescription = "close icon",
-                                modifier = Modifier.clickable {
-                                    searchViewModel.onSearchTermChange("")
-                                }
+                                modifier =
+                                    Modifier.clickable {
+                                        searchViewModel.onSearchTermChange("")
+                                    },
                             )
                         }
                     },
-                    colors = textFieldColors()
+                    colors = textFieldColors(),
                 )
             }
 
@@ -148,7 +156,7 @@ fun SharedTransitionScope.SearchScreen(
                 onClick = {
                     showFilterOptions = !showFilterOptions
                 },
-                modifier = Modifier.weight(.1f)
+                modifier = Modifier.weight(.1f),
             ) {
                 Icon(imageVector = filterIcon, contentDescription = "filter icon")
             }
@@ -158,14 +166,14 @@ fun SharedTransitionScope.SearchScreen(
             val filters = listOf("title", "cuisine", "ingredient")
             FlowRow(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 filters.forEach { title ->
                     CheckItem(
                         title = title,
                         onCheckChange = {
-                           searchViewModel.onFilteredChange(title)
-                        }
+                            searchViewModel.onFilteredChange(title)
+                        },
                     )
                 }
             }
@@ -174,11 +182,11 @@ fun SharedTransitionScope.SearchScreen(
         if (recipes.isEmpty()) {
             Box(
                 modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
+                contentAlignment = Alignment.Center,
             ) {
                 Text(
                     text = "Try search",
-                    color = MaterialTheme.colorScheme.onBackground.copy(.5f)
+                    color = MaterialTheme.colorScheme.onBackground.copy(.5f),
                 )
             }
         }
@@ -187,13 +195,13 @@ fun SharedTransitionScope.SearchScreen(
             columns = GridCells.Fixed(2),
             verticalArrangement = Arrangement.spacedBy(12.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
-            contentPadding = PaddingValues(16.dp)
+            contentPadding = PaddingValues(16.dp),
         ) {
             items(recipes) { recipe ->
                 RecipeItem(
                     recipe = recipe,
                     animatedVisibilityScope = animatedVisibilityScope,
-                    onItemClick = navigateToRecipeDetailScreen
+                    onItemClick = navigateToRecipeDetailScreen,
                 )
             }
         }
@@ -204,19 +212,19 @@ fun SharedTransitionScope.SearchScreen(
 fun CheckItem(
     modifier: Modifier = Modifier,
     title: String,
-    onCheckChange: (Boolean) -> Unit
+    onCheckChange: (Boolean) -> Unit,
 ) {
     var isChecked by rememberSaveable { mutableStateOf(false) }
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier
+        modifier = modifier,
     ) {
         Checkbox(
             checked = isChecked,
             onCheckedChange = {
                 isChecked = it
                 onCheckChange(it)
-            }
+            },
         )
         Text(text = title)
     }
@@ -228,38 +236,41 @@ fun SharedTransitionScope.RecipeItem(
     modifier: Modifier = Modifier,
     animatedVisibilityScope: AnimatedVisibilityScope,
     recipe: RecipeDetail,
-    onItemClick: (id: String) -> Unit
+    onItemClick: (id: String) -> Unit,
 ) {
     Column(
-        modifier = Modifier.noIndication {
-            onItemClick(recipe.recipeId)
-        }
+        modifier =
+            Modifier.noIndication {
+                onItemClick(recipe.recipeId)
+            },
     ) {
         Box(
-            modifier = modifier
-                .height(150.dp)
-                .clip(RoundedCornerShape(12.dp))
+            modifier =
+                modifier
+                    .height(150.dp)
+                    .clip(RoundedCornerShape(12.dp)),
         ) {
             SubcomposeAsyncImage(
                 model = recipe.image,
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .sharedElement(
-                        state = rememberSharedContentState(key = "image/${recipe.recipeId}"),
-                        animatedVisibilityScope = animatedVisibilityScope,
-                        boundsTransform = { _, _ ->
-                            tween(durationMillis = 200)
-                        }
-                    ),
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .sharedElement(
+                            state = rememberSharedContentState(key = "image/${recipe.recipeId}"),
+                            animatedVisibilityScope = animatedVisibilityScope,
+                            boundsTransform = { _, _ ->
+                                tween(durationMillis = 200)
+                            },
+                        ),
                 loading = {
                     Icon(
                         imageVector = Icons.Filled.Fastfood,
                         contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onBackground.copy(.2f)
+                        tint = MaterialTheme.colorScheme.onBackground.copy(.2f),
                     )
-                }
+                },
             )
         }
         Spacer(modifier = Modifier.height(4.dp))
@@ -268,16 +279,17 @@ fun SharedTransitionScope.RecipeItem(
             maxLines = 1,
             fontWeight = FontWeight.Bold,
             fontSize = 18.sp,
-            modifier = Modifier
-                .sharedElement(
-                    rememberSharedContentState(
-                        key = "text/${recipe.recipeId}"
+            modifier =
+                Modifier
+                    .sharedElement(
+                        rememberSharedContentState(
+                            key = "text/${recipe.recipeId}",
+                        ),
+                        animatedVisibilityScope,
+                        boundsTransform = { _, _ ->
+                            tween(durationMillis = 200)
+                        },
                     ),
-                    animatedVisibilityScope,
-                    boundsTransform = { _, _ ->
-                        tween(durationMillis = 200)
-                    }
-                )
         )
     }
 }

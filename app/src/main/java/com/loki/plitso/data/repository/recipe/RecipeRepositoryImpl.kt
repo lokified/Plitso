@@ -16,7 +16,6 @@ import com.loki.plitso.data.remote.mealdb.mappers.toDayRecipe
 import com.loki.plitso.data.remote.mealdb.mappers.toRandom
 import com.loki.plitso.data.remote.mealdb.mappers.toRecipe
 import com.loki.plitso.data.remote.mealdb.mappers.toRecipeDetail
-import com.loki.plitso.util.safeApiCall
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -31,25 +30,25 @@ class RecipeRepositoryImpl(
     private val recipeDao: RecipeDao,
     private val recipeDetailDao: RecipeDetailDao,
     private val dayRecipeDao: DayRecipeDao,
-    private val randomDao: RandomDao
+    private val randomDao: RandomDao,
 ) : RecipeRepository {
-
-    override fun getDayRecipe(): Flow<DayRecipe> = flow {
-        try {
-            val recipe = dayRecipeDao.getRecipes().first().isEmpty()
-            if (recipe) {
-                val randomRecipe = api.getRandomRecipe().meals[0]
-                dayRecipeDao.insert(randomRecipe.toDayRecipe(Date()))
-                val dayRecipe = dayRecipeDao.getRecipes().first()[0]
-                emit(dayRecipe)
-            } else {
-                val dayRecipe = dayRecipeDao.getRecipes().first()[0]
-                emit(dayRecipe)
+    override fun getDayRecipe(): Flow<DayRecipe> =
+        flow {
+            try {
+                val recipe = dayRecipeDao.getRecipes().first().isEmpty()
+                if (recipe) {
+                    val randomRecipe = api.getRandomRecipe().meals[0]
+                    dayRecipeDao.insert(randomRecipe.toDayRecipe(Date()))
+                    val dayRecipe = dayRecipeDao.getRecipes().first()[0]
+                    emit(dayRecipe)
+                } else {
+                    val dayRecipe = dayRecipeDao.getRecipes().first()[0]
+                    emit(dayRecipe)
+                }
+            } catch (e: Exception) {
+                Timber.tag("day recipe repo").d(e)
             }
-        } catch (e: Exception) {
-            Timber.tag("day recipe repo").d(e)
         }
-    }
 
     override suspend fun generateRandomRecipe() {
         try {
@@ -65,13 +64,11 @@ class RecipeRepositoryImpl(
     override val categories: Flow<List<Category>>
         get() = categoryDao.getCategories()
 
-    override fun getRecipeDetail(id: String): Flow<RecipeDetail> {
-        return recipeDetailDao.getRecipeDetail(id)
-    }
+    override fun getRecipeDetail(id: String): Flow<RecipeDetail> =
+        recipeDetailDao.getRecipeDetail(id)
 
-    override suspend fun getRecipes(categoryId: String): List<Recipe> {
-        return categoryDao.getCategoriesWithRecipes(categoryId).recipes
-    }
+    override suspend fun getRecipes(categoryId: String): List<Recipe> =
+        categoryDao.getCategoriesWithRecipes(categoryId).recipes
 
     override suspend fun refreshDatabase() {
         withContext(Dispatchers.IO) {

@@ -33,29 +33,29 @@ import com.loki.plitso.util.noIndication
 fun SettingItem(
     modifier: Modifier = Modifier,
     itemList: List<SettingItem>,
-    onItemClick: (itemIndex: Int) -> Unit = {}
+    onItemClick: (itemIndex: Int) -> Unit = {},
 ) {
     Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp)
-            .background(
-                color = MaterialTheme.colorScheme.surface,
-                shape = RoundedCornerShape(12.dp)
-            )
-    ) {
-
-        Column(
-            modifier = Modifier
+        modifier =
+            modifier
                 .fillMaxWidth()
-                .padding(8.dp)
+                .padding(horizontal = 16.dp)
+                .background(
+                    color = MaterialTheme.colorScheme.surface,
+                    shape = RoundedCornerShape(12.dp),
+                ),
+    ) {
+        Column(
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
         ) {
-
             itemList.forEachIndexed { index, item ->
                 Item(
                     settingItem = item,
                     modifier = Modifier.padding(vertical = 8.dp),
-                    onItemClick = { onItemClick(index) }
+                    onItemClick = { onItemClick(index) },
                 )
             }
         }
@@ -66,36 +66,34 @@ fun SettingItem(
 private fun Item(
     modifier: Modifier = Modifier,
     settingItem: SettingItem,
-    onItemClick: () -> Unit
+    onItemClick: () -> Unit,
 ) {
-
     Box(
-        modifier = Modifier.noIndication { onItemClick() }
+        modifier = Modifier.noIndication { onItemClick() },
     ) {
         Row(
-            modifier = modifier
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
+            modifier =
+                modifier
+                    .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
-
             if (settingItem.icon != null || settingItem.imageUrl != null) {
                 Box(
-                    modifier = Modifier
-                        .size(40.dp)
-                        .background(
-                            color = MaterialTheme.colorScheme.background,
-                            shape = CircleShape
-                        )
-                        .clip(CircleShape),
-                    contentAlignment = Alignment.Center
+                    modifier =
+                        Modifier
+                            .size(40.dp)
+                            .background(
+                                color = MaterialTheme.colorScheme.background,
+                                shape = CircleShape,
+                            ).clip(CircleShape),
+                    contentAlignment = Alignment.Center,
                 ) {
-
                     settingItem.icon?.let {
                         Icon(
                             imageVector = it,
                             contentDescription = settingItem.content,
                             modifier = Modifier.size(25.dp),
-                            tint = MaterialTheme.colorScheme.primary.copy(.5f)
+                            tint = MaterialTheme.colorScheme.primary.copy(.5f),
                         )
                     }
 
@@ -104,7 +102,7 @@ private fun Item(
                             model = it,
                             contentDescription = settingItem.content,
                             modifier = Modifier.fillMaxSize(),
-                            contentScale = ContentScale.Crop
+                            contentScale = ContentScale.Crop,
                         )
                     }
                 }
@@ -126,7 +124,7 @@ private fun Item(
             settingItem.switchData?.let { data ->
                 Switch(
                     checked = data.isChecked,
-                    onCheckedChange = data.onCheckedChange
+                    onCheckedChange = data.onCheckedChange,
                 )
             }
         }
@@ -138,10 +136,10 @@ data class SettingItem(
     val imageUrl: String? = null,
     val content: String? = null,
     val subContent: (@Composable () -> Unit)? = null,
-    val switchData: SwitchData? = null
+    val switchData: SwitchData? = null,
 )
 
 data class SwitchData(
     val isChecked: Boolean,
-    val onCheckedChange: (Boolean) -> Unit
+    val onCheckedChange: (Boolean) -> Unit,
 )

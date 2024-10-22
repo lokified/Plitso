@@ -7,7 +7,7 @@ import com.loki.plitso.data.local.datastore.DatastoreStorage
 import com.loki.plitso.data.local.datastore.LocalUser
 import com.loki.plitso.data.remote.mealdb.models.User
 import com.loki.plitso.data.repository.auth.AuthRepository
-import com.loki.plitso.data.repository.auth.google_auth.GoogleAuthProvider
+import com.loki.plitso.data.repository.auth.googleAuth.GoogleAuthProvider
 import com.loki.plitso.util.Resource
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -16,25 +16,27 @@ import kotlinx.coroutines.launch
 class LoginViewModel(
     private val authRepository: AuthRepository,
     private val datastoreStorage: DatastoreStorage,
-    val googleAuthProvider: GoogleAuthProvider
+    val googleAuthProvider: GoogleAuthProvider,
 ) : ViewModel() {
-
     private val _state = MutableStateFlow(LoginState())
     val state = _state.asStateFlow()
 
-    fun login(user: User?, onSuccess: () -> Unit) {
+    fun login(
+        user: User?,
+        onSuccess: () -> Unit,
+    ) {
         user?.let {
             viewModelScope.launch {
                 authRepository.authenticate(it.idToken).collect { result ->
                     when (result) {
                         is Resource.Loading -> {
-                            _state.value = _state.value.copy(
-                                isLoading = true
-                            )
+                            _state.value =
+                                _state.value.copy(
+                                    isLoading = true,
+                                )
                         }
 
                         is Resource.Success -> {
-
                             val loggedUser = result.data
                             datastoreStorage.saveLocalUser(
                                 LocalUser(
@@ -42,22 +44,24 @@ class LoginViewModel(
                                     email = loggedUser.email,
                                     username = loggedUser.username ?: "",
                                     imageUrl = loggedUser.imageUrl.toString(),
-                                    isLoggedIn = true
-                                )
+                                    isLoggedIn = true,
+                                ),
                             )
 
-                            _state.value = _state.value.copy(
-                                isLoading = false
-                            )
+                            _state.value =
+                                _state.value.copy(
+                                    isLoading = false,
+                                )
 
                             onSuccess()
                         }
 
                         is Resource.Error -> {
-                            _state.value = _state.value.copy(
-                                isLoading = false,
-                                errorMessage = result.message
-                            )
+                            _state.value =
+                                _state.value.copy(
+                                    isLoading = false,
+                                    errorMessage = result.message,
+                                )
                             Log.d("login err", result.message)
                         }
                     }

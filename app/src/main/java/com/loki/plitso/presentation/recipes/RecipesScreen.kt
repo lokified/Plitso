@@ -44,56 +44,54 @@ fun SharedTransitionScope.RecipesScreen(
     animatedVisibilityScope: AnimatedVisibilityScope,
     recipesState: RecipesState,
     navigateToRecipeDetailScreen: (id: String) -> Unit,
-    navigateBack: () -> Unit
+    navigateBack: () -> Unit,
 ) {
-
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
     ) {
-
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp, horizontal = 16.dp),
-            verticalAlignment = Alignment.CenterVertically
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp, horizontal = 16.dp),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             IconButton(onClick = navigateBack) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Default.ArrowBackIos,
-                    contentDescription = null
+                    contentDescription = null,
                 )
             }
             Spacer(modifier = Modifier.width(8.dp))
             Text(
                 text = recipesState.category,
                 fontSize = 22.sp,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
         }
 
         if (recipesState.recipes.isEmpty()) {
             Box(
                 modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
+                contentAlignment = Alignment.Center,
             ) {
                 Text(
                     text = "Data loading. Please wait ...",
-                    color = MaterialTheme.colorScheme.onBackground.copy(.5f)
+                    color = MaterialTheme.colorScheme.onBackground.copy(.5f),
                 )
             }
         } else {
-
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
-                contentPadding = PaddingValues(16.dp)
+                contentPadding = PaddingValues(16.dp),
             ) {
                 items(recipesState.recipes) { recipe ->
                     RecipeItem(
                         recipe = recipe,
                         animatedVisibilityScope = animatedVisibilityScope,
-                        onItemClick = navigateToRecipeDetailScreen
+                        onItemClick = navigateToRecipeDetailScreen,
                     )
                 }
             }
@@ -107,38 +105,41 @@ private fun SharedTransitionScope.RecipeItem(
     modifier: Modifier = Modifier,
     animatedVisibilityScope: AnimatedVisibilityScope,
     recipe: Recipe,
-    onItemClick: (id: String) -> Unit
+    onItemClick: (id: String) -> Unit,
 ) {
     Column(
-        modifier = Modifier.noIndication {
-            onItemClick(recipe.recipeId)
-        }
+        modifier =
+            Modifier.noIndication {
+                onItemClick(recipe.recipeId)
+            },
     ) {
         Box(
-            modifier = modifier
-                .height(150.dp)
-                .clip(RoundedCornerShape(12.dp))
+            modifier =
+                modifier
+                    .height(150.dp)
+                    .clip(RoundedCornerShape(12.dp)),
         ) {
             SubcomposeAsyncImage(
                 model = recipe.image,
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .sharedElement(
-                        state = rememberSharedContentState(key = "image/${recipe.recipeId}"),
-                        animatedVisibilityScope = animatedVisibilityScope,
-                        boundsTransform = { _, _ ->
-                            tween(durationMillis = 200)
-                        }
-                    ),
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .sharedElement(
+                            state = rememberSharedContentState(key = "image/${recipe.recipeId}"),
+                            animatedVisibilityScope = animatedVisibilityScope,
+                            boundsTransform = { _, _ ->
+                                tween(durationMillis = 200)
+                            },
+                        ),
                 loading = {
                     Icon(
                         imageVector = Icons.Filled.Fastfood,
                         contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onBackground.copy(.2f)
+                        tint = MaterialTheme.colorScheme.onBackground.copy(.2f),
                     )
-                }
+                },
             )
         }
         Spacer(modifier = Modifier.height(4.dp))
@@ -147,16 +148,17 @@ private fun SharedTransitionScope.RecipeItem(
             maxLines = 1,
             fontWeight = FontWeight.Bold,
             fontSize = 18.sp,
-            modifier = Modifier
-                .sharedElement(
-                    rememberSharedContentState(
-                        key = "text/${recipe.recipeId}"
+            modifier =
+                Modifier
+                    .sharedElement(
+                        rememberSharedContentState(
+                            key = "text/${recipe.recipeId}",
+                        ),
+                        animatedVisibilityScope,
+                        boundsTransform = { _, _ ->
+                            tween(durationMillis = 200)
+                        },
                     ),
-                    animatedVisibilityScope,
-                    boundsTransform = { _, _ ->
-                        tween(durationMillis = 200)
-                    }
-                )
         )
     }
 }

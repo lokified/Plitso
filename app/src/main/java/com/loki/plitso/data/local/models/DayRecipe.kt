@@ -10,5 +10,5 @@ data class DayRecipe(
     val recipeId: String,
     val title: String,
     val image: String,
-    val updatedDate: Date
+    val updatedDate: Date,
 )

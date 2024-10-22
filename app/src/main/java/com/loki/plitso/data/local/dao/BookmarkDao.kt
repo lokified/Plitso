@@ -6,8 +6,7 @@ import com.loki.plitso.data.local.models.Bookmark
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface BookmarkDao: BaseDao<Bookmark> {
-
+interface BookmarkDao : BaseDao<Bookmark> {
     @Query("SELECT * FROM bookmarks WHERE recipeId = :id")
     fun getBookmark(id: String): Flow<Bookmark?>
 

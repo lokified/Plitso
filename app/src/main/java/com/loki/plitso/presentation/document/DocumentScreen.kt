@@ -77,24 +77,26 @@ import com.loki.plitso.util.TimeUtil.currentTime
 import com.loki.plitso.util.noIndication
 import com.loki.plitso.util.showToast
 
-enum class MealType(@DrawableRes val image: Int) {
+enum class MealType(
+    @DrawableRes val image: Int,
+) {
     BREAKFAST(R.drawable.breakfast),
     LUNCH(R.drawable.lunch),
-    DINNER(R.drawable.dinner)
+    DINNER(R.drawable.dinner),
 }
 
 @Composable
 fun DocumentScreen(
     foodDocuments: List<FoodDocument>,
     documentViewModel: DocumentViewModel,
-    navigateToAllFoodDocument: () -> Unit
+    navigateToAllFoodDocument: () -> Unit,
 ) {
     val context = LocalContext.current
     val foodDocument by documentViewModel.foodDocument.collectAsStateWithLifecycle()
     var containerState by remember { mutableStateOf(ContainerState.BOX_INPUT) }
 
     LaunchedEffect(
-        documentViewModel.error.value
+        documentViewModel.error.value,
     ) {
         if (documentViewModel.error.value.isNotEmpty()) {
             context.showToast(documentViewModel.error.value)
@@ -108,18 +110,25 @@ fun DocumentScreen(
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
-
         Column {
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp, horizontal = 16.dp),
-                verticalAlignment = Alignment.CenterVertically
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp, horizontal = 16.dp),
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
-                    text = if (containerState == ContainerState.EDITOR_INPUT) "Editor" else "Document",
+                    text =
+                        if (containerState ==
+                            ContainerState.EDITOR_INPUT
+                        ) {
+                            "Editor"
+                        } else {
+                            "Document"
+                        },
                     fontSize = 22.sp,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
 
                 if (containerState == ContainerState.EDITOR_INPUT) {
@@ -127,10 +136,17 @@ fun DocumentScreen(
                     IconButton(
                         onClick = {
                             containerState =
-                                if (containerState == ContainerState.EDITOR_INPUT) ContainerState.BOX_INPUT else ContainerState.EDITOR_INPUT
+                                if (containerState ==
+                                    ContainerState.EDITOR_INPUT
+                                ) {
+                                    ContainerState.BOX_INPUT
+                                } else {
+                                    ContainerState.EDITOR_INPUT
+                                }
                         },
-                        modifier = Modifier
-                            .padding(8.dp)
+                        modifier =
+                            Modifier
+                                .padding(8.dp),
                     ) {
                         Icon(imageVector = Icons.Outlined.Close, contentDescription = null)
                     }
@@ -138,58 +154,62 @@ fun DocumentScreen(
             }
 
             Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState()),
             ) {
                 if (containerState == ContainerState.BOX_INPUT) {
                     TopSection(
                         foodDocuments = foodDocuments,
-                        navigateToAllFoodDocument = navigateToAllFoodDocument
+                        navigateToAllFoodDocument = navigateToAllFoodDocument,
                     )
                 }
                 Spacer(modifier = Modifier.height(16.dp))
                 DocumentSection(
                     documentViewModel = documentViewModel,
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .padding(bottom = 16.dp),
+                    modifier =
+                        Modifier
+                            .padding(horizontal = 16.dp)
+                            .padding(bottom = 16.dp),
                     containerState = containerState,
                     selectedContainer = {
                         containerState = it
-                    }
+                    },
                 )
             }
         }
 
         if (containerState == ContainerState.BOX_INPUT) {
             Box(
-                modifier = Modifier
-                    .padding(bottom = 20.dp, end = 24.dp)
-                    .align(Alignment.BottomEnd)
-                    .clip(RoundedCornerShape(10.dp))
-                    .noIndication(
-                        enabled = foodDocument.description.isNotEmpty()
-                    ) {
-                        if (documentViewModel.error.value.isEmpty()) {
-                            documentViewModel.saveFoodDocument()
-                        }
-                    },
-                contentAlignment = Alignment.Center
+                modifier =
+                    Modifier
+                        .padding(bottom = 20.dp, end = 24.dp)
+                        .align(Alignment.BottomEnd)
+                        .clip(RoundedCornerShape(10.dp))
+                        .noIndication(
+                            enabled = foodDocument.description.isNotEmpty(),
+                        ) {
+                            if (documentViewModel.error.value.isEmpty()) {
+                                documentViewModel.saveFoodDocument()
+                            }
+                        },
+                contentAlignment = Alignment.Center,
             ) {
-
                 Icon(
                     imageVector = Icons.Default.BookmarkAdd,
                     contentDescription = "Send",
                     tint = Color.White,
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(10.dp))
-                        .background(
-                            if (foodDocument.description.isEmpty())
-                                MaterialTheme.colorScheme.primary.copy(.4f)
-                            else MaterialTheme.colorScheme.primary
-                        )
-                        .padding(6.dp)
+                    modifier =
+                        Modifier
+                            .clip(RoundedCornerShape(10.dp))
+                            .background(
+                                if (foodDocument.description.isEmpty()) {
+                                    MaterialTheme.colorScheme.primary.copy(.4f)
+                                } else {
+                                    MaterialTheme.colorScheme.primary
+                                },
+                            ).padding(6.dp),
                 )
             }
         }
@@ -200,33 +220,31 @@ fun DocumentScreen(
 fun TopSection(
     modifier: Modifier = Modifier,
     foodDocuments: List<FoodDocument>,
-    navigateToAllFoodDocument: () -> Unit
+    navigateToAllFoodDocument: () -> Unit,
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
-
         Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(200.dp),
-            contentAlignment = Alignment.Center
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .height(200.dp),
+            contentAlignment = Alignment.Center,
         ) {
             if (foodDocuments.isEmpty()) {
                 Text(
                     text = "No recent food taken",
-                    color = MaterialTheme.colorScheme.onBackground.copy(.5f)
+                    color = MaterialTheme.colorScheme.onBackground.copy(.5f),
                 )
             } else {
-
                 Column {
-
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
                     ) {
                         Text(
                             text = "Recently Eaten",
                             fontWeight = FontWeight.Bold,
-                            fontSize = 20.sp
+                            fontSize = 20.sp,
                         )
                         Spacer(modifier = Modifier.weight(1f))
                         TextButton(onClick = navigateToAllFoodDocument) {
@@ -234,14 +252,14 @@ fun TopSection(
                             Spacer(modifier = Modifier.width(4.dp))
                             Icon(
                                 imageVector = Icons.AutoMirrored.Default.ArrowRightAlt,
-                                contentDescription = null
+                                contentDescription = null,
                             )
                         }
                     }
 
                     LazyRow(
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        contentPadding = PaddingValues(horizontal = 16.dp)
+                        contentPadding = PaddingValues(horizontal = 16.dp),
                     ) {
                         val foodList =
                             if (foodDocuments.size >= 5) foodDocuments.take(5) else foodDocuments
@@ -260,34 +278,32 @@ private fun DocumentSection(
     modifier: Modifier = Modifier,
     documentViewModel: DocumentViewModel,
     containerState: ContainerState,
-    selectedContainer: (ContainerState) -> Unit
+    selectedContainer: (ContainerState) -> Unit,
 ) {
     val foodDocument by documentViewModel.foodDocument.collectAsStateWithLifecycle()
 
     Column(
-        modifier = modifier
+        modifier = modifier,
     ) {
-
-
         Text(text = "Document your food cycle", fontWeight = FontWeight.Bold, fontSize = 20.sp)
         Spacer(modifier = Modifier.height(24.dp))
         Text(
             text = "What?",
             fontSize = 18.sp,
             textAlign = TextAlign.Center,
-            fontWeight = FontWeight.Thin
+            fontWeight = FontWeight.Thin,
         )
         Spacer(modifier = Modifier.height(12.dp))
         BoxDropdownInput(
             selectedOption = foodDocument.type,
-            onChangeOption = documentViewModel::onTypeChange
+            onChangeOption = documentViewModel::onTypeChange,
         )
         Spacer(modifier = Modifier.height(12.dp))
         Text(
             text = "When?",
             fontSize = 18.sp,
             textAlign = TextAlign.Center,
-            fontWeight = FontWeight.Thin
+            fontWeight = FontWeight.Thin,
         )
         Spacer(modifier = Modifier.height(12.dp))
         TimePickerDialog(documentViewModel = documentViewModel)
@@ -298,7 +314,7 @@ private fun DocumentSection(
         EditorContainer(
             containerState = containerState,
             documentViewModel = documentViewModel,
-            selectedContainer = selectedContainer
+            selectedContainer = selectedContainer,
         )
     }
 }
@@ -307,7 +323,7 @@ private fun DocumentSection(
 @Composable
 fun TimePickerDialog(
     modifier: Modifier = Modifier,
-    documentViewModel: DocumentViewModel
+    documentViewModel: DocumentViewModel,
 ) {
     val time by documentViewModel.time.collectAsStateWithLifecycle()
     var showTimePicker by remember { mutableStateOf(false) }
@@ -316,33 +332,35 @@ fun TimePickerDialog(
     BoxInput(
         value = time,
         onValueChange = documentViewModel::onTimeChange,
-        modifier = modifier.noIndication {
-            showTimePicker = true
-        },
+        modifier =
+            modifier.noIndication {
+                showTimePicker = true
+            },
         icon = R.drawable.time,
-        placeholder = "Pick Time"
+        placeholder = "Pick Time",
     )
 
     if (showTimePicker) {
-
         BasicAlertDialog(
-            modifier = Modifier
-                .background(MaterialTheme.colorScheme.background)
-                .clip(RoundedCornerShape(12.dp)),
-            onDismissRequest = { showTimePicker = false }
+            modifier =
+                Modifier
+                    .background(MaterialTheme.colorScheme.background)
+                    .clip(RoundedCornerShape(12.dp)),
+            onDismissRequest = { showTimePicker = false },
         ) {
             Column(
-                modifier = Modifier
-                    .padding(12.dp)
-
+                modifier =
+                    Modifier
+                        .padding(12.dp),
             ) {
                 TimePicker(
-                    state = timePickerState
+                    state = timePickerState,
                 )
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .align(Alignment.End)
+                    modifier =
+                        Modifier
+                            .align(Alignment.End),
                 ) {
                     TextButton(onClick = {
                         showTimePicker = false
@@ -354,14 +372,26 @@ fun TimePickerDialog(
                         onClick = {
                             showTimePicker = false
                             val hour =
-                                if (timePickerState.hour.toString().length == 1) "0${timePickerState.hour}" else timePickerState.hour
+                                if (timePickerState.hour.toString().length ==
+                                    1
+                                ) {
+                                    "0${timePickerState.hour}"
+                                } else {
+                                    timePickerState.hour
+                                }
                             val minute =
-                                if (timePickerState.minute == 0) "${timePickerState.minute}0" else timePickerState.minute
+                                if (timePickerState.minute ==
+                                    0
+                                ) {
+                                    "${timePickerState.minute}0"
+                                } else {
+                                    timePickerState.minute
+                                }
                             val selectedTime =
                                 if (timePickerState.hour == 0) currentTime() else "$hour:$minute"
 
                             documentViewModel.onTimeChange(selectedTime)
-                        }
+                        },
                     ) {
                         Text(text = "Ok")
                     }
@@ -375,49 +405,55 @@ fun TimePickerDialog(
 @Composable
 fun DatePickerDialog(
     modifier: Modifier = Modifier,
-    documentViewModel: DocumentViewModel
+    documentViewModel: DocumentViewModel,
 ) {
     val date by documentViewModel.date.collectAsStateWithLifecycle()
     var showDatePicker by remember { mutableStateOf(false) }
-    val datePickerState = rememberDatePickerState(
-        selectableDates = object : SelectableDates {
-            override fun isSelectableDate(utcTimeMillis: Long): Boolean {
-                return utcTimeMillis <= System.currentTimeMillis()
-            }
-        }
-    )
+    val datePickerState =
+        rememberDatePickerState(
+            selectableDates =
+                object : SelectableDates {
+                    override fun isSelectableDate(utcTimeMillis: Long): Boolean =
+                        utcTimeMillis <= System.currentTimeMillis()
+                },
+        )
 
     BoxInput(
         value = date,
         onValueChange = documentViewModel::onDateChange,
-        modifier = modifier.noIndication {
-            showDatePicker = true
-        },
+        modifier =
+            modifier.noIndication {
+                showDatePicker = true
+            },
         icon = R.drawable.cal,
-        placeholder = "Pick Date"
+        placeholder = "Pick Date",
     )
 
     if (showDatePicker) {
         BasicAlertDialog(
-            modifier = Modifier
-                .background(MaterialTheme.colorScheme.background)
-                .clip(RoundedCornerShape(12.dp)),
-            onDismissRequest = { showDatePicker = false }
+            modifier =
+                Modifier
+                    .background(MaterialTheme.colorScheme.background)
+                    .clip(RoundedCornerShape(12.dp)),
+            onDismissRequest = { showDatePicker = false },
         ) {
             Column(
-                modifier = Modifier
-                    .padding(12.dp)
+                modifier =
+                    Modifier
+                        .padding(12.dp),
             ) {
                 DatePicker(
                     state = datePickerState,
-                    colors = DatePickerDefaults.colors(
-                        containerColor = MaterialTheme.colorScheme.background
-                    )
+                    colors =
+                        DatePickerDefaults.colors(
+                            containerColor = MaterialTheme.colorScheme.background,
+                        ),
                 )
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .align(Alignment.End)
+                    modifier =
+                        Modifier
+                            .align(Alignment.End),
                 ) {
                     TextButton(onClick = { showDatePicker = false }) {
                         Text(text = "Cancel")
@@ -426,11 +462,12 @@ fun DatePickerDialog(
                     TextButton(
                         onClick = {
                             showDatePicker = false
-                            val selectedDate = datePickerState.selectedDateMillis?.let {
-                                convertMillisToDate(it)
-                            } ?: currentDate()
+                            val selectedDate =
+                                datePickerState.selectedDateMillis?.let {
+                                    convertMillisToDate(it)
+                                } ?: currentDate()
                             documentViewModel.onDateChange(selectedDate)
-                        }
+                        },
                     ) {
                         Text(text = "Ok")
                     }
@@ -442,7 +479,7 @@ fun DatePickerDialog(
 
 enum class ContainerState {
     BOX_INPUT,
-    EDITOR_INPUT
+    EDITOR_INPUT,
 }
 
 @Composable
@@ -450,7 +487,7 @@ private fun EditorContainer(
     modifier: Modifier = Modifier,
     containerState: ContainerState,
     documentViewModel: DocumentViewModel,
-    selectedContainer: (ContainerState) -> Unit
+    selectedContainer: (ContainerState) -> Unit,
 ) {
     val foodDocument by documentViewModel.foodDocument.collectAsStateWithLifecycle()
     val transition = updateTransition(targetState = containerState, label = "transition")
@@ -459,17 +496,19 @@ private fun EditorContainer(
         label = "corner radius",
         transitionSpec = {
             when (targetState) {
-                ContainerState.BOX_INPUT -> tween(
-                    durationMillis = 200,
-                    easing = EaseOutCubic
-                )
+                ContainerState.BOX_INPUT ->
+                    tween(
+                        durationMillis = 200,
+                        easing = EaseOutCubic,
+                    )
 
-                ContainerState.EDITOR_INPUT -> tween(
-                    durationMillis = 200,
-                    easing = FastOutSlowInEasing
-                )
+                ContainerState.EDITOR_INPUT ->
+                    tween(
+                        durationMillis = 200,
+                        easing = FastOutSlowInEasing,
+                    )
             }
-        }
+        },
     ) { state ->
         when (state) {
             ContainerState.EDITOR_INPUT -> 0.dp
@@ -485,12 +524,13 @@ private fun EditorContainer(
     }
 
     transition.AnimatedContent(
-        modifier = modifier
-            .fillMaxSize()
-            .clip(RoundedCornerShape(cornerRadius))
-            .drawBehind {
-                drawRect(color = backgroundColor)
-            }
+        modifier =
+            modifier
+                .fillMaxSize()
+                .clip(RoundedCornerShape(cornerRadius))
+                .drawBehind {
+                    drawRect(color = backgroundColor)
+                },
     ) { state ->
         when (state) {
             ContainerState.BOX_INPUT -> {
@@ -498,7 +538,7 @@ private fun EditorContainer(
                     foodDocument = foodDocument,
                     onChangePreview = {
                         selectedContainer(ContainerState.EDITOR_INPUT)
-                    }
+                    },
                 )
             }
 
@@ -506,7 +546,7 @@ private fun EditorContainer(
                 EditorBox(
                     value = foodDocument.description,
                     onValueChange = documentViewModel::onDescriptionChange,
-                    modifier = Modifier.imePadding()
+                    modifier = Modifier.imePadding(),
                 )
             }
         }
@@ -517,21 +557,21 @@ private fun EditorContainer(
 fun DocumentInput(
     modifier: Modifier = Modifier,
     foodDocument: FoodDocument,
-    onChangePreview: () -> Unit
+    onChangePreview: () -> Unit,
 ) {
-
     Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(150.dp)
-            .clip(RoundedCornerShape(12.dp))
-            .background(MaterialTheme.colorScheme.surface)
-            .noIndication { onChangePreview() }
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .height(150.dp)
+                .clip(RoundedCornerShape(12.dp))
+                .background(MaterialTheme.colorScheme.surface)
+                .noIndication { onChangePreview() },
     ) {
         Text(
             text = foodDocument.description.ifEmpty { "Document your meal here" },
             color = MaterialTheme.colorScheme.onBackground.copy(.5f),
-            modifier = Modifier.padding(12.dp)
+            modifier = Modifier.padding(12.dp),
         )
     }
 }
@@ -540,7 +580,7 @@ fun DocumentInput(
 fun EditorBox(
     modifier: Modifier = Modifier,
     value: String,
-    onValueChange: (String) -> Unit
+    onValueChange: (String) -> Unit,
 ) {
     val focusRequester = remember { FocusRequester() }
 
@@ -549,29 +589,31 @@ fun EditorBox(
     }
 
     Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(150.dp)
-            .clip(RoundedCornerShape(12.dp))
-            .background(MaterialTheme.colorScheme.surface)
-            .border(
-                1.dp,
-                MaterialTheme.colorScheme.onBackground.copy(.05f),
-                RoundedCornerShape(12.dp)
-            )
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .height(150.dp)
+                .clip(RoundedCornerShape(12.dp))
+                .background(MaterialTheme.colorScheme.surface)
+                .border(
+                    1.dp,
+                    MaterialTheme.colorScheme.onBackground.copy(.05f),
+                    RoundedCornerShape(12.dp),
+                ),
     ) {
         OutlinedTextField(
             value = value,
             onValueChange = onValueChange,
             placeholder = {
                 Text(
-                    text = "Document your meal eg. ingredients"
+                    text = "Document your meal eg. ingredients",
                 )
             },
             colors = textFieldColors(),
-            modifier = Modifier
-                .fillMaxSize()
-                .focusRequester(focusRequester)
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .focusRequester(focusRequester),
         )
     }
 }

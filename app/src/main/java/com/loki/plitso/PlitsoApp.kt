@@ -20,8 +20,9 @@ import org.koin.core.context.startKoin
 import org.koin.core.logger.Level
 import timber.log.Timber
 
-class PlitsoApp : Application(), Configuration.Provider {
-
+class PlitsoApp :
+    Application(),
+    Configuration.Provider {
     override fun onCreate() {
         super.onCreate()
         initTimber()
@@ -33,7 +34,7 @@ class PlitsoApp : Application(), Configuration.Provider {
                 appModule,
                 datastoreModule,
                 authModule,
-                aiModule
+                aiModule,
             )
         }
         setUpWorkerManagerNotificationChannel()
@@ -41,35 +42,39 @@ class PlitsoApp : Application(), Configuration.Provider {
         WorkInitializer.initializeDayRecipeWork(this)
     }
 
-    private fun initTimber() = when {
-        BuildConfig.DEBUG -> {
-            Timber.plant(object : Timber.DebugTree() {
-                override fun createStackElementTag(element: StackTraceElement): String? {
-                    return super.createStackElementTag(element) + ":" + element.lineNumber
-                }
-            })
-        }
+    private fun initTimber() =
+        when {
+            BuildConfig.DEBUG -> {
+                Timber.plant(
+                    object : Timber.DebugTree() {
+                        override fun createStackElementTag(element: StackTraceElement): String? =
+                            super.createStackElementTag(element) + ":" + element.lineNumber
+                    },
+                )
+            }
 
-        else -> {
-            Timber.plant(CrashlyticsTree())
+            else -> {
+                Timber.plant(CrashlyticsTree())
+            }
         }
-    }
 
     override val workManagerConfiguration: Configuration =
-        Configuration.Builder()
+        Configuration
+            .Builder()
             .setWorkerFactory(SyncDataWorkerFactory())
             .setMinimumLoggingLevel(android.util.Log.INFO)
             .build()
 
     private fun setUpWorkerManagerNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                NOTIFICATION_CHANNEL,
-                CHANNEL_NAME,
-                NotificationManager.IMPORTANCE_HIGH
-            ).apply {
-                description = "Notification for data updates"
-            }
+            val channel =
+                NotificationChannel(
+                    NOTIFICATION_CHANNEL,
+                    CHANNEL_NAME,
+                    NotificationManager.IMPORTANCE_HIGH,
+                ).apply {
+                    description = "Notification for data updates"
+                }
             val notificationManager = getSystemService(NotificationManager::class.java)
             notificationManager.createNotificationChannel(channel)
         }

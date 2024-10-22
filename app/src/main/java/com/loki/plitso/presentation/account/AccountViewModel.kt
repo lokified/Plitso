@@ -13,9 +13,8 @@ import kotlinx.coroutines.launch
 
 class AccountViewModel(
     private val datastoreStorage: DatastoreStorage,
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
 ) : ViewModel() {
-
     private val _state = MutableStateFlow(AccountState())
     val state = _state.asStateFlow()
 
@@ -26,20 +25,22 @@ class AccountViewModel(
     private fun getTheme() {
         viewModelScope.launch {
             datastoreStorage.getAppTheme().collect { theme ->
-                _state.value = _state.value.copy(
-                    theme = theme
-                )
+                _state.value =
+                    _state.value.copy(
+                        theme = theme,
+                    )
             }
         }
     }
 
     fun onChangeTheme(theme: String) {
         viewModelScope.launch {
-            val selectedTheme = when (theme) {
-                Theme.Dark.name -> Theme.Dark
-                Theme.Light.name -> Theme.Light
-                else -> Theme.System
-            }
+            val selectedTheme =
+                when (theme) {
+                    Theme.Dark.name -> Theme.Dark
+                    Theme.Light.name -> Theme.Light
+                    else -> Theme.System
+                }
             datastoreStorage.saveAppTheme(selectedTheme)
         }
     }
@@ -49,25 +50,28 @@ class AccountViewModel(
             authRepository.logOut().collect { result ->
                 when (result) {
                     is Resource.Loading -> {
-                        _state.value = AccountState(
-                            isLoading = true
-                        )
+                        _state.value =
+                            AccountState(
+                                isLoading = true,
+                            )
                     }
 
                     is Resource.Success -> {
-                        _state.value = AccountState(
-                            isLoading = false
-                        )
+                        _state.value =
+                            AccountState(
+                                isLoading = false,
+                            )
                         datastoreStorage.saveLocalUser(
-                            LocalUser()
+                            LocalUser(),
                         )
                     }
 
                     is Resource.Error -> {
-                        _state.value = AccountState(
-                            message = result.message,
-                            isLoading = false
-                        )
+                        _state.value =
+                            AccountState(
+                                message = result.message,
+                                isLoading = false,
+                            )
                     }
                 }
             }

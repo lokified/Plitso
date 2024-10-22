@@ -8,5 +8,5 @@ data class AiAnswer(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val role: String,
-    val content: String
+    val content: String,
 )

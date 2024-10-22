@@ -10,12 +10,13 @@ import com.loki.plitso.data.repository.recipe.RecipeRepository
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-class SyncDataWorkerFactory : WorkerFactory(), KoinComponent {
-
+class SyncDataWorkerFactory :
+    WorkerFactory(),
+    KoinComponent {
     override fun createWorker(
         appContext: Context,
         workerClassName: String,
-        workerParameters: WorkerParameters
+        workerParameters: WorkerParameters,
     ): ListenableWorker? {
         val recipeRepository: RecipeRepository by inject()
         val dayRecipeDao: DayRecipeDao by inject()
@@ -27,7 +28,13 @@ class SyncDataWorkerFactory : WorkerFactory(), KoinComponent {
             }
 
             DayRecipeWorker::class.java.name -> {
-                DayRecipeWorker(appContext, workerParameters, recipeRepository, randomDao, dayRecipeDao)
+                DayRecipeWorker(
+                    appContext,
+                    workerParameters,
+                    recipeRepository,
+                    randomDao,
+                    dayRecipeDao,
+                )
             }
 
             else -> null

@@ -39,65 +39,75 @@ import com.loki.plitso.presentation.navigation.Screen
 fun BottomNav(
     modifier: Modifier = Modifier,
     navController: NavController,
-    onItemClick: (Screen) -> Unit
+    onItemClick: (Screen) -> Unit,
 ) {
-
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = backStackEntry?.destination
     val bottomBarDestination = bottomNavItems.any { it.screen.route == currentDestination?.route }
 
     if (bottomBarDestination && currentDestination?.route != Screen.DocumentScreen.route) {
         Box(
-            modifier = modifier
-                .fillMaxWidth()
-                .background(
-                    MaterialTheme.colorScheme.surface
-                )
+            modifier =
+                modifier
+                    .fillMaxWidth()
+                    .background(
+                        MaterialTheme.colorScheme.surface,
+                    ),
         ) {
-
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
             ) {
-
                 bottomNavItems.forEach { bottomNavItem ->
                     val selected = bottomNavItem.screen.route == currentDestination?.route
 
                     val interactionSource = remember { MutableInteractionSource() }
 
                     val iconColor by animateColorAsState(
-                        targetValue = if (selected) MaterialTheme.colorScheme.primary
-                        else MaterialTheme.colorScheme.onBackground.copy(.5f),
+                        targetValue =
+                            if (selected) {
+                                MaterialTheme.colorScheme.primary
+                            } else {
+                                MaterialTheme.colorScheme.onBackground.copy(.5f)
+                            },
                         label = "unselectedIcon color",
-                        animationSpec = tween(
-                            easing = EaseInOut
-                        )
+                        animationSpec =
+                            tween(
+                                easing = EaseInOut,
+                            ),
                     )
 
                     Box(
-                        modifier = Modifier
-                            .weight(1f / bottomNavItems.size),
-                        contentAlignment = Alignment.Center
+                        modifier =
+                            Modifier
+                                .weight(1f / bottomNavItems.size),
+                        contentAlignment = Alignment.Center,
                     ) {
-
                         Box(
-                            modifier = Modifier
-                                .size(70.dp)
-                                .clip(CircleShape)
-                                .clickable(
-                                    interactionSource = interactionSource,
-                                    indication = null
-                                ) {
-                                    onItemClick(bottomNavItem.screen)
-                                },
-                            contentAlignment = Alignment.Center
+                            modifier =
+                                Modifier
+                                    .size(70.dp)
+                                    .clip(CircleShape)
+                                    .clickable(
+                                        interactionSource = interactionSource,
+                                        indication = null,
+                                    ) {
+                                        onItemClick(bottomNavItem.screen)
+                                    },
+                            contentAlignment = Alignment.Center,
                         ) {
                             Icon(
-                                imageVector = if (selected) bottomNavItem.selectedIcon else bottomNavItem.unselectedIcon,
+                                imageVector =
+                                    if (selected) {
+                                        bottomNavItem.selectedIcon
+                                    } else {
+                                        bottomNavItem.unselectedIcon
+                                    },
                                 contentDescription = bottomNavItem.title,
-                                tint = iconColor
+                                tint = iconColor,
                             )
                         }
                     }
@@ -107,36 +117,37 @@ fun BottomNav(
     }
 }
 
-val bottomNavItems = listOf(
-    BottomNavItem(
-        "Home",
-        Icons.Outlined.Home,
-        Icons.Filled.Home,
-        Screen.HomeScreen
-    ),
-    BottomNavItem(
-        "Document",
-        Icons.Outlined.Book,
-        Icons.Filled.Book,
-        Screen.DocumentScreen
-    ),
-    BottomNavItem(
-        "Bookmark",
-        Icons.Outlined.BookmarkBorder,
-        Icons.Filled.Bookmark,
-        Screen.BookmarkScreen
-    ),
-    BottomNavItem(
-        "Account",
-        Icons.Outlined.AccountCircle,
-        Icons.Filled.AccountCircle,
-        Screen.AccountScreen
+val bottomNavItems =
+    listOf(
+        BottomNavItem(
+            "Home",
+            Icons.Outlined.Home,
+            Icons.Filled.Home,
+            Screen.HomeScreen,
+        ),
+        BottomNavItem(
+            "Document",
+            Icons.Outlined.Book,
+            Icons.Filled.Book,
+            Screen.DocumentScreen,
+        ),
+        BottomNavItem(
+            "Bookmark",
+            Icons.Outlined.BookmarkBorder,
+            Icons.Filled.Bookmark,
+            Screen.BookmarkScreen,
+        ),
+        BottomNavItem(
+            "Account",
+            Icons.Outlined.AccountCircle,
+            Icons.Filled.AccountCircle,
+            Screen.AccountScreen,
+        ),
     )
-)
 
 data class BottomNavItem(
     val title: String,
     val unselectedIcon: ImageVector,
     val selectedIcon: ImageVector,
-    val screen: Screen
+    val screen: Screen,
 )

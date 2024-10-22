@@ -7,7 +7,6 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface RandomDao : BaseDao<Random> {
-
     @Query("SELECT * FROM random_recipe")
     fun getRandomRecipe(): Flow<List<Random>>
 

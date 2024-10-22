@@ -8,7 +8,7 @@ data class AiState(
     val messages: List<AiAnswer> = emptyList(),
     val isLoggedIn: Boolean = false,
     val username: String = "",
-    val generativeAnswer: String = ""
+    val generativeAnswer: String = "",
 )
 
 data class GenerativeParameters(
@@ -16,5 +16,5 @@ data class GenerativeParameters(
     val cuisine: String = "",
     val mood: String = "",
     val dietary: String = "",
-    val isQuick: Boolean = false
+    val isQuick: Boolean = false,
 )
