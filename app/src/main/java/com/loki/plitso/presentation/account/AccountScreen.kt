@@ -30,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -37,6 +38,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.loki.plitso.PlitsoViewModel
+import com.loki.plitso.R
 import com.loki.plitso.data.local.datastore.Theme
 import com.loki.plitso.util.noIndication
 import com.loki.plitso.util.showToast
@@ -82,7 +84,7 @@ fun AccountScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "Account",
+                text = stringResource(R.string.account),
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Bold
             )
@@ -100,7 +102,7 @@ fun AccountScreen(
                     onLoginClick = navigateToSignIn
                 )
             } else {
-                TitleHeader(title = "Profile")
+                TitleHeader(title = stringResource(R.string.profile))
 
                 SettingItem(
                     itemList = listOf(
@@ -116,13 +118,13 @@ fun AccountScreen(
                 )
             }
 
-            TitleHeader(title = "Settings")
+            TitleHeader(title = stringResource(R.string.settings))
 
             SettingItem(
                 itemList = listOf(
                     SettingItem(
                         icon = Icons.Default.Palette,
-                        content = "Select Theme",
+                        content = stringResource(R.string.select_theme),
                         subContent = {
                             TextSubContent(content = accountState.theme)
                         }
@@ -139,7 +141,7 @@ fun AccountScreen(
                     itemList = listOf(
                         SettingItem(
                             icon = Icons.AutoMirrored.Filled.Logout,
-                            content = "Logout"
+                            content = stringResource(R.string.logout)
                         )
                     ),
                     onItemClick = {
@@ -186,7 +188,7 @@ fun ThemeDialog(
                 Modifier.fillMaxWidth()
             ) {
                 Text(
-                    text = "Select Theme",
+                    text = stringResource(R.string.select_theme),
                     fontWeight = FontWeight.Bold,
                     fontSize = 22.sp
                 )
@@ -230,11 +232,11 @@ fun ThemeDialog(
                         .align(Alignment.End)
                 ) {
                     TextButton(onClick = onDismiss) {
-                        Text(text = "Cancel")
+                        Text(text = stringResource(R.string.cancel))
                     }
 
                     TextButton(onClick = onDismiss) {
-                        Text(text = "Ok")
+                        Text(text = stringResource(R.string.ok))
                     }
                 }
             }
@@ -281,12 +283,12 @@ fun LoginContainer(
             modifier = Modifier.padding(12.dp)
         ) {
             Text(
-                text = "Login to your account",
+                text = stringResource(R.string.login_to_your_account),
                 color = MaterialTheme.colorScheme.primary.copy(.8f)
             )
             Spacer(modifier = Modifier.weight(1f))
             TextButton(onClick = onLoginClick) {
-                Text(text = "Login")
+                Text(text = stringResource(R.string.login))
             }
         }
     }
