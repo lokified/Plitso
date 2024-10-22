@@ -18,12 +18,13 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 import org.koin.core.logger.Level
+import timber.log.Timber
 
 class PlitsoApp : Application(), Configuration.Provider {
 
     override fun onCreate() {
         super.onCreate()
-
+        initTimber()
         startKoin {
             androidLogger(Level.DEBUG)
             androidContext(this@PlitsoApp)
@@ -38,6 +39,20 @@ class PlitsoApp : Application(), Configuration.Provider {
         setUpWorkerManagerNotificationChannel()
         WorkInitializer.initializeDataSyncWork(this)
         WorkInitializer.initializeDayRecipeWork(this)
+    }
+
+    private fun initTimber() = when {
+        BuildConfig.DEBUG -> {
+            Timber.plant(object : Timber.DebugTree() {
+                override fun createStackElementTag(element: StackTraceElement): String? {
+                    return super.createStackElementTag(element) + ":" + element.lineNumber
+                }
+            })
+        }
+
+        else -> {
+            Timber.plant(CrashlyticsTree())
+        }
     }
 
     override val workManagerConfiguration: Configuration =
