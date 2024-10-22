@@ -5,6 +5,7 @@ import androidx.work.ListenableWorker
 import androidx.work.WorkerFactory
 import androidx.work.WorkerParameters
 import com.loki.plitso.data.local.dao.DayRecipeDao
+import com.loki.plitso.data.local.dao.RandomDao
 import com.loki.plitso.data.repository.recipe.RecipeRepository
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -18,6 +19,7 @@ class SyncDataWorkerFactory : WorkerFactory(), KoinComponent {
     ): ListenableWorker? {
         val recipeRepository: RecipeRepository by inject()
         val dayRecipeDao: DayRecipeDao by inject()
+        val randomDao: RandomDao by inject()
 
         return when (workerClassName) {
             SyncDataWorker::class.java.name -> {
@@ -25,7 +27,7 @@ class SyncDataWorkerFactory : WorkerFactory(), KoinComponent {
             }
 
             DayRecipeWorker::class.java.name -> {
-                DayRecipeWorker(appContext, workerParameters, recipeRepository, dayRecipeDao)
+                DayRecipeWorker(appContext, workerParameters, recipeRepository, randomDao, dayRecipeDao)
             }
 
             else -> null

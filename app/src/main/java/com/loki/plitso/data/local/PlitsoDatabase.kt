@@ -22,7 +22,7 @@ import com.loki.plitso.data.local.models.RecipeDetail
 
 @Database(
     exportSchema = false,
-    version = 3,
+    version = 1,
     entities = [
         DayRecipe::class,
         Category::class,

@@ -6,7 +6,6 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
-import com.loki.plitso.util.Constants.SYNCDATAWORKER_NAME
 import java.util.concurrent.TimeUnit
 
 object WorkInitializer {
@@ -25,7 +24,7 @@ object WorkInitializer {
             .build()
         WorkManager.getInstance(context).apply {
             enqueueUniquePeriodicWork(
-                SYNCDATAWORKER_NAME,
+                SYNC_DATA_WORK_NAME,
                 ExistingPeriodicWorkPolicy.KEEP,
                 request
             )
@@ -38,6 +37,13 @@ object WorkInitializer {
         val updateWorkRequest =
             PeriodicWorkRequestBuilder<DayRecipeWorker>(if (IS_TESTING) 15 else 24, timeUnit)
                 .build()
-        WorkManager.getInstance(context).enqueue(updateWorkRequest)
+        WorkManager.getInstance(context).enqueueUniquePeriodicWork(
+            DAY_RECIPE_WORK_NAME,
+            ExistingPeriodicWorkPolicy.KEEP,
+            updateWorkRequest
+        )
     }
+
+    private const val DAY_RECIPE_WORK_NAME = "day_recipe_work"
+    const val SYNC_DATA_WORK_NAME = "sync_data_work"
 }

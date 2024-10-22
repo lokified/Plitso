@@ -23,9 +23,9 @@ val repositoryModule = module {
     single { get<PlitsoDatabase>().bookmarkDao }
     single { get<PlitsoDatabase>().foodDocumentDao }
 
-    single<RecipeRepository> { RecipeRepositoryImpl(get(), get(), get(), get(), get()) }
+    single<RecipeRepository> { RecipeRepositoryImpl(get(), get(), get(), get(), get(), get()) }
 
-    viewModel { HomeViewModel(get(), get(), get()) }
+    viewModel { HomeViewModel(get(), get()) }
     viewModel { (handle: SavedStateHandle) -> RecipesViewModel(get(), handle) }
     viewModel { (handle: SavedStateHandle) -> RecipeDetailViewModel(get(), handle, get()) }
     viewModel { BookmarkViewmodel(get()) }

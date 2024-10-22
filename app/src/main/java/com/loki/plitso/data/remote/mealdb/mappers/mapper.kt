@@ -24,11 +24,21 @@ fun RecipeDetailDto.toDayRecipe(updateDate: Date): DayRecipe {
     )
 }
 
-fun RecipeDetailDto.toRandom(): Random {
+fun RecipeDetail.toRandom(): Random {
     return Random(
-        recipeId = idMeal,
-        title = strMeal,
-        image = strMealThumb
+        recipeId = recipeId,
+        title = title,
+        image = image,
+        instructions = instructions
+    )
+}
+
+fun Random.toDayRecipe(updateDate: Date): DayRecipe {
+    return DayRecipe(
+        recipeId = recipeId,
+        title = title,
+        image = image,
+        updatedDate = updateDate
     )
 }
 

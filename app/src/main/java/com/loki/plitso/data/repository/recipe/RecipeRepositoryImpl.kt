@@ -2,19 +2,20 @@ package com.loki.plitso.data.repository.recipe
 
 import com.loki.plitso.data.local.dao.CategoryDao
 import com.loki.plitso.data.local.dao.DayRecipeDao
+import com.loki.plitso.data.local.dao.RandomDao
 import com.loki.plitso.data.local.dao.RecipeDao
 import com.loki.plitso.data.local.dao.RecipeDetailDao
 import com.loki.plitso.data.local.models.Category
 import com.loki.plitso.data.local.models.DayRecipe
+import com.loki.plitso.data.local.models.Random
 import com.loki.plitso.data.local.models.Recipe
 import com.loki.plitso.data.local.models.RecipeDetail
 import com.loki.plitso.data.remote.mealdb.MealdbApi
 import com.loki.plitso.data.remote.mealdb.mappers.toCategory
 import com.loki.plitso.data.remote.mealdb.mappers.toDayRecipe
+import com.loki.plitso.data.remote.mealdb.mappers.toRandom
 import com.loki.plitso.data.remote.mealdb.mappers.toRecipe
 import com.loki.plitso.data.remote.mealdb.mappers.toRecipeDetail
-import com.loki.plitso.data.remote.mealdb.models.RecipeDetailDto
-import com.loki.plitso.util.Resource
 import com.loki.plitso.util.safeApiCall
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -27,9 +28,10 @@ import java.util.Date
 class RecipeRepositoryImpl(
     private val api: MealdbApi,
     private val categoryDao: CategoryDao,
-    val recipeDao: RecipeDao,
-    val recipeDetailDao: RecipeDetailDao,
-    private val dayRecipeDao: DayRecipeDao
+    private val recipeDao: RecipeDao,
+    private val recipeDetailDao: RecipeDetailDao,
+    private val dayRecipeDao: DayRecipeDao,
+    private val randomDao: RandomDao
 ) : RecipeRepository {
 
     override fun getDayRecipe(): Flow<DayRecipe> = flow {
@@ -49,10 +51,16 @@ class RecipeRepositoryImpl(
         }
     }
 
-    override fun getRandomRecipe(): Flow<Resource<RecipeDetailDto>> =
-        safeApiCall(
-            apiCall = { api.getRandomRecipe().meals[0] }
-        )
+    override suspend fun generateRandomRecipe() {
+        try {
+            randomDao.clear()
+            val recipes = recipeDetailDao.getAllRecipes().first()
+            val randomIndex = kotlin.random.Random.nextInt(recipes.size)
+            randomDao.insert(recipes[randomIndex].toRandom())
+        } catch (e: Exception) {
+            Timber.tag("random recipe repo").d(e)
+        }
+    }
 
     override val categories: Flow<List<Category>>
         get() = categoryDao.getCategories()

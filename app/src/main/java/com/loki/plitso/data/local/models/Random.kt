@@ -9,4 +9,5 @@ data class Random(
     val recipeId: String,
     val title: String,
     val image: String,
+    val instructions: String
 )

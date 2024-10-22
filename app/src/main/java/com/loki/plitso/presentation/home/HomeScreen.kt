@@ -5,7 +5,6 @@ import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -52,11 +51,11 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import coil.compose.SubcomposeAsyncImage
+import com.loki.plitso.PlitsoViewModel
 import com.loki.plitso.data.local.datastore.LocalUser
 import com.loki.plitso.data.local.models.Category
 import com.loki.plitso.data.local.models.DayRecipe
 import com.loki.plitso.presentation.components.HomeSkeleton
-import com.loki.plitso.presentation.theme.blue
 import com.loki.plitso.util.noIndication
 
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -64,6 +63,7 @@ import com.loki.plitso.util.noIndication
 fun SharedTransitionScope.HomeScreen(
     animatedVisibilityScope: AnimatedVisibilityScope,
     homeViewModel: HomeViewModel,
+    plitsoViewModel: PlitsoViewModel,
     navigateToAccountScreen: () -> Unit,
     navigateToSearchScreen: () -> Unit,
     navigateToRecipesScreen: (Category) -> Unit,
@@ -71,7 +71,7 @@ fun SharedTransitionScope.HomeScreen(
 ) {
     val homeState by homeViewModel.state.collectAsStateWithLifecycle()
     val dayRecipe by homeViewModel.dayRecipe.collectAsStateWithLifecycle()
-    val user by homeViewModel.user.collectAsStateWithLifecycle()
+    val user by plitsoViewModel.user.collectAsStateWithLifecycle()
 
     if (dayRecipe == null) {
         HomeSkeleton()
@@ -85,7 +85,6 @@ fun SharedTransitionScope.HomeScreen(
         ) {
             gridColItem {
                 HomeTopBar(
-                    homeState = homeState,
                     user = user,
                     navigateToAccountScreen = navigateToAccountScreen,
                     navigateToSearchScreen = navigateToSearchScreen
@@ -128,7 +127,6 @@ private fun LazyGridScope.gridColItem(content: @Composable () -> Unit) {
 @Composable
 private fun HomeTopBar(
     modifier: Modifier = Modifier,
-    homeState: HomeState,
     user: LocalUser,
     navigateToAccountScreen: () -> Unit,
     navigateToSearchScreen: () -> Unit

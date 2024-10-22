@@ -56,6 +56,7 @@ fun Navigation(
                 HomeScreen(
                     animatedVisibilityScope = this,
                     homeViewModel = homeViewModel,
+                    plitsoViewModel = plitsoViewModel,
                     navigateToAccountScreen = {
                         appState.navigate(Screen.AccountScreen)
                     },

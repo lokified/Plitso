@@ -9,7 +9,7 @@ import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
-import com.loki.plitso.util.Constants.SYNCDATAWORKER_NAME
+import com.loki.plitso.data.worker.WorkInitializer.SYNC_DATA_WORK_NAME
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.conflate
 
@@ -18,7 +18,7 @@ class SyncDataManagerImpl(
 ) : SyncDataManager {
 
     override val isSyncing: Flow<Boolean> =
-        WorkManager.getInstance(context).getWorkInfosForUniqueWorkLiveData(SYNCDATAWORKER_NAME)
+        WorkManager.getInstance(context).getWorkInfosForUniqueWorkLiveData(SYNC_DATA_WORK_NAME)
             .map(MutableList<WorkInfo>::anyRunning)
             .asFlow()
             .conflate()
@@ -33,7 +33,7 @@ class SyncDataManagerImpl(
             )
             .build()
         val workManager = WorkManager.getInstance(context)
-        workManager.beginUniqueWork(SYNCDATAWORKER_NAME, ExistingWorkPolicy.KEEP, syncDataRequest)
+        workManager.beginUniqueWork(SYNC_DATA_WORK_NAME, ExistingWorkPolicy.KEEP, syncDataRequest)
             .enqueue()
     }
 }
