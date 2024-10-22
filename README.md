@@ -28,8 +28,8 @@ The app uses these technologies;
 - Coroutines - Used to make asynchronous calls.
 - Splash screen Api - For creating a splash screen on app starting.
 - [RichEditorCompose](https://mohamedrejeb.github.io/compose-rich-editor/) - Library to display different text formats.
-- Reftrofit - For networking.
-- Koin - A lighweight dependency injection framework.
+- Retrofit - For networking.
+- Koin - A lightweight dependency injection framework.
 - GeminiAI
 - Coil - For loading Images
 - Firebase - For authentication, storage
@@ -44,7 +44,7 @@ The app uses these technologies;
 Setup your own firebase and provide `google-services.json`.
 - Add these variables to your **local.properties** file.
 ```
-geminiApiKey=  ## retrive this from google gemini
+geminiApiKey=  ## retrieve this from google gemini
 serverID=  ## retrieve OAuth ClientID from your google console follow the link and replace projectname link= `https://console.cloud.google.com/apis/credentials?authuser=0&hl=en&project= ##projectname`
 ```
 
