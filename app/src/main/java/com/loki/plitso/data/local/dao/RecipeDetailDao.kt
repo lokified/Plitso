@@ -20,11 +20,21 @@ interface RecipeDetailDao: BaseDao<RecipeDetail> {
 
     @Query("""
         SELECT * FROM recipe_detail WHERE
-        title LIKE '%' || :searchTerm || '%'
-        OR country LIKE '%' || :searchTerm || '%'
-        OR instructions LIKE '%' || :searchTerm || '%'
+        title LIKE '%' || :searchTerm || '%' 
+        OR country LIKE '%' || :searchTerm || '%' 
         OR ingredients LIKE '%' || :searchTerm || '%'
-    """
-    )
+    """)
     fun searchRecipe(searchTerm: String): Flow<List<RecipeDetail>>
+
+    @Query("""
+        SELECT * FROM recipe_detail WHERE
+        (:title IS NULL OR title LIKE '%' || :title || '%') AND
+        (:cuisine IS NULL OR country LIKE '%' || :cuisine || '%') AND
+        (:ingredient IS NULL OR ingredients LIKE '%' || :ingredient || '%')
+    """)
+    fun searchRecipe(
+        title: String?,
+        cuisine: String?,
+        ingredient: String?
+    ): Flow<List<RecipeDetail>>
 }
