@@ -48,6 +48,9 @@ geminiApiKey=  ## retrieve this from google gemini
 serverID=  ## retrieve OAuth ClientID from your google console follow the link and replace projectname link= `https://console.cloud.google.com/apis/credentials?authuser=0&hl=en&project= ##projectname`
 ```
 
+> Make sure to run this lint check before pushing
+> ./gradlew ktlintFormat && ./gradlew ktlintCheck && ./gradlew detekt
+
 ## Known Bugs
 
 

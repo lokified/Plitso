@@ -119,15 +119,18 @@ fun AccountScreen(
             }
 
             TitleHeader(title = stringResource(R.string.settings))
-                itemList = listOf(
-                    SettingItem(
-                        icon = Icons.Default.Palette,
-                        content = stringResource(R.string.select_theme),
-                        subContent = {
-                            TextSubContent(content = accountState.theme)
-                        }
-                    )
-                ),
+            SettingItem(
+                modifier = Modifier.padding(top = 12.dp),
+                itemList =
+                    listOf(
+                        SettingItem(
+                            icon = Icons.Default.Palette,
+                            content = stringResource(R.string.select_theme),
+                            subContent = {
+                                TextSubContent(content = accountState.theme)
+                            },
+                        ),
+                    ),
                 onItemClick = { itemIndex ->
                     isThemeDialogVisible = true
                 },
@@ -136,12 +139,13 @@ fun AccountScreen(
             if (user.isLoggedIn) {
                 SettingItem(
                     modifier = Modifier.padding(top = 12.dp),
-                    itemList = listOf(
-                        SettingItem(
-                            icon = Icons.AutoMirrored.Filled.Logout,
-                            content = stringResource(R.string.logout)
-                        )
-                    ),
+                    itemList =
+                        listOf(
+                            SettingItem(
+                                icon = Icons.AutoMirrored.Filled.Logout,
+                                content = stringResource(R.string.logout),
+                            ),
+                        ),
                     onItemClick = {
                         onLogOut()
                     },
@@ -288,7 +292,7 @@ fun LoginContainer(
         ) {
             Text(
                 text = stringResource(R.string.login_to_your_account),
-                color = MaterialTheme.colorScheme.primary.copy(.8f)
+                color = MaterialTheme.colorScheme.primary.copy(.8f),
             )
             Spacer(modifier = Modifier.weight(1f))
             TextButton(onClick = onLoginClick) {
