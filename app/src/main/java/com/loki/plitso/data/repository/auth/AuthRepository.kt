@@ -8,6 +8,8 @@ interface AuthRepository {
     val currentUserId: String
     val hasUser: Boolean
     val currentUser: Flow<User>
+
     fun authenticate(token: String): Flow<Resource<User>>
+
     fun logOut(): Flow<Resource<String>>
 }

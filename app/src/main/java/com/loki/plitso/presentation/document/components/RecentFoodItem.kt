@@ -30,29 +30,30 @@ import java.util.Locale
 @Composable
 fun RecentFoodDocumentItem(
     modifier: Modifier = Modifier,
-    foodDocument: FoodDocument
+    foodDocument: FoodDocument,
 ) {
-
     val foodDoc = MealType.entries.find { it.name == foodDocument.type }
     val richTextState = rememberRichTextState()
     richTextState.setMarkdown(foodDocument.description)
 
     Box(
-        modifier = modifier
-            .width(150.dp)
-            .border(
-                color = MaterialTheme.colorScheme.onBackground.copy(.1f),
-                width = 1.dp,
-                shape = RoundedCornerShape(12.dp)
-            )
+        modifier =
+            modifier
+                .width(150.dp)
+                .border(
+                    color = MaterialTheme.colorScheme.onBackground.copy(.1f),
+                    width = 1.dp,
+                    shape = RoundedCornerShape(12.dp),
+                ),
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(12.dp)
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(12.dp),
         ) {
             Row(
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(text = foodDocument.type.uppercase(Locale.ENGLISH), fontSize = 18.sp)
                 Spacer(modifier = Modifier.weight(1f))
@@ -66,14 +67,14 @@ fun RecentFoodDocumentItem(
                 state = richTextState,
                 color = MaterialTheme.colorScheme.onBackground.copy(.7f),
                 maxLines = 3,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
             )
             Spacer(modifier = Modifier.height(4.dp))
             val dateTime = foodDocument.servedOn.split(",")
             Text(
                 text = dateTime.joinToString("   "),
                 color = MaterialTheme.colorScheme.onBackground.copy(.5f),
-                fontSize = 12.sp
+                fontSize = 12.sp,
             )
         }
     }

@@ -10,9 +10,8 @@ import kotlinx.coroutines.launch
 
 class AiData(
     private val recipeDetailDao: RecipeDetailDao,
-    private val foodDocumentDao: FoodDocumentDao
+    private val foodDocumentDao: FoodDocumentDao,
 ) {
-
     val recipes = mutableListOf<RecipeData>()
     val countries = mutableListOf<String>()
     val pastMeals = mutableListOf<PastMeal>()
@@ -42,9 +41,10 @@ class AiData(
     private fun getRecipes() {
         CoroutineScope(Dispatchers.IO).launch {
             recipeDetailDao.getAllRecipes().collect { recipeDetails ->
-                val data = recipeDetails.map {
-                    it.toRecipeData()
-                }
+                val data =
+                    recipeDetails.map {
+                        it.toRecipeData()
+                    }
                 recipes.addAll(data)
             }
         }
@@ -54,24 +54,27 @@ class AiData(
 data class PastMeal(
     val type: String,
     val servedOn: String,
-    val description: String
+    val description: String,
 )
 
-fun FoodDocument.toPastMeal(): PastMeal {
-    return PastMeal(
-        type, servedOn, description
+fun FoodDocument.toPastMeal(): PastMeal =
+    PastMeal(
+        type,
+        servedOn,
+        description,
     )
-}
 
 data class RecipeData(
     val title: String,
     val country: String,
     val instructions: String,
-    val ingredients: String
+    val ingredients: String,
 )
 
-fun RecipeDetail.toRecipeData(): RecipeData {
-    return RecipeData(
-        title, country, instructions, ingredients.joinToString(" ")
+fun RecipeDetail.toRecipeData(): RecipeData =
+    RecipeData(
+        title,
+        country,
+        instructions,
+        ingredients.joinToString(" "),
     )
-}

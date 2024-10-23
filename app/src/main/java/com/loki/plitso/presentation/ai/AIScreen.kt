@@ -45,16 +45,12 @@ import com.loki.plitso.presentation.document.components.textFieldColors
 import com.loki.plitso.util.noIndication
 import com.loki.plitso.util.showToast
 
-enum class AiScreenContent {
-    FIRST_OPEN, CHAT, GENERATIVE
-}
-
 @Composable
 fun AIScreen(
     aiViewModel: AiViewModel,
     plitsoViewModel: PlitsoViewModel,
     navigateToLogin: () -> Unit,
-    navigateBack: () -> Unit
+    navigateBack: () -> Unit,
 ) {
     val user by plitsoViewModel.user.collectAsStateWithLifecycle()
     val aiState by aiViewModel.state.collectAsStateWithLifecycle()
@@ -81,36 +77,38 @@ fun AIScreen(
     }
 
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp, horizontal = 16.dp),
-            verticalAlignment = Alignment.CenterVertically
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp, horizontal = 16.dp),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
                 text = "Ask AI",
                 fontSize = 22.sp,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
 
             Spacer(modifier = Modifier.weight(1f))
             IconButton(
                 onClick = navigateBack,
-                modifier = Modifier
-                    .padding(8.dp)
+                modifier =
+                    Modifier
+                        .padding(8.dp),
             ) {
                 Icon(
                     imageVector = Icons.Outlined.Close,
-                    contentDescription = null
+                    contentDescription = null,
                 )
             }
         }
 
         if (!user.isLoggedIn) {
             LoginContent(
-                navigateToLogin = navigateToLogin
+                navigateToLogin = navigateToLogin,
             )
         } else {
             when (aiScreenContent) {
@@ -122,14 +120,14 @@ fun AIScreen(
                         },
                         onPreviewGenScreen = {
                             aiScreenContent = AiScreenContent.GENERATIVE
-                        }
+                        },
                     )
                 }
 
                 AiScreenContent.CHAT -> {
                     ChatContent(
                         modifier = Modifier.weight(1f),
-                        aiState = aiState
+                        aiState = aiState,
                     )
                 }
 
@@ -137,7 +135,7 @@ fun AIScreen(
                     GenerativeContent(
                         modifier = Modifier.weight(1f),
                         aiState = aiState,
-                        aiViewModel = aiViewModel
+                        aiViewModel = aiViewModel,
                     )
                 }
             }
@@ -145,17 +143,18 @@ fun AIScreen(
 
         if (aiScreenContent == AiScreenContent.CHAT) {
             Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.background)
-                    .imePadding()
-
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .background(MaterialTheme.colorScheme.background)
+                        .imePadding(),
             ) {
                 EditorCard(
-                    modifier = Modifier
-                        .padding(top = 4.dp)
-                        .padding(horizontal = 16.dp)
-                        .imePadding(),
+                    modifier =
+                        Modifier
+                            .padding(top = 4.dp)
+                            .padding(horizontal = 16.dp)
+                            .imePadding(),
                     value = input,
                     onValueChange = { setInput(it) },
                     onClickSend = {
@@ -164,7 +163,7 @@ fun AIScreen(
                             setInput("")
                             keyboardController?.hide()
                         }
-                    }
+                    },
                 )
             }
         }
@@ -176,16 +175,17 @@ private fun EditorCard(
     modifier: Modifier = Modifier,
     value: String,
     onValueChange: (String) -> Unit,
-    onClickSend: () -> Unit
+    onClickSend: () -> Unit,
 ) {
     Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .border(
-                width = 1.dp,
-                color = MaterialTheme.colorScheme.onBackground.copy(.2f),
-                shape = CircleShape
-            )
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .border(
+                    width = 1.dp,
+                    color = MaterialTheme.colorScheme.onBackground.copy(.2f),
+                    shape = CircleShape,
+                ),
     ) {
         TextField(
             modifier = Modifier.fillMaxWidth(),
@@ -196,21 +196,22 @@ private fun EditorCard(
             placeholder = {
                 Text(
                     text = "Write your message",
-                    color = MaterialTheme.colorScheme.onBackground.copy(.2f)
+                    color = MaterialTheme.colorScheme.onBackground.copy(.2f),
                 )
             },
             trailingIcon = {
                 Icon(
-                    modifier = Modifier
-                        .size(24.dp)
-                        .noIndication {
-                            onClickSend()
-                        },
+                    modifier =
+                        Modifier
+                            .size(24.dp)
+                            .noIndication {
+                                onClickSend()
+                            },
                     imageVector = Icons.AutoMirrored.Filled.Send,
-                    contentDescription = "send icon"
+                    contentDescription = "send icon",
                 )
             },
-            colors = textFieldColors()
+            colors = textFieldColors(),
         )
     }
 }

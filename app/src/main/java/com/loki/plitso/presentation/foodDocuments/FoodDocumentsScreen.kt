@@ -1,4 +1,4 @@
-package com.loki.plitso.presentation.food_documents
+package com.loki.plitso.presentation.foodDocuments
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -33,8 +33,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.loki.plitso.data.local.models.FoodDocument
-import com.loki.plitso.presentation.document.MealType
 import com.loki.plitso.presentation.document.DocumentViewModel
+import com.loki.plitso.presentation.document.MealType
 import com.loki.plitso.util.TimeUtil
 import com.loki.plitso.util.noIndication
 import com.loki.plitso.util.toRichHtmlString
@@ -44,51 +44,53 @@ import com.loki.plitso.util.toRichHtmlString
 fun FoodDocumentsScreen(
     foodDocuments: List<FoodDocument>,
     documentViewModel: DocumentViewModel,
-    navigateBack: () -> Unit
+    navigateBack: () -> Unit,
 ) {
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp, horizontal = 16.dp),
-            verticalAlignment = Alignment.CenterVertically
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp, horizontal = 16.dp),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             IconButton(onClick = navigateBack) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Default.ArrowBackIos,
-                    contentDescription = null
+                    contentDescription = null,
                 )
             }
             Spacer(modifier = Modifier.width(8.dp))
             Text(
                 text = "My Meals",
                 fontSize = 22.sp,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
         }
 
         LazyColumn(
             contentPadding = PaddingValues(16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+            verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-
-            val groupedTime = foodDocuments.groupBy {
-                val dateTime = TimeUtil.formatDateTime(it.servedOn).split(",")
-                dateTime[0]
-            }
+            val groupedTime =
+                foodDocuments.groupBy {
+                    val dateTime = TimeUtil.formatDateTime(it.servedOn).split(",")
+                    dateTime[0]
+                }
 
             for ((time, documents) in groupedTime) {
                 stickyHeader {
                     Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(MaterialTheme.colorScheme.background)
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .background(MaterialTheme.colorScheme.background),
                     ) {
                         Text(
                             text = time,
-                            modifier = Modifier.padding(vertical = 4.dp)
+                            modifier = Modifier.padding(vertical = 4.dp),
                         )
                     }
                 }
@@ -100,7 +102,7 @@ fun FoodDocumentsScreen(
                         dateTime = dateTime[1],
                         foodDocument = foodDocument,
                         onItemDelete = { documentViewModel.deleteFoodDocument(foodDocument) },
-                        onItemClick = {}
+                        onItemClick = {},
                     )
                 }
             }
@@ -114,27 +116,27 @@ fun FoodDocumentItem(
     foodDocument: FoodDocument,
     dateTime: String,
     onItemDelete: () -> Unit,
-    onItemClick: () -> Unit
+    onItemClick: () -> Unit,
 ) {
     Box(
-        modifier = modifier
-            .border(
-                width = 1.dp,
-                color = MaterialTheme.colorScheme.surface.copy(.1f),
-                shape = RoundedCornerShape(8.dp)
-            )
-            .background(MaterialTheme.colorScheme.surface.copy(.5f))
-            .noIndication { onItemClick() }
+        modifier =
+            modifier
+                .border(
+                    width = 1.dp,
+                    color = MaterialTheme.colorScheme.surface.copy(.1f),
+                    shape = RoundedCornerShape(8.dp),
+                ).background(MaterialTheme.colorScheme.surface.copy(.5f))
+                .noIndication { onItemClick() },
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(12.dp)
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(12.dp),
         ) {
             Row(
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
-
                 AsyncImage(
                     model = MealType.entries.find { it.name == foodDocument.type }?.image,
                     contentDescription = "food type",
@@ -146,10 +148,9 @@ fun FoodDocumentItem(
                     Icon(
                         imageVector = Icons.Default.Delete,
                         contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary
+                        tint = MaterialTheme.colorScheme.primary,
                     )
                 }
-
             }
 
             Spacer(modifier = Modifier.height(4.dp))
@@ -159,13 +160,13 @@ fun FoodDocumentItem(
                 maxLines = 4,
                 overflow = TextOverflow.Ellipsis,
                 color = MaterialTheme.colorScheme.onBackground.copy(.6f),
-                modifier = Modifier.padding(8.dp)
+                modifier = Modifier.padding(8.dp),
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = dateTime,
                 fontSize = 12.sp,
-                color = MaterialTheme.colorScheme.onBackground.copy(.4f)
+                color = MaterialTheme.colorScheme.onBackground.copy(.4f),
             )
         }
     }

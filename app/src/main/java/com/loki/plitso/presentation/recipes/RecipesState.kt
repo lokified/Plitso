@@ -6,5 +6,5 @@ data class RecipesState(
     val isLoading: Boolean = false,
     val message: String = "",
     val category: String = "",
-    val recipes: List<Recipe> = emptyList()
+    val recipes: List<Recipe> = emptyList(),
 )

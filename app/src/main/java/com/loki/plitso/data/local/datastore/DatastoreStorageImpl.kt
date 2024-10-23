@@ -13,9 +13,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class DatastoreStorageImpl(
-    private val datastore: DataStore<Preferences>
+    private val datastore: DataStore<Preferences>,
 ) : DatastoreStorage {
-
     override suspend fun saveLocalUser(localUser: LocalUser) {
         datastore.edit { preference ->
             preference[USER_ID_KEY] = localUser.userId
@@ -26,8 +25,8 @@ class DatastoreStorageImpl(
         }
     }
 
-    override fun getLocalUser(): Flow<LocalUser> {
-        return datastore.data.map { preferences ->
+    override fun getLocalUser(): Flow<LocalUser> =
+        datastore.data.map { preferences ->
             val userId = preferences[USER_ID_KEY] ?: ""
             val email = preferences[USER_EMAIL_KEY] ?: ""
             val username = preferences[USER_NAME_KEY] ?: ""
@@ -36,7 +35,6 @@ class DatastoreStorageImpl(
 
             LocalUser(userId, email, username, imageUrl, isLoggedIn)
         }
-    }
 
     override suspend fun saveAppTheme(theme: Theme) {
         datastore.edit { preference ->
@@ -44,9 +42,8 @@ class DatastoreStorageImpl(
         }
     }
 
-    override fun getAppTheme(): Flow<String> {
-        return datastore.data.map { preferences ->
+    override fun getAppTheme(): Flow<String> =
+        datastore.data.map { preferences ->
             preferences[THEME_KEY] ?: Theme.System.name
         }
-    }
 }

@@ -7,7 +7,6 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface AiAnswerDao : BaseDao<AiAnswer> {
-
     @Query("SELECT * FROM answers")
     fun getAnswers(): Flow<List<AiAnswer>>
 }

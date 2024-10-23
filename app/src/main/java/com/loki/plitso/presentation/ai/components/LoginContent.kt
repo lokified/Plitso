@@ -25,45 +25,46 @@ import com.loki.plitso.presentation.components.TypeWriterTextEffect
 @Composable
 fun LoginContent(
     modifier: Modifier = Modifier,
-    navigateToLogin: () -> Unit
+    navigateToLogin: () -> Unit,
 ) {
     Box(modifier = modifier.fillMaxSize()) {
-
         TypeWriterTextEffect(
             minDelayInMillis = 20,
             maxDelayInMillis = 200,
             text = "Hello, \nuse AI to generate recipe",
-            onEffectComplete = { }
+            onEffectComplete = { },
         ) {
             Text(
                 text = it,
                 fontSize = 32.sp,
                 textAlign = TextAlign.Center,
                 lineHeight = 34.sp,
-                modifier = Modifier
-                    .padding(top = 32.dp)
-                    .padding(horizontal = 24.dp)
-                    .align(Alignment.TopCenter)
+                modifier =
+                    Modifier
+                        .padding(top = 32.dp)
+                        .padding(horizontal = 24.dp)
+                        .align(Alignment.TopCenter),
             )
         }
 
         Column(
-            modifier = Modifier
-                .align(Alignment.Center)
-                .padding(horizontal = 16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier =
+                Modifier
+                    .align(Alignment.Center)
+                    .padding(horizontal = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Image(
                 painter = painterResource(id = R.drawable.ai),
                 contentDescription = null,
-                modifier = Modifier.size(100.dp)
+                modifier = Modifier.size(100.dp),
             )
 
             Spacer(modifier = Modifier.height(12.dp))
             Text(
                 text = "Use your previous meal history to generate suggestion for your next meal",
                 textAlign = TextAlign.Center,
-                color = MaterialTheme.colorScheme.onBackground.copy(.7f)
+                color = MaterialTheme.colorScheme.onBackground.copy(.7f),
             )
             Spacer(modifier = Modifier.height(32.dp))
 

@@ -7,5 +7,5 @@ data class HomeState(
     val dayRecipe: DayRecipe? = null,
     val randomRecipeId: String = "",
     val randomRecipeImage: String = "",
-    val categories: List<Category> = emptyList()
+    val categories: List<Category> = emptyList(),
 )

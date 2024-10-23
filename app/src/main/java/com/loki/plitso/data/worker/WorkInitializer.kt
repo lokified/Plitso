@@ -9,24 +9,23 @@ import androidx.work.WorkManager
 import java.util.concurrent.TimeUnit
 
 object WorkInitializer {
-
     const val IS_TESTING = false
 
     fun initializeDataSyncWork(context: Context) {
-        val request = PeriodicWorkRequestBuilder<SyncDataWorker>(24, TimeUnit.HOURS)
-            .setConstraints(
-                Constraints.Builder()
-                    .setRequiredNetworkType(
-                        NetworkType.CONNECTED
-                    )
-                    .build()
-            )
-            .build()
+        val request =
+            PeriodicWorkRequestBuilder<SyncDataWorker>(24, TimeUnit.HOURS)
+                .setConstraints(
+                    Constraints
+                        .Builder()
+                        .setRequiredNetworkType(
+                            NetworkType.CONNECTED,
+                        ).build(),
+                ).build()
         WorkManager.getInstance(context).apply {
             enqueueUniquePeriodicWork(
                 SYNC_DATA_WORK_NAME,
                 ExistingPeriodicWorkPolicy.KEEP,
-                request
+                request,
             )
         }
     }
@@ -40,7 +39,7 @@ object WorkInitializer {
         WorkManager.getInstance(context).enqueueUniquePeriodicWork(
             DAY_RECIPE_WORK_NAME,
             ExistingPeriodicWorkPolicy.KEEP,
-            updateWorkRequest
+            updateWorkRequest,
         )
     }
 

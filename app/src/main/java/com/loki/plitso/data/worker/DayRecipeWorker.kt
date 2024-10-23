@@ -34,9 +34,8 @@ class DayRecipeWorker(
     val workParams: WorkerParameters,
     private val recipeRepository: RecipeRepository,
     private val randomDao: RandomDao,
-    private val dayRecipeDao: DayRecipeDao
+    private val dayRecipeDao: DayRecipeDao,
 ) : CoroutineWorker(context, workParams) {
-
     override suspend fun doWork(): Result {
         withContext(Dispatchers.IO) {
             val recipes = dayRecipeDao.getRecipes().first()
@@ -44,13 +43,16 @@ class DayRecipeWorker(
             val lastUpdated = if (recipes.isNotEmpty()) recipes[0].updatedDate else Date()
             val currentTime = Date()
 
-            if (IS_TESTING || ((currentTime.time - lastUpdated.time) >= TimeUnit.HOURS.toMillis(24))) {
+            if (IS_TESTING ||
+                ((currentTime.time - lastUpdated.time) >= TimeUnit.HOURS.toMillis(24))
+            ) {
                 dayRecipeDao.clear()
                 recipeRepository.generateRandomRecipe()
                 val random = randomDao.getRandomRecipe().first()[0]
                 dayRecipeDao.insert(random.toDayRecipe(currentTime))
                 sendNotification(
-                    random.title, random.instructions
+                    random.title,
+                    random.instructions,
                 )
             }
         }
@@ -58,28 +60,36 @@ class DayRecipeWorker(
         return Result.success()
     }
 
+    private fun sendNotification(
+        recipeTitle: String,
+        recipeInstructions: String,
+    ) {
+        val intent =
+            Intent(context, MainActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
+        val pendingIntent: PendingIntent =
+            PendingIntent.getActivity(
+                context,
+                0,
+                intent,
+                PendingIntent.FLAG_IMMUTABLE,
+            )
 
-    private fun sendNotification(recipeTitle: String, recipeInstructions: String) {
-
-        val intent = Intent(context, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        }
-        val pendingIntent: PendingIntent = PendingIntent.getActivity(
-            context, 0, intent, PendingIntent.FLAG_IMMUTABLE
-        )
-
-        val builder = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL)
-            .setSmallIcon(R.drawable.splash_image)
-            .setContentTitle("Recipe of the day: $recipeTitle")
-            .setContentText(recipeInstructions)
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            .setContentIntent(pendingIntent)
-            .setAutoCancel(true)
+        val builder =
+            NotificationCompat
+                .Builder(context, NOTIFICATION_CHANNEL)
+                .setSmallIcon(R.drawable.splash_image)
+                .setContentTitle("Recipe of the day: $recipeTitle")
+                .setContentText(recipeInstructions)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true)
 
         with(NotificationManagerCompat.from(context)) {
             if (ActivityCompat.checkSelfPermission(
                     context,
-                    Manifest.permission.POST_NOTIFICATIONS
+                    Manifest.permission.POST_NOTIFICATIONS,
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
                 requestNotificationPermission(context as ComponentActivity)
@@ -90,15 +100,16 @@ class DayRecipeWorker(
     }
 
     private fun requestNotificationPermission(activity: ComponentActivity) {
-        val requestPermissionLauncher = activity.registerForActivityResult(
-            ActivityResultContracts.RequestPermission()
-        ) { isGranted: Boolean ->
-            if (isGranted) {
-                activity.showToast("Permission Granted")
-            } else {
-                activity.showToast("Permission Denied")
+        val requestPermissionLauncher =
+            activity.registerForActivityResult(
+                ActivityResultContracts.RequestPermission(),
+            ) { isGranted: Boolean ->
+                if (isGranted) {
+                    activity.showToast("Permission Granted")
+                } else {
+                    activity.showToast("Permission Denied")
+                }
             }
-        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)

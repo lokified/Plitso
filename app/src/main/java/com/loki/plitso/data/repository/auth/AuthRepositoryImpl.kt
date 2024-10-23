@@ -17,12 +17,10 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.tasks.await
 import java.io.IOException
 
-
 class AuthRepositoryImpl(
     private val auth: FirebaseAuth,
-    private val credentialManager: CredentialManager
+    private val credentialManager: CredentialManager,
 ) : AuthRepository {
-
     override val currentUserId: String
         get() = auth.currentUser?.uid.orEmpty()
 
@@ -30,62 +28,67 @@ class AuthRepositoryImpl(
         get() = auth.currentUser != null
 
     override val currentUser: Flow<User>
-        get() = callbackFlow {
-            val listener = FirebaseAuth.AuthStateListener { auth ->
-                this.trySend(auth.currentUser?.let {
-                    User(
-                        id = it.uid,
-                        email = it.email!!
-                    )
-                } ?: User())
+        get() =
+            callbackFlow {
+                val listener =
+                    FirebaseAuth.AuthStateListener { auth ->
+                        this.trySend(
+                            auth.currentUser?.let {
+                                User(
+                                    id = it.uid,
+                                    email = it.email!!,
+                                )
+                            } ?: User(),
+                        )
+                    }
+
+                auth.addAuthStateListener(listener)
+                awaitClose {
+                    auth.removeAuthStateListener(listener)
+                }
             }
 
-            auth.addAuthStateListener(listener)
-            awaitClose {
-                auth.removeAuthStateListener(listener)
+    override fun authenticate(token: String): Flow<Resource<User>> =
+        flow {
+            trace(LOGIN_USER_TRACE) {
+                try {
+                    emit(Resource.Loading())
+                    val credential = GoogleAuthProvider.getCredential(token, null)
+                    val user = auth.signInWithCredential(credential).await().user
+                    emit(
+                        Resource.Success(
+                            User(
+                                id = user!!.uid,
+                                email = user.email!!,
+                                username = user.displayName,
+                                imageUrl = user.photoUrl!!,
+                            ),
+                        ),
+                    )
+                } catch (e: FirebaseException) {
+                    emit(Resource.Error(e.localizedMessage ?: "Something went wrong!"))
+                } catch (e: IOException) {
+                    emit(Resource.Error("No Network Connection!"))
+                }
             }
         }
 
-    override fun authenticate(token: String): Flow<Resource<User>> = flow {
-        trace(LOGIN_USER_TRACE) {
+    override fun logOut(): Flow<Resource<String>> =
+        flow {
             try {
                 emit(Resource.Loading())
-                val credential = GoogleAuthProvider.getCredential(token, null)
-                val user = auth.signInWithCredential(credential).await().user
-                emit(
-                    Resource.Success(
-                        User(
-                            id = user!!.uid,
-                            email = user.email!!,
-                            username = user.displayName,
-                            imageUrl = user.photoUrl!!
-                        )
-                    )
-                )
-
+                auth.signOut()
+                credentialManager.clearCredentialState(ClearCredentialStateRequest())
+                emit(Resource.Success("logout successful"))
             } catch (e: FirebaseException) {
                 emit(Resource.Error(e.localizedMessage ?: "Something went wrong!"))
             } catch (e: IOException) {
                 emit(Resource.Error("No Network Connection!"))
             }
-        }
-    }
-
-    override fun logOut(): Flow<Resource<String>> = flow {
-        try {
-            emit(Resource.Loading())
-            auth.signOut()
-            credentialManager.clearCredentialState(ClearCredentialStateRequest())
-            emit(Resource.Success("logout successful"))
-        } catch (e: FirebaseException) {
-            emit(Resource.Error(e.localizedMessage ?: "Something went wrong!"))
-        } catch (e: IOException) {
-            emit(Resource.Error("No Network Connection!"))
-        }
-    }.flowOn(Dispatchers.IO)
+        }.flowOn(Dispatchers.IO)
 
     companion object {
-        //traces
+        // traces
         const val LOGIN_USER_TRACE = "login_trace"
     }
 }

@@ -13,17 +13,17 @@ import timber.log.Timber
 
 class RecipesViewModel(
     private val recipeRepository: RecipeRepository,
-    private val savedStateHandle: SavedStateHandle
+    private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
-
     private val _state = MutableStateFlow(RecipesState())
     val state = _state.asStateFlow()
 
     init {
         savedStateHandle.get<String>(CATEGORY_NAME_KEY)?.let { name ->
-            _state.value = _state.value.copy(
-                category = name
-            )
+            _state.value =
+                _state.value.copy(
+                    category = name,
+                )
         }
         savedStateHandle.get<String>(CATEGORY_ID_KEY)?.let { category ->
             getRecipes(category)
@@ -34,9 +34,10 @@ class RecipesViewModel(
         viewModelScope.launch {
             try {
                 val recipes = recipeRepository.getRecipes(categoryId)
-                _state.value = _state.value.copy(
-                    recipes = recipes
-                )
+                _state.value =
+                    _state.value.copy(
+                        recipes = recipes,
+                    )
             } catch (e: Exception) {
                 Timber.tag("vm recipes").d(e)
             }

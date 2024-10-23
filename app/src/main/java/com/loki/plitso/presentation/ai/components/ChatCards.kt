@@ -29,20 +29,21 @@ import com.mohamedrejeb.richeditor.ui.material3.RichText
 @Composable
 fun MessengerItemCard(
     modifier: Modifier = Modifier,
-    message: String = ""
+    message: String = "",
 ) {
     Surface(
         modifier = modifier,
         color = MaterialTheme.colorScheme.primary,
-        shape = RoundedCornerShape(topStart = 25.dp, bottomEnd = 25.dp, bottomStart = 25.dp)
+        shape = RoundedCornerShape(topStart = 25.dp, bottomEnd = 25.dp, bottomStart = 25.dp),
     ) {
         Text(
-            modifier = Modifier
-                .wrapContentSize()
-                .padding(horizontal = 24.dp, vertical = 18.dp),
+            modifier =
+                Modifier
+                    .wrapContentSize()
+                    .padding(horizontal = 24.dp, vertical = 18.dp),
             text = message,
             textAlign = TextAlign.Start,
-            style = MaterialTheme.typography.labelLarge.copy(color = Color.White)
+            style = MaterialTheme.typography.labelLarge.copy(color = Color.White),
         )
     }
 }
@@ -53,42 +54,45 @@ fun ReceiverMessageItemCard(
     modifier: Modifier = Modifier,
     message: String = "",
     isEffectActive: Boolean = false,
-    onEffectComplete: () -> Unit = {}
+    onEffectComplete: () -> Unit = {},
 ) {
-
     Row(
-        modifier = modifier
+        modifier = modifier,
     ) {
         Surface(
-            modifier = Modifier
-                .wrapContentSize()
-                .align(Alignment.Bottom),
+            modifier =
+                Modifier
+                    .wrapContentSize()
+                    .align(Alignment.Bottom),
             shape = CircleShape,
             color = Color.White,
-            shadowElevation = 4.dp
+            shadowElevation = 4.dp,
         ) {
             Image(
-                modifier = Modifier
-                    .padding(horizontal = 8.dp, vertical = 6.dp)
-                    .size(18.dp),
+                modifier =
+                    Modifier
+                        .padding(horizontal = 8.dp, vertical = 6.dp)
+                        .size(18.dp),
                 painter = painterResource(id = R.drawable.ai),
-                contentDescription = ""
+                contentDescription = "",
             )
         }
 
         Spacer(modifier = Modifier.width(8.dp))
 
         Surface(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 24.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 24.dp),
             shape = RoundedCornerShape(topStart = 25.dp, topEnd = 25.dp, bottomEnd = 25.dp),
-            color = MaterialTheme.colorScheme.surface
+            color = MaterialTheme.colorScheme.surface,
         ) {
             val richTextState = rememberRichTextState()
-            val cleanedText = message
-                .replace(" **", "**")
-                .replace("*", " ")
+            val cleanedText =
+                message
+                    .replace(" **", "**")
+                    .replace("*", " ")
 
             richTextState.setMarkdown(cleanedText)
             richTextState.config.codeSpanColor = MaterialTheme.colorScheme.primary.copy(.6f)
@@ -100,17 +104,17 @@ fun ReceiverMessageItemCard(
             if (isEffectActive) {
                 TypeWriterTextEffect(
                     text = richTextState.toText(),
-                    onEffectComplete = onEffectComplete
+                    onEffectComplete = onEffectComplete,
                 ) { text ->
                     Text(
                         text = text,
-                        modifier = Modifier.padding(12.dp)
+                        modifier = Modifier.padding(12.dp),
                     )
                 }
             } else {
                 RichText(
                     state = richTextState,
-                    modifier = Modifier.padding(12.dp)
+                    modifier = Modifier.padding(12.dp),
                 )
             }
         }

@@ -21,14 +21,15 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.loki.plitso.presentation.login.components.GoogleButtonUiContainer
+import com.loki.plitso.presentation.login.components.GoogleSignInButton
 import com.loki.plitso.util.showToast
 
 @Composable
 fun LoginScreen(
     loginViewModel: LoginViewModel,
-    navigateBack: () -> Unit
+    navigateBack: () -> Unit,
 ) {
-
     val context = LocalContext.current
     val loginState by loginViewModel.state.collectAsStateWithLifecycle()
     val googleAuthProvider = loginViewModel.googleAuthProvider
@@ -40,23 +41,24 @@ fun LoginScreen(
     }
 
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
     ) {
-
         IconButton(
             onClick = navigateBack,
-            modifier = Modifier
-                .padding(8.dp)
-                .align(Alignment.TopEnd)
+            modifier =
+                Modifier
+                    .padding(8.dp)
+                    .align(Alignment.TopEnd),
         ) {
             Icon(imageVector = Icons.Outlined.Close, contentDescription = null)
         }
 
         Column(
-            modifier = Modifier
-                .align(Alignment.Center)
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier =
+                Modifier
+                    .align(Alignment.Center)
+                    .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(text = "Plitso", fontSize = 28.sp)
             Spacer(modifier = Modifier.height(12.dp))
@@ -67,13 +69,13 @@ fun LoginScreen(
                 googleAuthProvider = googleAuthProvider,
                 onGoogleSignInResult = { user ->
                     loginViewModel.login(user, navigateBack)
-                }
+                },
             ) {
                 GoogleSignInButton(
                     isEnabled = !loginState.isLoading,
                     onClick = {
                         this.onClick()
-                    }
+                    },
                 )
             }
             Spacer(modifier = Modifier.height(12.dp))

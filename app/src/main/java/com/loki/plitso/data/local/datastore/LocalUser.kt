@@ -5,5 +5,5 @@ data class LocalUser(
     val email: String = "",
     val username: String = "",
     val imageUrl: String? = null,
-    val isLoggedIn: Boolean = false
+    val isLoggedIn: Boolean = false,
 )

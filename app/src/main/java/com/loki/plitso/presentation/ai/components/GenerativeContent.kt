@@ -19,25 +19,25 @@ import com.loki.plitso.presentation.ai.AiViewModel
 fun GenerativeContent(
     modifier: Modifier = Modifier,
     aiState: AiState,
-    aiViewModel: AiViewModel
+    aiViewModel: AiViewModel,
 ) {
-
     var showSuggestion by rememberSaveable {
         mutableStateOf(false)
     }
 
     Column(
-        modifier = modifier
-            .fillMaxSize()
+        modifier =
+            modifier
+                .fillMaxSize(),
     ) {
         if (showSuggestion) {
             Column(
-                modifier = Modifier.verticalScroll(rememberScrollState())
+                modifier = Modifier.verticalScroll(rememberScrollState()),
             ) {
                 ReceiverMessageItemCard(
                     modifier = Modifier.padding(16.dp),
                     message = aiState.generativeAnswer,
-                    isEffectActive = true
+                    isEffectActive = true,
                 )
             }
         } else {
@@ -47,7 +47,7 @@ fun GenerativeContent(
                     aiViewModel.generateSuggestions {
                         showSuggestion = true
                     }
-                }
+                },
             )
         }
     }

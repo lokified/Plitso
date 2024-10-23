@@ -8,9 +8,14 @@ import kotlinx.coroutines.flow.Flow
 
 interface RecipeRepository {
     val categories: Flow<List<Category>>
+
     fun getDayRecipe(): Flow<DayRecipe>
+
     fun getRecipeDetail(id: String): Flow<RecipeDetail>
+
     suspend fun getRecipes(categoryId: String): List<Recipe>
+
     suspend fun generateRandomRecipe()
+
     suspend fun refreshDatabase()
 }

@@ -10,20 +10,22 @@ import com.loki.plitso.presentation.ai.AiViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
-val aiModule = module {
-    val config = generationConfig {
-        temperature = 0.7f
-    }
+val aiModule =
+    module {
+        val config =
+            generationConfig {
+                temperature = 0.7f
+            }
 
-    single {
-        GenerativeModel(
-            modelName = "gemini-1.5-flash-latest",
-            apiKey = BuildConfig.geminiApiKey,
-            generationConfig = config
-        )
-    }
+        single {
+            GenerativeModel(
+                modelName = "gemini-1.5-flash-latest",
+                apiKey = BuildConfig.geminiApiKey,
+                generationConfig = config,
+            )
+        }
 
-    single<AiAnswerDao> { get<PlitsoDatabase>().aiAnswerDao }
-    single { AiData(get(), get()) }
-    viewModel { AiViewModel(get(), get(), get()) }
-}
+        single<AiAnswerDao> { get<PlitsoDatabase>().aiAnswerDao }
+        single { AiData(get(), get()) }
+        viewModel { AiViewModel(get(), get(), get()) }
+    }

@@ -31,12 +31,11 @@ import com.loki.plitso.data.local.models.RecipeDetail
         Random::class,
         Bookmark::class,
         FoodDocument::class,
-        AiAnswer::class
-    ]
+        AiAnswer::class,
+    ],
 )
 @TypeConverters(Converters::class)
 abstract class PlitsoDatabase : RoomDatabase() {
-
     abstract val categoryDao: CategoryDao
     abstract val recipeDao: RecipeDao
     abstract val dayRecipeDao: DayRecipeDao

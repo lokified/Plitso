@@ -8,8 +8,7 @@ import com.loki.plitso.data.local.models.CategoryWithRecipes
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface CategoryDao: BaseDao<Category> {
-
+interface CategoryDao : BaseDao<Category> {
     @Query("SELECT * FROM categories")
     fun getCategories(): Flow<List<Category>>
 

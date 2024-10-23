@@ -1,6 +1,5 @@
 package com.loki.plitso
 
-import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -18,7 +17,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -36,7 +34,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -55,7 +52,6 @@ import com.loki.plitso.util.showToast
 import org.koin.android.ext.android.inject
 
 class MainActivity : ComponentActivity() {
-
     private val plitsoViewModel: PlitsoViewModel by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,29 +61,29 @@ class MainActivity : ComponentActivity() {
         setContent {
             val theme by plitsoViewModel.theme.collectAsStateWithLifecycle()
             PlitsoTheme(
-                theme = theme
+                theme = theme,
             ) {
-
                 val context = LocalContext.current
                 var showNotificationDialog by remember { mutableStateOf(false) }
 
-                val settingsLauncher = rememberLauncherForActivityResult(
-                    contract = ActivityResultContracts.StartActivityForResult()
-                ) {  result ->
-                    if (result.resultCode == RESULT_OK) {
-                        showNotificationDialog = false
-                        context.showToast("Permission Granted")
-                    } else {
-                        context.showToast("Permission Denied")
+                val settingsLauncher =
+                    rememberLauncherForActivityResult(
+                        contract = ActivityResultContracts.StartActivityForResult(),
+                    ) { result ->
+                        if (result.resultCode == RESULT_OK) {
+                            showNotificationDialog = false
+                            context.showToast("Permission Granted")
+                        } else {
+                            context.showToast("Permission Denied")
+                        }
                     }
-                }
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                     NotificationPermissionRequest(
                         context = context,
                         onGrantedPermission = { isGranted ->
                             showNotificationDialog = !isGranted
-                        }
+                        },
                     )
                 }
 
@@ -97,11 +93,12 @@ class MainActivity : ComponentActivity() {
                         content = R.string.permission_is_required_to_show_app_notifications,
                         onDismiss = {},
                         onRequest = {
-                            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                                data = Uri.fromParts("package", context.packageName, null)
-                            }
+                            val intent =
+                                Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                                    data = Uri.fromParts("package", context.packageName, null)
+                                }
                             settingsLauncher.launch(intent)
-                        }
+                        },
                     )
                 }
 
@@ -112,9 +109,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MainApp(
-    plitsoViewModel: PlitsoViewModel
-) {
+fun MainApp(plitsoViewModel: PlitsoViewModel) {
     val appState = rememberAppState()
 
     Scaffold(
@@ -125,7 +120,7 @@ fun MainApp(
                 navController = appState.navController,
                 onItemClick = { screen ->
                     appState.bottomNavNavigate(screen.route)
-                }
+                },
             )
         },
         floatingActionButton = {
@@ -134,45 +129,46 @@ fun MainApp(
             val routes =
                 listOf(
                     Screen.RecipesScreen.route,
-                    Screen.HomeScreen.route
+                    Screen.HomeScreen.route,
                 )
             if (routes.any { it == currentDestination?.route }) {
                 Box(
-                    modifier = Modifier
-                        .size(45.dp)
-                        .clip(RoundedCornerShape(12.dp))
-                        .background(MaterialTheme.colorScheme.primary)
-                        .noIndication {
-                            appState.navigate(Screen.AIScreen)
-                        },
-                    contentAlignment = Alignment.Center
+                    modifier =
+                        Modifier
+                            .size(45.dp)
+                            .clip(RoundedCornerShape(12.dp))
+                            .background(MaterialTheme.colorScheme.primary)
+                            .noIndication {
+                                appState.navigate(Screen.AIScreen)
+                            },
+                    contentAlignment = Alignment.Center,
                 ) {
                     Icon(
                         imageVector = Icons.Default.AutoFixHigh,
                         contentDescription = null,
-                        tint = Color.White
+                        tint = Color.White,
                     )
                 }
             }
-        }
+        },
     ) { innerPadding ->
         Box(
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
+            modifier =
+                Modifier
+                    .padding(innerPadding)
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.background),
         ) {
             Navigation(
                 appState = appState,
-                plitsoViewModel = plitsoViewModel
+                plitsoViewModel = plitsoViewModel,
             )
         }
     }
 }
 
 @Composable
-fun rememberAppState(
-    navHostController: NavHostController = rememberNavController()
-) = remember(navHostController) {
-    AppState(navHostController)
-}
+fun rememberAppState(navHostController: NavHostController = rememberNavController()) =
+    remember(navHostController) {
+        AppState(navHostController)
+    }

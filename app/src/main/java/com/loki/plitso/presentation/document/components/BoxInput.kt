@@ -22,13 +22,14 @@ fun BoxInput(
     value: String,
     onValueChange: (String) -> Unit,
     icon: Int,
-    placeholder: String = ""
+    placeholder: String = "",
 ) {
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(12.dp))
-            .background(MaterialTheme.colorScheme.surface.copy(.5f))
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(12.dp))
+                .background(MaterialTheme.colorScheme.surface.copy(.5f)),
     ) {
         OutlinedTextField(
             value = value,
@@ -38,27 +39,28 @@ fun BoxInput(
             trailingIcon = {
                 Image(
                     painter = painterResource(id = icon),
-                    contentDescription = "time"
+                    contentDescription = "time",
                 )
             },
             placeholder = {
                 Text(
                     text = placeholder,
-                    color = MaterialTheme.colorScheme.onBackground.copy(.5f)
+                    color = MaterialTheme.colorScheme.onBackground.copy(.5f),
                 )
             },
-            readOnly = true
+            readOnly = true,
         )
         Box(
-            modifier = modifier.matchParentSize()
+            modifier = modifier.matchParentSize(),
         )
     }
 }
 
 @Composable
-fun textFieldColors() = TextFieldDefaults.colors(
-    focusedContainerColor = Color.Transparent,
-    unfocusedContainerColor = Color.Transparent,
-    focusedIndicatorColor = Color.Transparent,
-    unfocusedIndicatorColor = Color.Transparent
-)
+fun textFieldColors() =
+    TextFieldDefaults.colors(
+        focusedContainerColor = Color.Transparent,
+        unfocusedContainerColor = Color.Transparent,
+        focusedIndicatorColor = Color.Transparent,
+        unfocusedIndicatorColor = Color.Transparent,
+    )

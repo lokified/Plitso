@@ -13,22 +13,23 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class DocumentViewModel(
-    private val foodDocumentDao: FoodDocumentDao
+    private val foodDocumentDao: FoodDocumentDao,
 ) : ViewModel() {
-
-    val foodDocuments = foodDocumentDao.getFoodDocuments().stateIn(
-        viewModelScope,
-        SharingStarted.WhileSubscribed(5000L),
-        emptyList()
-    )
-
-    private val _foodDocument = MutableStateFlow(
-        FoodDocument(
-            type = "",
-            servedOn = "",
-            description = ""
+    val foodDocuments =
+        foodDocumentDao.getFoodDocuments().stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5000L),
+            emptyList(),
         )
-    )
+
+    private val _foodDocument =
+        MutableStateFlow(
+            FoodDocument(
+                type = "",
+                servedOn = "",
+                description = "",
+            ),
+        )
     val foodDocument = _foodDocument.asStateFlow()
 
     private val _time = MutableStateFlow(TimeUtil.currentTime())
@@ -41,9 +42,10 @@ class DocumentViewModel(
         if (_foodDocument.value.type.isNotEmpty()) {
             error.value = ""
         }
-        _foodDocument.value = _foodDocument.value.copy(
-            type = newValue
-        )
+        _foodDocument.value =
+            _foodDocument.value.copy(
+                type = newValue,
+            )
     }
 
     fun onTimeChange(newValue: String) {
@@ -54,25 +56,24 @@ class DocumentViewModel(
         _date.value = newValue
     }
 
-
     fun onPictureChangeChange(newValue: String) {
-        _foodDocument.value = _foodDocument.value.copy(
-            picture = newValue
-        )
+        _foodDocument.value =
+            _foodDocument.value.copy(
+                picture = newValue,
+            )
     }
 
     fun onDescriptionChange(newValue: String) {
         if (_foodDocument.value.description.isNotEmpty()) {
             error.value = ""
         }
-        _foodDocument.value = _foodDocument.value.copy(
-            description = newValue
-        )
+        _foodDocument.value =
+            _foodDocument.value.copy(
+                description = newValue,
+            )
     }
 
-
     fun saveFoodDocument() {
-
         if (_foodDocument.value.type.isEmpty()) {
             error.value = "Please select meal type"
             return
@@ -86,18 +87,18 @@ class DocumentViewModel(
         error.value = ""
 
         viewModelScope.launch {
-
             foodDocumentDao.insert(
                 foodDocument.value.copy(
-                    servedOn = "${time.value},${date.value}"
-                )
+                    servedOn = "${time.value},${date.value}",
+                ),
             )
 
-            _foodDocument.value = FoodDocument(
-                servedOn = "",
-                description = "",
-                type = ""
-            )
+            _foodDocument.value =
+                FoodDocument(
+                    servedOn = "",
+                    description = "",
+                    type = "",
+                )
             _time.value = ""
             _date.value = ""
         }

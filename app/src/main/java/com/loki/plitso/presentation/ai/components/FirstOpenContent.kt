@@ -22,30 +22,29 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.loki.plitso.util.noIndication
 
-
 @Composable
 fun FirstOpenContent(
     modifier: Modifier = Modifier,
     onPreviewChatScreen: () -> Unit,
-    onPreviewGenScreen: () -> Unit
+    onPreviewGenScreen: () -> Unit,
 ) {
     Column(
-        modifier = modifier
-            .padding(16.dp)
-            .fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(24.dp)
+        modifier =
+            modifier
+                .padding(16.dp)
+                .fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(24.dp),
     ) {
-
         BoxSelect(
             modifier = Modifier.weight(.5f),
             text = "Generate Meal based on the previous meal",
-            onClick = onPreviewGenScreen
+            onClick = onPreviewGenScreen,
         )
 
         BoxSelect(
             modifier = Modifier.weight(.5f),
             text = "Ask AI anything about meals, nutrition etc",
-            onClick = onPreviewChatScreen
+            onClick = onPreviewChatScreen,
         )
     }
 }
@@ -54,36 +53,36 @@ fun FirstOpenContent(
 fun BoxSelect(
     modifier: Modifier = Modifier,
     text: String,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(100.dp)
-            .border(
-                width = 1.dp,
-                shape = RoundedCornerShape(12.dp),
-                color = MaterialTheme.colorScheme.surface
-            )
-            .noIndication { onClick() },
-        contentAlignment = Alignment.Center
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .height(100.dp)
+                .border(
+                    width = 1.dp,
+                    shape = RoundedCornerShape(12.dp),
+                    color = MaterialTheme.colorScheme.surface,
+                ).noIndication { onClick() },
+        contentAlignment = Alignment.Center,
     ) {
         Text(
             text = text,
             modifier = Modifier.padding(12.dp),
             color = MaterialTheme.colorScheme.onBackground.copy(.7f),
             fontSize = 24.sp,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
         )
 
         IconButton(
             onClick = {},
-            modifier = Modifier.align(Alignment.BottomEnd)
+            modifier = Modifier.align(Alignment.BottomEnd),
         ) {
             Icon(
                 imageVector = Icons.Default.Output,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.onBackground.copy(.7f)
+                tint = MaterialTheme.colorScheme.onBackground.copy(.7f),
             )
         }
     }

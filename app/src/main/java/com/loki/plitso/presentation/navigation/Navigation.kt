@@ -19,13 +19,13 @@ import com.loki.plitso.presentation.bookmark.BookmarkScreen
 import com.loki.plitso.presentation.bookmark.BookmarkViewmodel
 import com.loki.plitso.presentation.document.DocumentScreen
 import com.loki.plitso.presentation.document.DocumentViewModel
-import com.loki.plitso.presentation.food_documents.FoodDocumentsScreen
+import com.loki.plitso.presentation.foodDocuments.FoodDocumentsScreen
 import com.loki.plitso.presentation.home.HomeScreen
 import com.loki.plitso.presentation.home.HomeViewModel
 import com.loki.plitso.presentation.login.LoginScreen
 import com.loki.plitso.presentation.login.LoginViewModel
-import com.loki.plitso.presentation.recipe_detail.RecipeDetailScreen
-import com.loki.plitso.presentation.recipe_detail.RecipeDetailViewModel
+import com.loki.plitso.presentation.recipeDetail.RecipeDetailScreen
+import com.loki.plitso.presentation.recipeDetail.RecipeDetailViewModel
 import com.loki.plitso.presentation.recipes.RecipesScreen
 import com.loki.plitso.presentation.recipes.RecipesViewModel
 import com.loki.plitso.presentation.search.SearchScreen
@@ -40,16 +40,15 @@ import org.koin.core.parameter.parametersOf
 @Composable
 fun Navigation(
     appState: AppState,
-    plitsoViewModel: PlitsoViewModel
+    plitsoViewModel: PlitsoViewModel,
 ) {
-
     val documentViewModel = koinViewModel<DocumentViewModel>()
     val foodDocuments by documentViewModel.foodDocuments.collectAsStateWithLifecycle()
 
     SharedTransitionLayout {
         NavHost(
             navController = appState.navController,
-            startDestination = Screen.HomeScreen.route
+            startDestination = Screen.HomeScreen.route,
         ) {
             composable(Screen.HomeScreen.route) {
                 val homeViewModel = koinViewModel<HomeViewModel>()
@@ -64,26 +63,31 @@ fun Navigation(
                         appState.navigate(Screen.SearchScreen)
                     },
                     navigateToRecipesScreen = { category ->
-                        appState.navigate(Screen.RecipesScreen.navWith("${category.categoryId}/${category.title}"))
+                        appState.navigate(
+                            Screen.RecipesScreen.navWith(
+                                "${category.categoryId}/${category.title}",
+                            ),
+                        )
                     },
                     navigateToRecipeDetailScreen = { id ->
                         if (id.isNotEmpty()) {
                             appState.navigate(Screen.RecipeDetailScreen.navWith(id))
                         }
-                    }
+                    },
                 )
             }
 
             composable(
                 route = Screen.RecipesScreen.withCategory(),
-                arguments = listOf(
-                    navArgument(CATEGORY_ID_KEY) {
-                        type = NavType.StringType
-                    },
-                    navArgument(CATEGORY_NAME_KEY) {
-                        type = NavType.StringType
-                    }
-                )
+                arguments =
+                    listOf(
+                        navArgument(CATEGORY_ID_KEY) {
+                            type = NavType.StringType
+                        },
+                        navArgument(CATEGORY_NAME_KEY) {
+                            type = NavType.StringType
+                        },
+                    ),
             ) {
                 val recipesViewModel =
                     koinViewModel<RecipesViewModel> { parametersOf(SavedStateHandle()) }
@@ -94,17 +98,18 @@ fun Navigation(
                     navigateToRecipeDetailScreen = { id ->
                         appState.navigate(Screen.RecipeDetailScreen.navWith(id))
                     },
-                    navigateBack = appState::navigateUp
+                    navigateBack = appState::navigateUp,
                 )
             }
 
             composable(
                 route = Screen.RecipeDetailScreen.withRecipeId(),
-                arguments = listOf(
-                    navArgument(RECIPE_ID_KEY) {
-                        type = NavType.StringType
-                    }
-                )
+                arguments =
+                    listOf(
+                        navArgument(RECIPE_ID_KEY) {
+                            type = NavType.StringType
+                        },
+                    ),
             ) {
                 val recipeDetailViewModel =
                     koinViewModel<RecipeDetailViewModel> { parametersOf(SavedStateHandle()) }
@@ -113,12 +118,12 @@ fun Navigation(
                     animatedVisibilityScope = this,
                     recipeDetailState = recipeDetailState,
                     navigateBack = appState::navigateUp,
-                    onAddToBookmark = recipeDetailViewModel::toggleBookmark
+                    onAddToBookmark = recipeDetailViewModel::toggleBookmark,
                 )
             }
 
             composable(
-                route = Screen.SearchScreen.route
+                route = Screen.SearchScreen.route,
             ) {
                 val searchViewModel = koinViewModel<SearchViewModel>()
                 SearchScreen(
@@ -126,7 +131,7 @@ fun Navigation(
                     searchViewModel = searchViewModel,
                     navigateToRecipeDetailScreen = { id ->
                         appState.navigate(Screen.RecipeDetailScreen.navWith(id))
-                    }
+                    },
                 )
             }
 
@@ -136,7 +141,7 @@ fun Navigation(
                     documentViewModel = documentViewModel,
                     navigateToAllFoodDocument = {
                         appState.navigate(Screen.FoodDocumentsScreen)
-                    }
+                    },
                 )
             }
 
@@ -144,7 +149,7 @@ fun Navigation(
                 FoodDocumentsScreen(
                     foodDocuments = foodDocuments,
                     documentViewModel = documentViewModel,
-                    navigateBack = appState::navigateUp
+                    navigateBack = appState::navigateUp,
                 )
             }
 
@@ -156,7 +161,7 @@ fun Navigation(
                     navigateToLogin = {
                         appState.navigate(Screen.LoginScreen)
                     },
-                    navigateBack = appState::navigateUp
+                    navigateBack = appState::navigateUp,
                 )
             }
 
@@ -168,7 +173,7 @@ fun Navigation(
                     bookmarks = bookmarks,
                     navigateToRecipeDetailScreen = { id ->
                         appState.navigate(Screen.RecipeDetailScreen.navWith(id))
-                    }
+                    },
                 )
             }
 
@@ -182,7 +187,7 @@ fun Navigation(
                     onLogOut = accountViewModel::logOut,
                     navigateToSignIn = {
                         appState.navigate(Screen.LoginScreen)
-                    }
+                    },
                 )
             }
 
@@ -190,7 +195,7 @@ fun Navigation(
                 val loginViewModel = koinViewModel<LoginViewModel>()
                 LoginScreen(
                     loginViewModel = loginViewModel,
-                    navigateBack = appState::navigateUp
+                    navigateBack = appState::navigateUp,
                 )
             }
         }

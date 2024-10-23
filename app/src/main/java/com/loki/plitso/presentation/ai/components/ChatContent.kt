@@ -25,7 +25,7 @@ import com.loki.plitso.presentation.ai.AiState
 @Composable
 fun ChatContent(
     modifier: Modifier = Modifier,
-    aiState: AiState
+    aiState: AiState,
 ) {
     val lazyListState = rememberLazyListState()
 
@@ -34,24 +34,24 @@ fun ChatContent(
     }
 
     Column(
-        modifier = modifier
-            .fillMaxSize()
+        modifier =
+            modifier
+                .fillMaxSize(),
     ) {
         LazyColumn(
             modifier = modifier.fillMaxWidth(),
             state = lazyListState,
             contentPadding = PaddingValues(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
-            horizontalAlignment = Alignment.End
+            horizontalAlignment = Alignment.End,
         ) {
             items(aiState.messages) { message ->
                 if (message.role == "user") {
                     MessengerItemCard(
                         modifier = Modifier.align(Alignment.End),
-                        message = message.content
+                        message = message.content,
                     )
                 } else {
-
                     var isStartTypeEffect by remember { mutableStateOf(false) }
 
                     LaunchedEffect(aiState.isLoading) {
@@ -66,11 +66,11 @@ fun ChatContent(
                             isEffectActive = true,
                             onEffectComplete = {
                                 isStartTypeEffect = false
-                            }
+                            },
                         )
                     } else {
                         ReceiverMessageItemCard(
-                            message = message.content
+                            message = message.content,
                         )
                     }
                 }
@@ -80,7 +80,7 @@ fun ChatContent(
                 item {
                     Box(
                         modifier = Modifier.fillMaxWidth(),
-                        contentAlignment = Alignment.Center
+                        contentAlignment = Alignment.Center,
                     ) {
                         CircularProgressIndicator()
                     }
@@ -90,7 +90,10 @@ fun ChatContent(
     }
 }
 
-suspend fun scrollToEnd(listState: LazyListState, itemCount: Int) {
+suspend fun scrollToEnd(
+    listState: LazyListState,
+    itemCount: Int,
+) {
     val lastVisibleItem = listState.layoutInfo.visibleItemsInfo.lastOrNull()
 
     if (itemCount > 0) {

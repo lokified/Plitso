@@ -67,7 +67,7 @@ fun SharedTransitionScope.HomeScreen(
     navigateToAccountScreen: () -> Unit,
     navigateToSearchScreen: () -> Unit,
     navigateToRecipesScreen: (Category) -> Unit,
-    navigateToRecipeDetailScreen: (id: String) -> Unit
+    navigateToRecipeDetailScreen: (id: String) -> Unit,
 ) {
     val homeState by homeViewModel.state.collectAsStateWithLifecycle()
     val dayRecipe by homeViewModel.dayRecipe.collectAsStateWithLifecycle()
@@ -76,18 +76,17 @@ fun SharedTransitionScope.HomeScreen(
     if (dayRecipe == null) {
         HomeSkeleton()
     } else {
-
         LazyVerticalGrid(
             columns = GridCells.Fixed(3),
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
-            contentPadding = PaddingValues(16.dp)
+            contentPadding = PaddingValues(16.dp),
         ) {
             gridColItem {
                 HomeTopBar(
                     user = user,
                     navigateToAccountScreen = navigateToAccountScreen,
-                    navigateToSearchScreen = navigateToSearchScreen
+                    navigateToSearchScreen = navigateToSearchScreen,
                 )
             }
 
@@ -95,14 +94,14 @@ fun SharedTransitionScope.HomeScreen(
                 RecipeOfDayComponent(
                     animatedVisibilityScope = animatedVisibilityScope,
                     dayRecipe = dayRecipe,
-                    navigateToRecipeDetailScreen = navigateToRecipeDetailScreen
+                    navigateToRecipeDetailScreen = navigateToRecipeDetailScreen,
                 )
             }
 
             gridColItem {
                 RandomRecipe(
                     homeState = homeState,
-                    navigateToRecipeDetailScreen = navigateToRecipeDetailScreen
+                    navigateToRecipeDetailScreen = navigateToRecipeDetailScreen,
                 )
             }
 
@@ -111,7 +110,7 @@ fun SharedTransitionScope.HomeScreen(
                     category = category,
                     onItemClick = {
                         navigateToRecipesScreen(category)
-                    }
+                    },
                 )
             }
         }
@@ -129,23 +128,24 @@ private fun HomeTopBar(
     modifier: Modifier = Modifier,
     user: LocalUser,
     navigateToAccountScreen: () -> Unit,
-    navigateToSearchScreen: () -> Unit
+    navigateToSearchScreen: () -> Unit,
 ) {
     Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp),
-        verticalAlignment = Alignment.CenterVertically
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
-
         if (user.isLoggedIn) {
             AsyncImage(
                 model = user.imageUrl,
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .size(40.dp)
-                    .clip(CircleShape)
+                modifier =
+                    Modifier
+                        .size(40.dp)
+                        .clip(CircleShape),
             )
 
             Spacer(modifier = Modifier.width(12.dp))
@@ -154,7 +154,7 @@ private fun HomeTopBar(
                 text = user.username,
                 fontWeight = FontWeight.Bold,
                 fontSize = 18.sp,
-                modifier = Modifier.noIndication { navigateToAccountScreen() }
+                modifier = Modifier.noIndication { navigateToAccountScreen() },
             )
             Spacer(modifier = Modifier.width(4.dp))
 
@@ -162,15 +162,14 @@ private fun HomeTopBar(
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowForwardIos,
                     contentDescription = null,
-                    modifier = Modifier.scale(.6f)
+                    modifier = Modifier.scale(.6f),
                 )
             }
-
         } else {
             Text(
                 text = "Welcome",
                 fontWeight = FontWeight.Bold,
-                fontSize = 18.sp
+                fontSize = 18.sp,
             )
         }
 
@@ -179,7 +178,7 @@ private fun HomeTopBar(
         IconButton(onClick = navigateToSearchScreen) {
             Icon(
                 imageVector = Icons.Default.Search,
-                contentDescription = null
+                contentDescription = null,
             )
         }
     }
@@ -191,14 +190,15 @@ private fun SharedTransitionScope.RecipeOfDayComponent(
     modifier: Modifier = Modifier,
     animatedVisibilityScope: AnimatedVisibilityScope,
     dayRecipe: DayRecipe?,
-    navigateToRecipeDetailScreen: (id: String) -> Unit
+    navigateToRecipeDetailScreen: (id: String) -> Unit,
 ) {
     dayRecipe?.let { recipe ->
         BoxWithConstraints(
-            modifier = modifier
-                .clip(RoundedCornerShape(16.dp))
-                .height(370.dp)
-                .noIndication { navigateToRecipeDetailScreen(recipe.recipeId) }
+            modifier =
+                modifier
+                    .clip(RoundedCornerShape(16.dp))
+                    .height(370.dp)
+                    .noIndication { navigateToRecipeDetailScreen(recipe.recipeId) },
         ) {
             val width = this.maxWidth
 
@@ -206,46 +206,51 @@ private fun SharedTransitionScope.RecipeOfDayComponent(
                 model = recipe.image,
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .sharedElement(
-                        state = rememberSharedContentState(key = "image/${recipe.recipeId}"),
-                        animatedVisibilityScope = animatedVisibilityScope,
-                        boundsTransform = { _, _ ->
-                            tween(durationMillis = 200)
-                        }
-                    )
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .sharedElement(
+                            state = rememberSharedContentState(key = "image/${recipe.recipeId}"),
+                            animatedVisibilityScope = animatedVisibilityScope,
+                            boundsTransform = { _, _ ->
+                                tween(durationMillis = 200)
+                            },
+                        ),
             )
 
             Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight()
-                    .height(200.dp)
-                    .background(
-                        brush = Brush.verticalGradient(
-                            listOf(
-                                Color.Black.copy(.7f),
-                                Color.Black.copy(.4f),
-                                Color.Transparent
-                            )
-                        )
-                    )
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight()
+                        .height(200.dp)
+                        .background(
+                            brush =
+                                Brush.verticalGradient(
+                                    listOf(
+                                        Color.Black.copy(.7f),
+                                        Color.Black.copy(.4f),
+                                        Color.Transparent,
+                                    ),
+                                ),
+                        ),
             )
 
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(12.dp)
-                    .align(Alignment.TopCenter)
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(12.dp)
+                        .align(Alignment.TopCenter),
             ) {
                 Text(
                     text = "RECIPE OF THE DAY",
                     fontSize = 18.sp,
                     color = Color.White.copy(.5f),
-                    modifier = Modifier
-                        .padding(top = 8.dp)
-                        .padding(vertical = 8.dp)
+                    modifier =
+                        Modifier
+                            .padding(top = 8.dp)
+                            .padding(vertical = 8.dp),
                 )
 
                 Text(
@@ -253,29 +258,30 @@ private fun SharedTransitionScope.RecipeOfDayComponent(
                     fontSize = 28.sp,
                     lineHeight = 30.sp,
                     color = Color.White,
-                    modifier = Modifier
-                        .width(width * 3 / 4)
-                        .sharedElement(
-                            rememberSharedContentState(
-                                key = "text/${recipe.recipeId}"
+                    modifier =
+                        Modifier
+                            .width(width * 3 / 4)
+                            .sharedElement(
+                                rememberSharedContentState(
+                                    key = "text/${recipe.recipeId}",
+                                ),
+                                animatedVisibilityScope,
+                                boundsTransform = { _, _ ->
+                                    tween(durationMillis = 200)
+                                },
                             ),
-                            animatedVisibilityScope,
-                            boundsTransform = { _, _ ->
-                                tween(durationMillis = 200)
-                            }
-                        )
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
 
                 Row(
-                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
                 ) {
                     repeat(5) {
                         Icon(
                             imageVector = Icons.Filled.Star,
                             contentDescription = null,
-                            tint = Color.Yellow.copy(.7f)
+                            tint = Color.Yellow.copy(.7f),
                         )
                     }
                 }
@@ -288,39 +294,39 @@ private fun SharedTransitionScope.RecipeOfDayComponent(
 fun RandomRecipe(
     modifier: Modifier = Modifier,
     homeState: HomeState,
-    navigateToRecipeDetailScreen: (id: String) -> Unit
+    navigateToRecipeDetailScreen: (id: String) -> Unit,
 ) {
     Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(16.dp))
-            .background(MaterialTheme.colorScheme.surface)
-            .noIndication { navigateToRecipeDetailScreen(homeState.randomRecipeId) }
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(16.dp))
+                .background(MaterialTheme.colorScheme.surface)
+                .noIndication { navigateToRecipeDetailScreen(homeState.randomRecipeId) },
     ) {
-
         SubcomposeAsyncImage(
             model = homeState.randomRecipeImage,
             contentDescription = null,
             contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .align(Alignment.CenterStart)
-                .size(width = 100.dp, height = 80.dp),
+            modifier =
+                Modifier
+                    .align(Alignment.CenterStart)
+                    .size(width = 100.dp, height = 80.dp),
             loading = {
                 Icon(
                     imageVector = Icons.Filled.Fastfood,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onBackground.copy(.2f)
+                    tint = MaterialTheme.colorScheme.onBackground.copy(.2f),
                 )
-            }
+            },
         )
 
         Row(
             modifier = Modifier.padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
-
             Box(
-                modifier = Modifier.width(100.dp)
+                modifier = Modifier.width(100.dp),
             )
 
             Spacer(modifier = Modifier.weight(1f))
@@ -329,24 +335,25 @@ fun RandomRecipe(
                 Text(text = "Random recipe", fontSize = 20.sp)
                 Text(
                     text = "Don't know what to cook?",
-                    color = MaterialTheme.colorScheme.onBackground.copy(.5f)
+                    color = MaterialTheme.colorScheme.onBackground.copy(.5f),
                 )
             }
 
             Spacer(modifier = Modifier.weight(1f))
 
             Box(
-                modifier = Modifier
-                    .size(50.dp)
-                    .padding(start = 8.dp)
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(MaterialTheme.colorScheme.primary),
-                contentAlignment = Alignment.Center
+                modifier =
+                    Modifier
+                        .size(50.dp)
+                        .padding(start = 8.dp)
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(MaterialTheme.colorScheme.primary),
+                contentAlignment = Alignment.Center,
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowForward,
                     contentDescription = null,
-                    tint = Color.White
+                    tint = Color.White,
                 )
             }
         }
@@ -357,19 +364,20 @@ fun RandomRecipe(
 fun CategoryItem(
     category: Category,
     modifier: Modifier = Modifier,
-    onItemClick: () -> Unit
+    onItemClick: () -> Unit,
 ) {
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier
-            .size(100.dp)
-            .clip(RoundedCornerShape(12.dp))
-            .background(MaterialTheme.colorScheme.surface.copy(.5f))
-            .noIndication { onItemClick() }
+        modifier =
+            modifier
+                .size(100.dp)
+                .clip(RoundedCornerShape(12.dp))
+                .background(MaterialTheme.colorScheme.surface.copy(.5f))
+                .noIndication { onItemClick() },
     ) {
         Box(
-            modifier = Modifier
+            modifier = Modifier,
         ) {
             SubcomposeAsyncImage(
                 model = category.image,
@@ -379,16 +387,16 @@ fun CategoryItem(
                     Icon(
                         imageVector = Icons.Filled.Fastfood,
                         contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onBackground.copy(.2f)
+                        tint = MaterialTheme.colorScheme.onBackground.copy(.2f),
                     )
-                }
+                },
             )
         }
         Spacer(modifier = Modifier.height(4.dp))
         Text(
             text = category.title,
             fontSize = 15.sp,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
         )
     }
 }

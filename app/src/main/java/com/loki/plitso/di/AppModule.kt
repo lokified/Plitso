@@ -14,26 +14,29 @@ import retrofit2.create
 
 private const val BASE_URL = "https://www.themealdb.com/api/json/v1/1/"
 
-val appModule = module {
+val appModule =
+    module {
 
-    single<MealdbApi> {
-        Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create()
+        single<MealdbApi> {
+            Retrofit
+                .Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create()
+        }
+
+        single<PlitsoDatabase> {
+            Room
+                .databaseBuilder(
+                    get(),
+                    PlitsoDatabase::class.java,
+                    PlitsoDatabase.DATABASE_NAME,
+                ).fallbackToDestructiveMigration()
+                .build()
+        }
+
+        single<SyncDataManager> { SyncDataManagerImpl(get()) }
+
+        viewModel { PlitsoViewModel(get()) }
     }
-
-    single<PlitsoDatabase> {
-        Room.databaseBuilder(
-            get(),
-            PlitsoDatabase::class.java,
-            PlitsoDatabase.DATABASE_NAME
-        ).fallbackToDestructiveMigration().build()
-    }
-
-    single<SyncDataManager> { SyncDataManagerImpl(get()) }
-
-    viewModel { PlitsoViewModel(get()) }
-
-}

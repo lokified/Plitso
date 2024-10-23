@@ -7,7 +7,6 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface MealdbApi {
-
     @GET("random.php")
     suspend fun getRandomRecipe(): RecipeDetailResponse
 
@@ -15,8 +14,12 @@ interface MealdbApi {
     suspend fun getCategories(): CategoryResponse
 
     @GET("filter.php")
-    suspend fun getCategoryRecipe(@Query("c") category: String): RecipesResponse
+    suspend fun getCategoryRecipe(
+        @Query("c") category: String,
+    ): RecipesResponse
 
     @GET("lookup.php")
-    suspend fun getRecipeDetail(@Query("i") id: String): RecipeDetailResponse
+    suspend fun getRecipeDetail(
+        @Query("i") id: String,
+    ): RecipeDetailResponse
 }

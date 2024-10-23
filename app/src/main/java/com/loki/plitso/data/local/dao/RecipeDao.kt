@@ -4,4 +4,4 @@ import androidx.room.Dao
 import com.loki.plitso.data.local.models.Recipe
 
 @Dao
-interface RecipeDao: BaseDao<Recipe>
+interface RecipeDao : BaseDao<Recipe>

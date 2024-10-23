@@ -7,7 +7,6 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface DayRecipeDao : BaseDao<DayRecipe> {
-
     @Query("SELECT * FROM dayrecipe")
     fun getRecipes(): Flow<List<DayRecipe>>
 

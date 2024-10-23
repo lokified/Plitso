@@ -11,14 +11,14 @@ data class Recipe(
     val recipeId: String,
     val title: String,
     val image: String,
-    val categoryId: String
+    val categoryId: String,
 )
 
 data class CategoryWithRecipes(
     @Embedded val category: Category,
     @Relation(
         parentColumn = "categoryId",
-        entityColumn = "categoryId"
+        entityColumn = "categoryId",
     )
-    val recipes: List<Recipe>
+    val recipes: List<Recipe>,
 )

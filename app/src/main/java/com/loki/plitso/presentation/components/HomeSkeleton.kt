@@ -22,26 +22,29 @@ import com.loki.plitso.util.shimmerEffect
 @Composable
 fun HomeSkeleton(modifier: Modifier = Modifier) {
     Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(16.dp)
+        modifier =
+            modifier
+                .fillMaxSize()
+                .padding(16.dp),
     ) {
         Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(370.dp)
-                .clip(RoundedCornerShape(16.dp))
-                .shimmerEffect()
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .height(370.dp)
+                    .clip(RoundedCornerShape(16.dp))
+                    .shimmerEffect(),
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
         Box(
-            modifier = modifier
-                .fillMaxWidth()
-                .height(70.dp)
-                .clip(RoundedCornerShape(16.dp))
-                .shimmerEffect()
+            modifier =
+                modifier
+                    .fillMaxWidth()
+                    .height(70.dp)
+                    .clip(RoundedCornerShape(16.dp))
+                    .shimmerEffect(),
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -53,10 +56,11 @@ fun HomeSkeleton(modifier: Modifier = Modifier) {
         ) {
             items(12) {
                 Box(
-                    modifier = Modifier
-                        .height(70.dp)
-                        .clip(RoundedCornerShape(12.dp))
-                        .shimmerEffect()
+                    modifier =
+                        Modifier
+                            .height(70.dp)
+                            .clip(RoundedCornerShape(12.dp))
+                            .shimmerEffect(),
                 )
             }
         }
@@ -64,7 +68,8 @@ fun HomeSkeleton(modifier: Modifier = Modifier) {
 }
 
 @Preview(
-    showBackground = true, uiMode = 1
+    showBackground = true,
+    uiMode = 1,
 )
 @Composable
 fun HomeSkeletonPreview() {

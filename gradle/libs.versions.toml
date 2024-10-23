@@ -24,7 +24,8 @@ firebaseBom = "33.4.0"
 googleServices = "4.4.2"
 firebasePerf = "1.4.2"
 firebaseCrash = "3.0.2"
-ktlint = "11.0.0"
+ktlint = "12.1.1"
+detekt = "1.23.7"
 spotless = "6.19.0"
 pager = "0.24.13-rc"
 worker = "2.9.1"
@@ -144,6 +145,7 @@ google-services = { id = "com.google.gms.google-services", version.ref = "google
 firebase-perfomance = { id = "com.google.firebase.firebase-perf", version.ref = "firebasePerf" }
 firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrash" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 secrets = {  id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "secretsGradlePlugin"}
 

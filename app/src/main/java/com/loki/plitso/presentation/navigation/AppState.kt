@@ -7,15 +7,15 @@ import androidx.navigation.NavHostController
 class AppState(
     val navController: NavHostController,
 ) {
-
     fun navigateUp() {
         navController.navigateUp()
     }
 
     fun navigate(screen: Screen) {
-        val route = screen.routePath?.let { routePath ->
-            screen.route + "/$routePath"
-        } ?: screen.route
+        val route =
+            screen.routePath?.let { routePath ->
+                screen.route + "/$routePath"
+            } ?: screen.route
 
         navController.navigate(route = route) {
             launchSingleTop = true

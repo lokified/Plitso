@@ -40,43 +40,50 @@ fun String.toRichHtmlString(): AnnotatedString {
     return state.annotatedString
 }
 
-fun Modifier.noIndication(enabled: Boolean = true, onClick: () -> Unit) = composed {
+fun Modifier.noIndication(
+    enabled: Boolean = true,
+    onClick: () -> Unit,
+) = composed {
     val interactionSource = remember { MutableInteractionSource() }
     clickable(
         interactionSource = interactionSource,
         indication = null,
-        enabled = enabled
+        enabled = enabled,
     ) {
         onClick()
     }
 }
 
-fun Modifier.shimmerEffect(): Modifier = composed {
-    var size by remember {
-        mutableStateOf(IntSize.Zero)
-    }
+fun Modifier.shimmerEffect(): Modifier =
+    composed {
+        var size by remember {
+            mutableStateOf(IntSize.Zero)
+        }
 
-    val transition = rememberInfiniteTransition(label = "infinite transition")
-    val startOffsetX by transition.animateFloat(
-        initialValue = -2 * size.width.toFloat(),
-        targetValue = 2 * size.width.toFloat(),
-        animationSpec = infiniteRepeatable(
-            animation = tween(1000)
-        ), label = "start transition"
-    )
-
-    background(
-        brush = Brush.linearGradient(
-            colors = listOf(
-                MaterialTheme.colorScheme.onBackground.copy(.06f),
-                MaterialTheme.colorScheme.onBackground.copy(.2f),
-                MaterialTheme.colorScheme.onBackground.copy(.06f),
-            ),
-            start = Offset(startOffsetX, 0f),
-            end = Offset(startOffsetX + size.width.toFloat(), size.height.toFloat())
+        val transition = rememberInfiniteTransition(label = "infinite transition")
+        val startOffsetX by transition.animateFloat(
+            initialValue = -2 * size.width.toFloat(),
+            targetValue = 2 * size.width.toFloat(),
+            animationSpec =
+                infiniteRepeatable(
+                    animation = tween(1000),
+                ),
+            label = "start transition",
         )
-    )
-        .onGloballyPositioned {
+
+        background(
+            brush =
+                Brush.linearGradient(
+                    colors =
+                        listOf(
+                            MaterialTheme.colorScheme.onBackground.copy(.06f),
+                            MaterialTheme.colorScheme.onBackground.copy(.2f),
+                            MaterialTheme.colorScheme.onBackground.copy(.06f),
+                        ),
+                    start = Offset(startOffsetX, 0f),
+                    end = Offset(startOffsetX + size.width.toFloat(), size.height.toFloat()),
+                ),
+        ).onGloballyPositioned {
             size = it.size
         }
-}
+    }
