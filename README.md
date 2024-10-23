@@ -49,7 +49,7 @@ serverID=  ## retrieve OAuth ClientID from your google console follow the link a
 ```
 
 > Make sure to run this lint check before pushing
-> ./gradlew ktlintFormat && ./gradlew ktlintCheck && ./gradlew detekt
+ `./gradlew ktlintFormat && ./gradlew ktlintCheck && ./gradlew detekt`
 
 ## Known Bugs
 
