@@ -19,7 +19,9 @@ import com.loki.plitso.data.remote.mealdb.mappers.toRecipeDetail
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.util.Date
@@ -35,8 +37,8 @@ class RecipeRepositoryImpl(
     override fun getDayRecipe(): Flow<DayRecipe> =
         flow {
             try {
-                val recipe = dayRecipeDao.getRecipes().first().isEmpty()
-                if (recipe) {
+                val recipe = dayRecipeDao.getRecipes().first()
+                if (recipe.isEmpty()) {
                     val randomRecipe = api.getRandomRecipe().meals[0]
                     dayRecipeDao.insert(randomRecipe.toDayRecipe(Date()))
                     val dayRecipe = dayRecipeDao.getRecipes().first()[0]
@@ -48,16 +50,25 @@ class RecipeRepositoryImpl(
             } catch (e: Exception) {
                 Timber.tag("day recipe repo").d(e)
             }
-        }
+        }.flowOn(Dispatchers.IO)
 
     override suspend fun generateRandomRecipe() {
-        try {
-            randomDao.clear()
-            val recipes = recipeDetailDao.getAllRecipes().first()
-            val randomIndex = kotlin.random.Random.nextInt(recipes.size)
-            randomDao.insert(recipes[randomIndex].toRandom())
-        } catch (e: Exception) {
-            Timber.tag("random recipe repo").d(e)
+        withContext(Dispatchers.IO) {
+            try {
+                val random = randomDao.getRandomRecipe().first()
+                if (random.isEmpty()) {
+                    val randomRecipe = api.getRandomRecipe().meals[0]
+                    randomDao.insert(randomRecipe.toRandom())
+                } else {
+                    recipeDetailDao.getAllRecipes().firstOrNull()?.let {
+                        randomDao.clear()
+                        val randomIndex = kotlin.random.Random.nextInt(it.size)
+                        randomDao.insert(it[randomIndex].toRandom())
+                    }
+                }
+            } catch (e: Exception) {
+                Timber.tag("random recipe repo").d(e)
+            }
         }
     }
 

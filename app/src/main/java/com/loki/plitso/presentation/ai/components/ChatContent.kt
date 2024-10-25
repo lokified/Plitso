@@ -4,107 +4,169 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.loki.plitso.presentation.ai.AiState
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.loki.plitso.R
+import com.loki.plitso.presentation.ai.AiViewModel
+import com.loki.plitso.presentation.ai.ChatUiState
+import com.loki.plitso.util.showToast
 
 @Composable
 fun ChatContent(
     modifier: Modifier = Modifier,
-    aiState: AiState,
+    aiViewModel: AiViewModel,
 ) {
+    val context = LocalContext.current
     val lazyListState = rememberLazyListState()
+    val uiState by aiViewModel.chatState.collectAsStateWithLifecycle()
+    val newMessageId by aiViewModel.newMessageId.collectAsStateWithLifecycle()
 
-    LaunchedEffect(aiState.messages.size) {
-        scrollToEnd(lazyListState, aiState.messages.size)
+    LaunchedEffect(key1 = Unit) {
+        aiViewModel.onStartNewChat()
     }
 
-    Column(
-        modifier =
-            modifier
-                .fillMaxSize(),
-    ) {
-        LazyColumn(
-            modifier = modifier.fillMaxWidth(),
-            state = lazyListState,
-            contentPadding = PaddingValues(16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            horizontalAlignment = Alignment.End,
-        ) {
-            items(aiState.messages) { message ->
-                if (message.role == "user") {
-                    MessengerItemCard(
-                        modifier = Modifier.align(Alignment.End),
-                        message = message.content,
-                    )
-                } else {
-                    var isStartTypeEffect by remember { mutableStateOf(false) }
+    when (uiState) {
+        is ChatUiState.Loading -> {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center,
+            ) {
+                CircularProgressIndicator()
+            }
+        }
+        is ChatUiState.Error -> {
+            context.showToast((uiState as ChatUiState.Error).message)
+        }
+        is ChatUiState.Success -> {
+            val state = uiState as ChatUiState.Success
 
-                    LaunchedEffect(aiState.isLoading) {
-                        if (aiState.isLoading && message == aiState.messages.last()) {
-                            isStartTypeEffect = true
-                        }
-                    }
-
-                    if (message == aiState.messages.last() && isStartTypeEffect) {
-                        ReceiverMessageItemCard(
-                            message = message.content,
-                            isEffectActive = true,
-                            onEffectComplete = {
-                                isStartTypeEffect = false
-                            },
-                        )
-                    } else {
-                        ReceiverMessageItemCard(
-                            message = message.content,
-                        )
+            LaunchedEffect(uiState) {
+                (uiState as? ChatUiState.Success)?.messages?.size?.let { messagesSize ->
+                    if (messagesSize > 0) {
+                        lazyListState.animateScrollToItem(messagesSize - 1)
                     }
                 }
             }
 
-            if (aiState.isLoading) {
-                item {
-                    Box(
-                        modifier = Modifier.fillMaxWidth(),
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        CircularProgressIndicator()
+            Column(
+                modifier =
+                    modifier
+                        .fillMaxSize(),
+            ) {
+                LazyColumn(
+                    modifier = modifier.fillMaxWidth(),
+                    state = lazyListState,
+                    contentPadding = PaddingValues(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    horizontalAlignment = Alignment.End,
+                ) {
+                    items(
+                        items = state.messages,
+                        key = { it.id },
+                    ) { message ->
+                        if (message.role == context.getString(R.string.user)) {
+                            MessengerItemCard(
+                                modifier = Modifier.align(Alignment.End),
+                                message = message.content,
+                            )
+                        } else {
+                            ReceiverMessageItemCard(
+                                message = message.content,
+                                isEffectActive = message.id.toString() == newMessageId,
+                                onEffectComplete = {
+                                    aiViewModel.resetMessageId()
+                                },
+                            )
+                        }
                     }
+
+                    if (state.isProcessing) {
+                        item {
+                            ProcessingIndicator()
+                        }
+                    }
+                }
+                if (state.error != null) {
+                    ErrorMessage(
+                        message = state.error,
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                    )
                 }
             }
         }
     }
 }
 
-suspend fun scrollToEnd(
-    listState: LazyListState,
-    itemCount: Int,
-) {
-    val lastVisibleItem = listState.layoutInfo.visibleItemsInfo.lastOrNull()
-
-    if (itemCount > 0) {
-        if (lastVisibleItem != null && lastVisibleItem.index == itemCount - 1) {
-            val viewportHeight = listState.layoutInfo.viewportEndOffset
-            val lastItemBottom = lastVisibleItem.offset + lastVisibleItem.size
-            if (lastItemBottom > viewportHeight) {
-                listState.scrollToItem(itemCount - 1, lastItemBottom - viewportHeight)
+@Composable
+private fun ProcessingIndicator(modifier: Modifier = Modifier) {
+    Row(
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Card(
+            modifier = Modifier.widthIn(max = 340.dp),
+            colors =
+                CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                ),
+        ) {
+            Row(
+                modifier = Modifier.padding(16.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(16.dp),
+                    strokeWidth = 2.dp,
+                )
+                Text(
+                    text = stringResource(R.string.thinking),
+                    style = MaterialTheme.typography.bodyMedium,
+                )
             }
-        } else {
-            listState.scrollToItem(itemCount - 1)
         }
+    }
+}
+
+@Composable
+private fun ErrorMessage(
+    message: String,
+    modifier: Modifier = Modifier,
+) {
+    Surface(
+        color = MaterialTheme.colorScheme.errorContainer,
+        shape = MaterialTheme.shapes.small,
+        modifier = modifier.fillMaxWidth(),
+    ) {
+        Text(
+            text = message,
+            color = MaterialTheme.colorScheme.onErrorContainer,
+            modifier = Modifier.padding(16.dp),
+        )
     }
 }

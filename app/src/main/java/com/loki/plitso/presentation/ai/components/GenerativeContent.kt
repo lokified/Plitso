@@ -6,23 +6,34 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.loki.plitso.presentation.ai.AiState
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.loki.plitso.presentation.ai.AiViewModel
+import com.loki.plitso.util.showToast
 
 @Composable
 fun GenerativeContent(
     modifier: Modifier = Modifier,
-    aiState: AiState,
     aiViewModel: AiViewModel,
 ) {
+    val uiState by aiViewModel.genState.collectAsStateWithLifecycle()
+
     var showSuggestion by rememberSaveable {
         mutableStateOf(false)
+    }
+    val context = LocalContext.current
+
+    LaunchedEffect(uiState.errorMessage) {
+        if (uiState.errorMessage.isNotEmpty()) {
+            context.showToast(uiState.errorMessage)
+        }
     }
 
     Column(
@@ -36,7 +47,7 @@ fun GenerativeContent(
             ) {
                 ReceiverMessageItemCard(
                     modifier = Modifier.padding(16.dp),
-                    message = aiState.generativeAnswer,
+                    message = uiState.generativeAnswer,
                     isEffectActive = true,
                 )
             }

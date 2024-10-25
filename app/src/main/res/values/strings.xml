@@ -14,4 +14,28 @@
     <string name="login_to_your_account">Login to your account</string>
     <string name="login">Login</string>
 
+    <!-- Ai Screen -->
+    <string name="user">user</string>
+    <string name="thinking">Thinking…</string>
+    <string name="start_new_chat">Start new chat</string>
+    <string name="no_chat_history">No chat history</string>
+    <string name="select_chat">Select chat: %1$s</string>
+    <string name="what_would_you">What would you like to do?</string>
+    <string name="generate_new_meal">Generate New Meal</string>
+    <string name="personalized_meal">Get personalized meal suggestions based on your previous meals</string>
+    <string name="get_answers">Get answers about nutrition, cooking tips, and meal planning</string>
+    <string name="get_started">Get Started</string>
+    <string name="hello_use_ai">Hello, \nuse AI to generate recipe</string>
+    <string name="use_your_previous_meal">Use your previous meal history to generate suggestion for your next meal</string>
+    <string name="tune_your_meal">Tune your Meal Suggestions</string>
+    <string name="select_meal">Select Meal</string>
+    <string name="suggest_a_meal">Suggest A Meal</string>
+    <string name="select_cuisine">Select Cuisine</string>
+    <string name="select_mood">Select Mood</string>
+    <string name="select_dietary">Select Dietary (Optional)</string>
+    <string name="want_a_quick_meal">Want a Quick Meal?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="write_your_message">Write your message</string>
+
 </resources>

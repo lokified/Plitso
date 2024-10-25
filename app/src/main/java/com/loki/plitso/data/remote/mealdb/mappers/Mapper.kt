@@ -22,6 +22,14 @@ fun RecipeDetailDto.toDayRecipe(updateDate: Date): DayRecipe =
         updatedDate = updateDate,
     )
 
+fun RecipeDetailDto.toRandom(): Random =
+    Random(
+        recipeId = idMeal,
+        title = strMeal,
+        image = strMealThumb,
+        instructions = strInstructions.orEmpty(),
+    )
+
 fun RecipeDetail.toRandom(): Random =
     Random(
         recipeId = recipeId,
