@@ -14,6 +14,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -56,6 +60,7 @@ fun ReceiverMessageItemCard(
     isEffectActive: Boolean = false,
     onEffectComplete: () -> Unit = {},
 ) {
+    var isEffectComplete by remember { mutableStateOf(false) }
     Row(
         modifier = modifier,
     ) {
@@ -101,10 +106,13 @@ fun ReceiverMessageItemCard(
             richTextState.config.linkColor = Color.Blue
             richTextState.config.listIndent = 10
 
-            if (isEffectActive) {
+            if (isEffectActive && !isEffectComplete) {
                 TypeWriterTextEffect(
                     text = richTextState.toText(),
-                    onEffectComplete = onEffectComplete,
+                    onEffectComplete = {
+                        onEffectComplete()
+                        isEffectComplete = true
+                    },
                 ) { text ->
                     Text(
                         text = text,

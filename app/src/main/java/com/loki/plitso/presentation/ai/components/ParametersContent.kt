@@ -21,9 +21,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.loki.plitso.R
 import com.loki.plitso.presentation.ai.AiViewModel
 import com.loki.plitso.presentation.components.TypeWriterTextEffect
 import com.loki.plitso.presentation.document.MealType
@@ -35,7 +37,7 @@ fun ParametersContent(
     onSuggestClick: () -> Unit,
 ) {
     val parameters by aiViewModel.parameters.collectAsStateWithLifecycle()
-    val aiState by aiViewModel.state.collectAsStateWithLifecycle()
+    val uiState by aiViewModel.genState.collectAsStateWithLifecycle()
 
     Column(
         modifier =
@@ -47,9 +49,9 @@ fun ParametersContent(
             modifier = Modifier.padding(16.dp),
         ) {
             TypeWriterTextEffect(
-                text = "Tune your Meal Suggestions",
+                text = stringResource(R.string.tune_your_meal),
                 maxDelayInMillis = 200,
-                onEffectComplete = { /*TODO*/ },
+                onEffectComplete = { },
             ) { text ->
                 Text(
                     text = text,
@@ -90,16 +92,16 @@ fun ParametersContent(
             Button(
                 onClick = onSuggestClick,
                 modifier = Modifier.align(Alignment.End),
-                enabled = !aiState.isLoading,
+                enabled = !uiState.isLoading,
             ) {
-                if (aiState.isLoading) {
+                if (uiState.isLoading) {
                     CircularProgressIndicator(
                         color = Color.White,
                         modifier = Modifier.size(20.dp),
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                 }
-                Text(text = "Suggest A Meal", color = Color.White)
+                Text(text = stringResource(R.string.suggest_a_meal), color = Color.White)
             }
         }
     }
@@ -113,7 +115,7 @@ fun MealTypeSection(
     onChangeSelected: (String) -> Unit,
 ) {
     Column {
-        Text(text = "Select Meal")
+        Text(text = stringResource(R.string.select_meal))
         Spacer(modifier = Modifier.height(4.dp))
 
         FlowRow(
@@ -142,7 +144,7 @@ fun CuisineSection(
     onChangeSelected: (String) -> Unit,
 ) {
     Column {
-        Text(text = "Select Cuisine")
+        Text(text = stringResource(R.string.select_cuisine))
         Spacer(modifier = Modifier.height(4.dp))
         FlowRow(
             modifier = modifier,
@@ -170,7 +172,7 @@ fun MoodSection(
 ) {
     val moods = listOf("Savory", "Sweet", "Spicy", "Healthy", "Comfort")
     Column {
-        Text(text = "Select Mood")
+        Text(text = stringResource(R.string.select_mood))
         Spacer(modifier = Modifier.height(4.dp))
         FlowRow(
             modifier = modifier,
@@ -198,7 +200,7 @@ fun DietarySection(
 ) {
     val dietaries = listOf("Vegeterian", "Vegan", "Glutten-free", "Dairy-free")
     Column {
-        Text(text = "Select Dietary (Optional)")
+        Text(text = stringResource(R.string.select_dietary))
         Spacer(modifier = Modifier.height(4.dp))
         FlowRow(
             modifier = modifier,
@@ -226,7 +228,7 @@ fun QuickSection(
 ) {
     val quicks = listOf("Yes", "No")
     Column {
-        Text(text = "Want a Quick Meal?")
+        Text(text = stringResource(R.string.want_a_quick_meal))
         Spacer(modifier = Modifier.height(4.dp))
         FlowRow(
             modifier = modifier,
@@ -234,7 +236,15 @@ fun QuickSection(
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             quicks.forEach { quick ->
-                val selected = quick == if (selectedQuick) "Yes" else "No"
+                val selected =
+                    quick ==
+                        if (selectedQuick) {
+                            stringResource(R.string.yes)
+                        } else {
+                            stringResource(
+                                R.string.no,
+                            )
+                        }
                 Selectable(
                     label = quick,
                     selected = selected,

@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -31,7 +32,7 @@ fun LoginContent(
         TypeWriterTextEffect(
             minDelayInMillis = 20,
             maxDelayInMillis = 200,
-            text = "Hello, \nuse AI to generate recipe",
+            text = stringResource(R.string.hello_use_ai),
             onEffectComplete = { },
         ) {
             Text(
@@ -62,14 +63,14 @@ fun LoginContent(
 
             Spacer(modifier = Modifier.height(12.dp))
             Text(
-                text = "Use your previous meal history to generate suggestion for your next meal",
+                text = stringResource(R.string.use_your_previous_meal),
                 textAlign = TextAlign.Center,
                 color = MaterialTheme.colorScheme.onBackground.copy(.7f),
             )
             Spacer(modifier = Modifier.height(32.dp))
 
             Button(onClick = navigateToLogin) {
-                Text(text = "Login", color = Color.White)
+                Text(text = stringResource(id = R.string.login), color = Color.White)
             }
         }
     }

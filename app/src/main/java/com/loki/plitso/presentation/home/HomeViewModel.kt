@@ -4,13 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.loki.plitso.data.local.dao.RandomDao
 import com.loki.plitso.data.repository.recipe.RecipeRepository
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class HomeViewModel(
     private val recipeRepository: RecipeRepository,
@@ -33,9 +31,7 @@ class HomeViewModel(
 
     private fun showRandomRecipe() {
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                recipeRepository.generateRandomRecipe()
-            }
+            recipeRepository.generateRandomRecipe()
 
             randomDao.getRandomRecipe().collect { random ->
                 if (random.isNotEmpty()) {

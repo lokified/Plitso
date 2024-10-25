@@ -2,6 +2,7 @@ package com.loki.plitso.data.local
 
 import androidx.room.TypeConverter
 import java.util.Date
+import java.util.UUID
 
 class Converters {
     @TypeConverter
@@ -15,4 +16,10 @@ class Converters {
 
     @TypeConverter
     fun dateToTimestamp(date: Date?): Long? = date?.time
+
+    @TypeConverter
+    fun fromUUID(uuid: UUID?): String? = uuid?.toString()
+
+    @TypeConverter
+    fun toUUID(uuidString: String?): UUID? = uuidString?.let { UUID.fromString(it) }
 }
