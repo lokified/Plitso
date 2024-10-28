@@ -87,7 +87,7 @@ dependencies {
     implementation(libs.room.ktx)
     ksp(libs.room.compiler)
     implementation(libs.bundles.retrofit)
-    implementation(libs.richeditor.compose)
+    implementation(libs.markdown.renderer)
     implementation(libs.generativeai)
     implementation(kotlin("reflect"))
 }

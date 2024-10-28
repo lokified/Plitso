@@ -38,4 +38,22 @@
     <string name="no">No</string>
     <string name="write_your_message">Write your message</string>
 
+    <!-- food document screen -->
+    <string name="my_meals">My Meals</string>
+
+    <!-- document screen -->
+    <string name="select_meal_time">Select Meal Time</string>
+    <string name="editor">Editor</string>
+    <string name="document">Document</string>
+    <string name="no_recent_food">No recent food taken</string>
+    <string name="recently_eaten">Recently Eaten</string>
+    <string name="view_all">View All</string>
+    <string name="document_your_food">Document your food cycle</string>
+    <string name="what">What?</string>
+    <string name="when_str">When?</string>
+    <string name="pick_time">Pick Time</string>
+    <string name="pick_date">Pick Date</string>
+    <string name="document_your_meal">Document your meal here</string>
+    <string name="document_your_meal_placeholder">Document your meal eg. ingredients</string>
+
 </resources>

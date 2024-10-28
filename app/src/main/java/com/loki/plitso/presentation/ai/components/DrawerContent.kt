@@ -27,9 +27,13 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -91,9 +95,9 @@ private fun NewChatButton(
     TextButton(
         onClick = onClick,
         modifier =
-            modifier
-                .fillMaxWidth()
-                .padding(vertical = 16.dp),
+        modifier
+            .fillMaxWidth()
+            .padding(vertical = 16.dp),
         colors =
             ButtonDefaults.textButtonColors(
                 contentColor = MaterialTheme.colorScheme.primary,
@@ -166,18 +170,16 @@ private fun ChatHistoryItem(
 ) {
     Surface(
         modifier = modifier.fillMaxWidth(),
-        color = MaterialTheme.colorScheme.surface,
-        tonalElevation = 2.dp,
         shape = MaterialTheme.shapes.small,
     ) {
         Row(
             modifier =
-                Modifier
-                    .clickable(
-                        role = Role.Button,
-                        onClickLabel = stringResource(R.string.select_chat, chat.title),
-                    ) { onChatSelected(chat) }
-                    .padding(horizontal = 16.dp, vertical = 12.dp),
+            Modifier
+                .clickable(
+                    role = Role.Button,
+                    onClickLabel = stringResource(R.string.select_chat, chat.title),
+                ) { onChatSelected(chat) }
+                .padding(horizontal = 16.dp, vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Column(modifier = Modifier.weight(1f)) {

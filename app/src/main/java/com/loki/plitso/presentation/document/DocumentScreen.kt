@@ -60,6 +60,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -113,9 +114,9 @@ fun DocumentScreen(
         Column {
             Row(
                 modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 8.dp, horizontal = 16.dp),
+                Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp, horizontal = 16.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
@@ -123,9 +124,9 @@ fun DocumentScreen(
                         if (containerState ==
                             ContainerState.EDITOR_INPUT
                         ) {
-                            "Editor"
+                            stringResource(R.string.editor)
                         } else {
-                            "Document"
+                            stringResource(R.string.document)
                         },
                     fontSize = 22.sp,
                     fontWeight = FontWeight.Bold,
@@ -155,9 +156,9 @@ fun DocumentScreen(
 
             Column(
                 modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .verticalScroll(rememberScrollState()),
+                Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState()),
             ) {
                 if (containerState == ContainerState.BOX_INPUT) {
                     TopSection(
@@ -169,9 +170,9 @@ fun DocumentScreen(
                 DocumentSection(
                     documentViewModel = documentViewModel,
                     modifier =
-                        Modifier
-                            .padding(horizontal = 16.dp)
-                            .padding(bottom = 16.dp),
+                    Modifier
+                        .padding(horizontal = 16.dp)
+                        .padding(bottom = 16.dp),
                     containerState = containerState,
                     selectedContainer = {
                         containerState = it
@@ -183,17 +184,17 @@ fun DocumentScreen(
         if (containerState == ContainerState.BOX_INPUT) {
             Box(
                 modifier =
-                    Modifier
-                        .padding(bottom = 20.dp, end = 24.dp)
-                        .align(Alignment.BottomEnd)
-                        .clip(RoundedCornerShape(10.dp))
-                        .noIndication(
-                            enabled = foodDocument.description.isNotEmpty(),
-                        ) {
-                            if (documentViewModel.error.value.isEmpty()) {
-                                documentViewModel.saveFoodDocument()
-                            }
-                        },
+                Modifier
+                    .padding(bottom = 20.dp, end = 24.dp)
+                    .align(Alignment.BottomEnd)
+                    .clip(RoundedCornerShape(10.dp))
+                    .noIndication(
+                        enabled = foodDocument.description.isNotEmpty(),
+                    ) {
+                        if (documentViewModel.error.value.isEmpty()) {
+                            documentViewModel.saveFoodDocument()
+                        }
+                    },
                 contentAlignment = Alignment.Center,
             ) {
                 Icon(
@@ -201,15 +202,16 @@ fun DocumentScreen(
                     contentDescription = "Send",
                     tint = Color.White,
                     modifier =
-                        Modifier
-                            .clip(RoundedCornerShape(10.dp))
-                            .background(
-                                if (foodDocument.description.isEmpty()) {
-                                    MaterialTheme.colorScheme.primary.copy(.4f)
-                                } else {
-                                    MaterialTheme.colorScheme.primary
-                                },
-                            ).padding(6.dp),
+                    Modifier
+                        .clip(RoundedCornerShape(10.dp))
+                        .background(
+                            if (foodDocument.description.isEmpty()) {
+                                MaterialTheme.colorScheme.primary.copy(.4f)
+                            } else {
+                                MaterialTheme.colorScheme.primary
+                            },
+                        )
+                        .padding(6.dp),
                 )
             }
         }
@@ -225,14 +227,14 @@ fun TopSection(
     Column(modifier = modifier.fillMaxWidth()) {
         Box(
             modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .height(200.dp),
+            Modifier
+                .fillMaxWidth()
+                .height(200.dp),
             contentAlignment = Alignment.Center,
         ) {
             if (foodDocuments.isEmpty()) {
                 Text(
-                    text = "No recent food taken",
+                    text = stringResource(R.string.no_recent_food),
                     color = MaterialTheme.colorScheme.onBackground.copy(.5f),
                 )
             } else {
@@ -242,13 +244,13 @@ fun TopSection(
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
                     ) {
                         Text(
-                            text = "Recently Eaten",
+                            text = stringResource(R.string.recently_eaten),
                             fontWeight = FontWeight.Bold,
                             fontSize = 20.sp,
                         )
                         Spacer(modifier = Modifier.weight(1f))
                         TextButton(onClick = navigateToAllFoodDocument) {
-                            Text(text = "View All")
+                            Text(text = stringResource(R.string.view_all))
                             Spacer(modifier = Modifier.width(4.dp))
                             Icon(
                                 imageVector = Icons.AutoMirrored.Default.ArrowRightAlt,
@@ -285,10 +287,10 @@ private fun DocumentSection(
     Column(
         modifier = modifier,
     ) {
-        Text(text = "Document your food cycle", fontWeight = FontWeight.Bold, fontSize = 20.sp)
+        Text(text = stringResource(R.string.document_your_food), fontWeight = FontWeight.Bold, fontSize = 20.sp)
         Spacer(modifier = Modifier.height(24.dp))
         Text(
-            text = "What?",
+            text = stringResource(R.string.what),
             fontSize = 18.sp,
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.Thin,
@@ -300,7 +302,7 @@ private fun DocumentSection(
         )
         Spacer(modifier = Modifier.height(12.dp))
         Text(
-            text = "When?",
+            text = stringResource(R.string.when_str),
             fontSize = 18.sp,
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.Thin,
@@ -337,15 +339,15 @@ fun TimePickerDialog(
                 showTimePicker = true
             },
         icon = R.drawable.time,
-        placeholder = "Pick Time",
+        placeholder = stringResource(R.string.pick_time),
     )
 
     if (showTimePicker) {
         BasicAlertDialog(
             modifier =
-                Modifier
-                    .background(MaterialTheme.colorScheme.background)
-                    .clip(RoundedCornerShape(12.dp)),
+            Modifier
+                .background(MaterialTheme.colorScheme.background)
+                .clip(RoundedCornerShape(12.dp)),
             onDismissRequest = { showTimePicker = false },
         ) {
             Column(
@@ -365,7 +367,7 @@ fun TimePickerDialog(
                     TextButton(onClick = {
                         showTimePicker = false
                     }) {
-                        Text(text = "Cancel")
+                        Text(text = stringResource(id = R.string.cancel))
                     }
 
                     TextButton(
@@ -393,7 +395,7 @@ fun TimePickerDialog(
                             documentViewModel.onTimeChange(selectedTime)
                         },
                     ) {
-                        Text(text = "Ok")
+                        Text(text = stringResource(id = R.string.ok))
                     }
                 }
             }
@@ -426,15 +428,15 @@ fun DatePickerDialog(
                 showDatePicker = true
             },
         icon = R.drawable.cal,
-        placeholder = "Pick Date",
+        placeholder = stringResource(R.string.pick_date),
     )
 
     if (showDatePicker) {
         BasicAlertDialog(
             modifier =
-                Modifier
-                    .background(MaterialTheme.colorScheme.background)
-                    .clip(RoundedCornerShape(12.dp)),
+            Modifier
+                .background(MaterialTheme.colorScheme.background)
+                .clip(RoundedCornerShape(12.dp)),
             onDismissRequest = { showDatePicker = false },
         ) {
             Column(
@@ -456,7 +458,7 @@ fun DatePickerDialog(
                             .align(Alignment.End),
                 ) {
                     TextButton(onClick = { showDatePicker = false }) {
-                        Text(text = "Cancel")
+                        Text(text = stringResource(R.string.cancel),)
                     }
 
                     TextButton(
@@ -469,7 +471,7 @@ fun DatePickerDialog(
                             documentViewModel.onDateChange(selectedDate)
                         },
                     ) {
-                        Text(text = "Ok")
+                        Text(text = stringResource(R.string.ok),)
                     }
                 }
             }
@@ -525,12 +527,12 @@ private fun EditorContainer(
 
     transition.AnimatedContent(
         modifier =
-            modifier
-                .fillMaxSize()
-                .clip(RoundedCornerShape(cornerRadius))
-                .drawBehind {
-                    drawRect(color = backgroundColor)
-                },
+        modifier
+            .fillMaxSize()
+            .clip(RoundedCornerShape(cornerRadius))
+            .drawBehind {
+                drawRect(color = backgroundColor)
+            },
     ) { state ->
         when (state) {
             ContainerState.BOX_INPUT -> {
@@ -561,15 +563,15 @@ fun DocumentInput(
 ) {
     Box(
         modifier =
-            modifier
-                .fillMaxWidth()
-                .height(150.dp)
-                .clip(RoundedCornerShape(12.dp))
-                .background(MaterialTheme.colorScheme.surface)
-                .noIndication { onChangePreview() },
+        modifier
+            .fillMaxWidth()
+            .height(150.dp)
+            .clip(RoundedCornerShape(12.dp))
+            .background(MaterialTheme.colorScheme.surface)
+            .noIndication { onChangePreview() },
     ) {
         Text(
-            text = foodDocument.description.ifEmpty { "Document your meal here" },
+            text = foodDocument.description.ifEmpty { stringResource(R.string.document_your_meal) },
             color = MaterialTheme.colorScheme.onBackground.copy(.5f),
             modifier = Modifier.padding(12.dp),
         )
@@ -590,30 +592,30 @@ fun EditorBox(
 
     Column(
         modifier =
-            modifier
-                .fillMaxWidth()
-                .height(150.dp)
-                .clip(RoundedCornerShape(12.dp))
-                .background(MaterialTheme.colorScheme.surface)
-                .border(
-                    1.dp,
-                    MaterialTheme.colorScheme.onBackground.copy(.05f),
-                    RoundedCornerShape(12.dp),
-                ),
+        modifier
+            .fillMaxWidth()
+            .height(150.dp)
+            .clip(RoundedCornerShape(12.dp))
+            .background(MaterialTheme.colorScheme.surface)
+            .border(
+                1.dp,
+                MaterialTheme.colorScheme.onBackground.copy(.05f),
+                RoundedCornerShape(12.dp),
+            ),
     ) {
         OutlinedTextField(
             value = value,
             onValueChange = onValueChange,
             placeholder = {
                 Text(
-                    text = "Document your meal eg. ingredients",
+                    text = stringResource(R.string.document_your_meal_placeholder),
                 )
             },
             colors = textFieldColors(),
             modifier =
-                Modifier
-                    .fillMaxSize()
-                    .focusRequester(focusRequester),
+            Modifier
+                .fillMaxSize()
+                .focusRequester(focusRequester),
         )
     }
 }

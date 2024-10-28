@@ -136,7 +136,12 @@ fun AIScreen(
                     modifier =
                         Modifier
                             .weight(1f)
-                            .padding(horizontal = 16.dp),
+                            .padding(horizontal = 16.dp)
+                            .padding(
+                                top = if (aiScreenContent == AiScreenContent.CHAT) {
+                                    16.dp
+                                } else 0.dp
+                            ),
                 )
 
                 IconButton(
