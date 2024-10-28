@@ -18,9 +18,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.loki.plitso.R
 import com.loki.plitso.presentation.login.components.GoogleButtonUiContainer
 import com.loki.plitso.presentation.login.components.GoogleSignInButton
 import com.loki.plitso.util.showToast
@@ -60,9 +62,9 @@ fun LoginScreen(
                     .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Text(text = "Plitso", fontSize = 28.sp)
+            Text(text = stringResource(id = R.string.app_name), fontSize = 28.sp)
             Spacer(modifier = Modifier.height(12.dp))
-            Text(text = "Welcome Back")
+            Text(text = stringResource(R.string.welcome_back))
             Spacer(modifier = Modifier.height(24.dp))
             GoogleButtonUiContainer(
                 modifier = Modifier,

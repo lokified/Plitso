@@ -21,6 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.loki.plitso.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -42,7 +43,8 @@ fun PermissionDialog(
                     .background(
                         color = MaterialTheme.colorScheme.surface,
                         shape = RoundedCornerShape(16.dp),
-                    ).padding(16.dp),
+                    )
+                    .padding(16.dp),
         ) {
             Text(
                 text = stringResource(title),
@@ -68,7 +70,7 @@ fun PermissionDialog(
                 TextButton(
                     onClick = onRequest,
                 ) {
-                    Text(text = "Request")
+                    Text(text = stringResource(R.string.request))
                 }
             }
         }

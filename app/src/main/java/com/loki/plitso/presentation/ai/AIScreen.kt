@@ -138,9 +138,12 @@ fun AIScreen(
                             .weight(1f)
                             .padding(horizontal = 16.dp)
                             .padding(
-                                top = if (aiScreenContent == AiScreenContent.CHAT) {
-                                    16.dp
-                                } else 0.dp
+                                top =
+                                    if (aiScreenContent == AiScreenContent.CHAT) {
+                                        16.dp
+                                    } else {
+                                        0.dp
+                                    },
                             ),
                 )
 

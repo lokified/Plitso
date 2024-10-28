@@ -45,6 +45,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -52,6 +53,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import coil.compose.SubcomposeAsyncImage
 import com.loki.plitso.PlitsoViewModel
+import com.loki.plitso.R
 import com.loki.plitso.data.local.datastore.LocalUser
 import com.loki.plitso.data.local.models.Category
 import com.loki.plitso.data.local.models.DayRecipe
@@ -167,7 +169,7 @@ private fun HomeTopBar(
             }
         } else {
             Text(
-                text = "Welcome",
+                text = stringResource(R.string.welcome),
                 fontWeight = FontWeight.Bold,
                 fontSize = 18.sp,
             )
@@ -244,7 +246,7 @@ private fun SharedTransitionScope.RecipeOfDayComponent(
                         .align(Alignment.TopCenter),
             ) {
                 Text(
-                    text = "RECIPE OF THE DAY",
+                    text = stringResource(R.string.recipe_of_the_day),
                     fontSize = 18.sp,
                     color = Color.White.copy(.5f),
                     modifier =
@@ -332,9 +334,9 @@ fun RandomRecipe(
             Spacer(modifier = Modifier.weight(1f))
 
             Column {
-                Text(text = "Random recipe", fontSize = 20.sp)
+                Text(text = stringResource(R.string.random_recipe), fontSize = 20.sp)
                 Text(
-                    text = "Don't know what to cook?",
+                    text = stringResource(R.string.don_t_know_cook),
                     color = MaterialTheme.colorScheme.onBackground.copy(.5f),
                 )
             }

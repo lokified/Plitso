@@ -40,9 +40,9 @@ fun MessengerItemCard(
     ) {
         Text(
             modifier =
-            Modifier
-                .wrapContentSize()
-                .padding(horizontal = 24.dp, vertical = 18.dp),
+                Modifier
+                    .wrapContentSize()
+                    .padding(horizontal = 24.dp, vertical = 18.dp),
             text = message,
             textAlign = TextAlign.Start,
             style = MaterialTheme.typography.labelLarge.copy(color = Color.White),
@@ -63,18 +63,18 @@ fun ReceiverMessageItemCard(
     ) {
         Surface(
             modifier =
-            Modifier
-                .wrapContentSize()
-                .align(Alignment.Bottom),
+                Modifier
+                    .wrapContentSize()
+                    .align(Alignment.Bottom),
             shape = CircleShape,
             color = Color.White,
             shadowElevation = 4.dp,
         ) {
             Image(
                 modifier =
-                Modifier
-                    .padding(horizontal = 8.dp, vertical = 6.dp)
-                    .size(18.dp),
+                    Modifier
+                        .padding(horizontal = 8.dp, vertical = 6.dp)
+                        .size(18.dp),
                 painter = painterResource(id = R.drawable.ai),
                 contentDescription = "",
             )
@@ -84,13 +84,12 @@ fun ReceiverMessageItemCard(
 
         Surface(
             modifier =
-            Modifier
-                .fillMaxWidth()
-                .padding(bottom = 24.dp),
+                Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 24.dp),
             shape = RoundedCornerShape(topStart = 25.dp, topEnd = 25.dp, bottomEnd = 25.dp),
             color = MaterialTheme.colorScheme.surface,
         ) {
-
             if (isEffectActive && !isEffectComplete) {
                 TypeWriterTextEffect(
                     text = message,
@@ -101,13 +100,13 @@ fun ReceiverMessageItemCard(
                 ) { text ->
                     Markdown(
                         content = text,
-                        modifier = Modifier.padding(12.dp)
+                        modifier = Modifier.padding(12.dp),
                     )
                 }
             } else {
                 Markdown(
                     content = message,
-                    modifier = Modifier.padding(12.dp)
+                    modifier = Modifier.padding(12.dp),
                 )
             }
         }

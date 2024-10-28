@@ -15,7 +15,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.loki.plitso.R
 import com.loki.plitso.presentation.document.MealType
 import com.loki.plitso.util.noIndication
 
@@ -37,7 +39,7 @@ fun BoxDropdownInput(
             value = selectedOption,
             onValueChange = onChangeOption,
             icon = icon.image,
-            placeholder = "Select Meal Time",
+            placeholder = stringResource(id = R.string.document_your_meal_placeholder),
             modifier = Modifier.noIndication { expanded = !expanded },
         )
 
@@ -52,7 +54,8 @@ fun BoxDropdownInput(
                             bottomStart = 12.dp,
                             bottomEnd = 12.dp,
                         ),
-                    ).background(MaterialTheme.colorScheme.surface),
+                    )
+                    .background(MaterialTheme.colorScheme.surface),
         ) {
             Column {
                 MealType.entries.forEach { option ->

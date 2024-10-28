@@ -2,6 +2,7 @@
     <string name="app_name">Plitso</string>
     <string name="notification_permission_request">Notification Permission Request</string>
     <string name="permission_is_required_to_show_app_notifications">Permission is required to show app notifications</string>
+    <string name="request">Request</string>
 
     <!--Account Screen-->
     <string name="account">Account</string>
@@ -37,6 +38,7 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="write_your_message">Write your message</string>
+    <string name="start_a_chat">Start a chat</string>
 
     <!-- food document screen -->
     <string name="my_meals">My Meals</string>
@@ -55,5 +57,26 @@
     <string name="pick_date">Pick Date</string>
     <string name="document_your_meal">Document your meal here</string>
     <string name="document_your_meal_placeholder">Document your meal eg. ingredients</string>
+
+    <!-- bookmark screen -->
+    <string name="bookmark">Bookmark</string>
+    <string name="nothing_to_see">Nothing to see here</string>
+
+    <!-- home screen -->
+    <string name="welcome">Welcome</string>
+    <string name="recipe_of_the_day">RECIPE OF THE DAY</string>
+    <string name="random_recipe">Random recipe</string>
+    <string name="don_t_know_cook">Don\'t know what to cook?</string>
+
+    <!-- login screen -->
+    <string name="welcome_back">Welcome Back</string>
+    <string name="sign_in_with_google">Sign In With Google</string>
+
+    <!-- recipe detail screen -->
+    <string name="data_loading_please_wait">Data loading. Please wait …</string>
+
+    <!-- search screen -->
+    <string name="try_search">Try search</string>
+    <string name="search_placeholder">Search eg. ingredients, food</string>
 
 </resources>

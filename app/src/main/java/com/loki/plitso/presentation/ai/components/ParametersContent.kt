@@ -41,9 +41,9 @@ fun ParametersContent(
 
     Column(
         modifier =
-        modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState()),
+            modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState()),
     ) {
         Column(
             modifier = Modifier.padding(16.dp),
@@ -92,7 +92,11 @@ fun ParametersContent(
             Button(
                 onClick = onSuggestClick,
                 modifier = Modifier.align(Alignment.End),
-                enabled = !uiState.isLoading || (parameters.mealType.isNotEmpty() && parameters.cuisine.isNotEmpty() && parameters.mood.isNotEmpty()),
+                enabled =
+                    !uiState.isLoading || (
+                        parameters.mealType.isNotEmpty() &&
+                            parameters.cuisine.isNotEmpty() && parameters.mood.isNotEmpty()
+                    ),
             ) {
                 if (uiState.isLoading) {
                     CircularProgressIndicator(

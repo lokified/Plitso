@@ -27,17 +27,18 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.loki.plitso.R
 import com.loki.plitso.data.local.models.FoodDocument
 import com.loki.plitso.presentation.document.DocumentViewModel
 import com.loki.plitso.presentation.document.MealType
 import com.loki.plitso.util.TimeUtil
 import com.loki.plitso.util.noIndication
-import com.loki.plitso.util.toRichHtmlString
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -64,7 +65,7 @@ fun FoodDocumentsScreen(
             }
             Spacer(modifier = Modifier.width(8.dp))
             Text(
-                text = "My Meals",
+                text = stringResource(id = R.string.my_meals),
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Bold,
             )
@@ -156,7 +157,7 @@ fun FoodDocumentItem(
             Spacer(modifier = Modifier.height(4.dp))
 
             Text(
-                text = foodDocument.description.toRichHtmlString(),
+                text = foodDocument.description,
                 maxLines = 4,
                 overflow = TextOverflow.Ellipsis,
                 color = MaterialTheme.colorScheme.onBackground.copy(.6f),

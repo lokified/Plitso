@@ -21,20 +21,14 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.loki.plitso.data.local.models.FoodDocument
 import com.loki.plitso.presentation.document.MealType
-import com.mohamedrejeb.richeditor.annotation.ExperimentalRichTextApi
-import com.mohamedrejeb.richeditor.model.rememberRichTextState
-import com.mohamedrejeb.richeditor.ui.material3.RichText
 import java.util.Locale
 
-@OptIn(ExperimentalRichTextApi::class)
 @Composable
 fun RecentFoodDocumentItem(
     modifier: Modifier = Modifier,
     foodDocument: FoodDocument,
 ) {
     val foodDoc = MealType.entries.find { it.name == foodDocument.type }
-    val richTextState = rememberRichTextState()
-    richTextState.setMarkdown(foodDocument.description)
 
     Box(
         modifier =
@@ -63,8 +57,8 @@ fun RecentFoodDocumentItem(
                 )
             }
             Spacer(modifier = Modifier.height(4.dp))
-            RichText(
-                state = richTextState,
+            Text(
+                text = foodDocument.description,
                 color = MaterialTheme.colorScheme.onBackground.copy(.7f),
                 maxLines = 3,
                 overflow = TextOverflow.Ellipsis,
