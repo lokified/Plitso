@@ -72,15 +72,15 @@ fun ChatContent(
                 }
             }
 
-            if (state.messages.isEmpty()) {
-                StartNewChartContent()
-            }
-
             Column(
                 modifier =
                     modifier
                         .fillMaxSize(),
             ) {
+                if (state.messages.isEmpty()) {
+                    StartNewChartContent()
+                }
+
                 LazyColumn(
                     modifier = modifier.fillMaxWidth(),
                     state = lazyListState,
@@ -149,7 +149,7 @@ fun StartNewChartContent(modifier: Modifier = Modifier) {
             Text(
                 text = stringResource(R.string.start_a_chat),
                 color = MaterialTheme.colorScheme.onBackground.copy(.5f),
-                style = MaterialTheme.typography.bodyLarge,
+                style = MaterialTheme.typography.displaySmall,
             )
         }
     }
