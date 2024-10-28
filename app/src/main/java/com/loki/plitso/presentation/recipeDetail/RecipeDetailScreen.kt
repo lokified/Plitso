@@ -45,11 +45,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.SubcomposeAsyncImage
+import com.loki.plitso.R
 import com.loki.plitso.util.noIndication
 
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -59,35 +61,33 @@ fun SharedTransitionScope.RecipeDetailScreen(
     recipeDetailState: RecipeDetailState,
     navigateBack: () -> Unit,
     onAddToBookmark: () -> Unit,
-) {
-    if (recipeDetailState.recipeDetail == null) {
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center,
-        ) {
-            Text(
-                text = "Data loading. Please wait ...",
-                color = MaterialTheme.colorScheme.onBackground.copy(.5f),
-            )
-        }
-    } else {
-        Column(
-            modifier =
-                Modifier
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState()),
-        ) {
-            TopSection(
-                animatedVisibilityScope = animatedVisibilityScope,
-                recipeDetailState = recipeDetailState,
-                navigateBack = navigateBack,
-                onAddToBookmark = onAddToBookmark,
-            )
-            ContentSection(
-                animatedVisibilityScope = animatedVisibilityScope,
-                recipeDetailState = recipeDetailState,
-            )
-        }
+) = if (recipeDetailState.recipeDetail == null) {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center,
+    ) {
+        Text(
+            text = stringResource(R.string.data_loading_please_wait),
+            color = MaterialTheme.colorScheme.onBackground.copy(.5f),
+        )
+    }
+} else {
+    Column(
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState()),
+    ) {
+        TopSection(
+            animatedVisibilityScope = animatedVisibilityScope,
+            recipeDetailState = recipeDetailState,
+            navigateBack = navigateBack,
+            onAddToBookmark = onAddToBookmark,
+        )
+        ContentSection(
+            animatedVisibilityScope = animatedVisibilityScope,
+            recipeDetailState = recipeDetailState,
+        )
     }
 }
 
@@ -155,17 +155,6 @@ private fun SharedTransitionScope.TopSection(
                         tint = Color.White,
                     )
                 }
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = recipe.title,
-                    fontSize = 22.sp,
-                    fontWeight = FontWeight.Bold,
-                    maxLines = 2,
-                    color = Color.White,
-                    modifier =
-                        Modifier
-                            .width(250.dp),
-                )
                 Spacer(modifier = Modifier.weight(1f))
                 IconButton(onClick = onAddToBookmark) {
                     val icon =

@@ -52,11 +52,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.SubcomposeAsyncImage
+import com.loki.plitso.R
 import com.loki.plitso.data.local.models.RecipeDetail
 import com.loki.plitso.presentation.document.components.textFieldColors
 import com.loki.plitso.util.noIndication
@@ -101,7 +103,8 @@ fun SharedTransitionScope.SearchScreen(
                             width = 1.dp,
                             color = MaterialTheme.colorScheme.onBackground.copy(.2f),
                             shape = CircleShape,
-                        ).weight(.9f),
+                        )
+                        .weight(.9f),
             ) {
                 val focusRequester =
                     remember {
@@ -123,7 +126,7 @@ fun SharedTransitionScope.SearchScreen(
                     onValueChange = searchViewModel::onSearchTermChange,
                     placeholder = {
                         Text(
-                            text = "Search eg. ingredients, food",
+                            text = stringResource(R.string.search_placeholder),
                             color = MaterialTheme.colorScheme.onBackground.copy(.2f),
                         )
                     },
@@ -185,7 +188,7 @@ fun SharedTransitionScope.SearchScreen(
                 contentAlignment = Alignment.Center,
             ) {
                 Text(
-                    text = "Try search",
+                    text = stringResource(R.string.try_search),
                     color = MaterialTheme.colorScheme.onBackground.copy(.5f),
                 )
             }

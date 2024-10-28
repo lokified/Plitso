@@ -27,10 +27,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.SubcomposeAsyncImage
+import com.loki.plitso.R
 import com.loki.plitso.data.local.models.Bookmark
 import com.loki.plitso.util.noIndication
 
@@ -50,7 +52,7 @@ fun SharedTransitionScope.BookmarkScreen(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
-                text = "Bookmark",
+                text = stringResource(R.string.bookmark),
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Bold,
             )
@@ -61,7 +63,7 @@ fun SharedTransitionScope.BookmarkScreen(
                 contentAlignment = Alignment.Center,
             ) {
                 Text(
-                    text = "Nothing to see here",
+                    text = stringResource(R.string.nothing_to_see),
                     color = MaterialTheme.colorScheme.onBackground.copy(.5f),
                 )
             }

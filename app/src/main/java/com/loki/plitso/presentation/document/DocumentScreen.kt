@@ -60,6 +60,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -123,9 +124,9 @@ fun DocumentScreen(
                         if (containerState ==
                             ContainerState.EDITOR_INPUT
                         ) {
-                            "Editor"
+                            stringResource(R.string.editor)
                         } else {
-                            "Document"
+                            stringResource(R.string.document)
                         },
                     fontSize = 22.sp,
                     fontWeight = FontWeight.Bold,
@@ -209,7 +210,8 @@ fun DocumentScreen(
                                 } else {
                                     MaterialTheme.colorScheme.primary
                                 },
-                            ).padding(6.dp),
+                            )
+                            .padding(6.dp),
                 )
             }
         }
@@ -232,7 +234,7 @@ fun TopSection(
         ) {
             if (foodDocuments.isEmpty()) {
                 Text(
-                    text = "No recent food taken",
+                    text = stringResource(R.string.no_recent_food),
                     color = MaterialTheme.colorScheme.onBackground.copy(.5f),
                 )
             } else {
@@ -242,13 +244,13 @@ fun TopSection(
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
                     ) {
                         Text(
-                            text = "Recently Eaten",
+                            text = stringResource(R.string.recently_eaten),
                             fontWeight = FontWeight.Bold,
                             fontSize = 20.sp,
                         )
                         Spacer(modifier = Modifier.weight(1f))
                         TextButton(onClick = navigateToAllFoodDocument) {
-                            Text(text = "View All")
+                            Text(text = stringResource(R.string.view_all))
                             Spacer(modifier = Modifier.width(4.dp))
                             Icon(
                                 imageVector = Icons.AutoMirrored.Default.ArrowRightAlt,
@@ -285,10 +287,14 @@ private fun DocumentSection(
     Column(
         modifier = modifier,
     ) {
-        Text(text = "Document your food cycle", fontWeight = FontWeight.Bold, fontSize = 20.sp)
+        Text(
+            text = stringResource(R.string.document_your_food),
+            fontWeight = FontWeight.Bold,
+            fontSize = 20.sp,
+        )
         Spacer(modifier = Modifier.height(24.dp))
         Text(
-            text = "What?",
+            text = stringResource(R.string.what),
             fontSize = 18.sp,
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.Thin,
@@ -300,7 +306,7 @@ private fun DocumentSection(
         )
         Spacer(modifier = Modifier.height(12.dp))
         Text(
-            text = "When?",
+            text = stringResource(R.string.when_str),
             fontSize = 18.sp,
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.Thin,
@@ -337,7 +343,7 @@ fun TimePickerDialog(
                 showTimePicker = true
             },
         icon = R.drawable.time,
-        placeholder = "Pick Time",
+        placeholder = stringResource(R.string.pick_time),
     )
 
     if (showTimePicker) {
@@ -365,7 +371,7 @@ fun TimePickerDialog(
                     TextButton(onClick = {
                         showTimePicker = false
                     }) {
-                        Text(text = "Cancel")
+                        Text(text = stringResource(id = R.string.cancel))
                     }
 
                     TextButton(
@@ -393,7 +399,7 @@ fun TimePickerDialog(
                             documentViewModel.onTimeChange(selectedTime)
                         },
                     ) {
-                        Text(text = "Ok")
+                        Text(text = stringResource(id = R.string.ok))
                     }
                 }
             }
@@ -426,7 +432,7 @@ fun DatePickerDialog(
                 showDatePicker = true
             },
         icon = R.drawable.cal,
-        placeholder = "Pick Date",
+        placeholder = stringResource(R.string.pick_date),
     )
 
     if (showDatePicker) {
@@ -456,7 +462,7 @@ fun DatePickerDialog(
                             .align(Alignment.End),
                 ) {
                     TextButton(onClick = { showDatePicker = false }) {
-                        Text(text = "Cancel")
+                        Text(text = stringResource(R.string.cancel))
                     }
 
                     TextButton(
@@ -469,7 +475,7 @@ fun DatePickerDialog(
                             documentViewModel.onDateChange(selectedDate)
                         },
                     ) {
-                        Text(text = "Ok")
+                        Text(text = stringResource(R.string.ok))
                     }
                 }
             }
@@ -569,7 +575,7 @@ fun DocumentInput(
                 .noIndication { onChangePreview() },
     ) {
         Text(
-            text = foodDocument.description.ifEmpty { "Document your meal here" },
+            text = foodDocument.description.ifEmpty { stringResource(R.string.document_your_meal) },
             color = MaterialTheme.colorScheme.onBackground.copy(.5f),
             modifier = Modifier.padding(12.dp),
         )
@@ -606,7 +612,7 @@ fun EditorBox(
             onValueChange = onValueChange,
             placeholder = {
                 Text(
-                    text = "Document your meal eg. ingredients",
+                    text = stringResource(R.string.document_your_meal_placeholder),
                 )
             },
             colors = textFieldColors(),

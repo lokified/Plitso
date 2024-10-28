@@ -7,20 +7,20 @@ junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 lifecycleRuntimeKtx = "2.8.6"
-activityCompose = "1.9.2"
-composeBom = "2024.09.03"
+activityCompose = "1.9.3"
+composeBom = "2024.10.00"
 androidxLifecycle = "2.8.6"
 androidxDataStore = "1.1.1"
 androidxCoreSplashscreen = "1.0.1"
-androidxNavigation = "2.8.2"
+androidxNavigation = "2.8.3"
 kotlinxCoroutines = "1.7.3"
-richeditorCompose = "1.0.0-rc09"
+markdownRenderer = "0.26.0"
 room = "2.6.1"
 coil = "2.6.0"
 ksp = "2.0.0-1.0.22"
 koinBom = "3.5.6"
 palette = "1.0.0"
-firebaseBom = "33.4.0"
+firebaseBom = "33.5.1"
 googleServices = "4.4.2"
 firebasePerf = "1.4.2"
 firebaseCrash = "3.0.2"
@@ -35,7 +35,7 @@ timber = "5.0.1"
 retrofit = "2.9.0"
 interceptor = "4.12.0"
 gson = "2.10.1"
-composeAnimation = "1.7.3"
+composeAnimation = "1.7.4"
 secretsGradlePlugin = "2.0.1"
 
 [libraries]
@@ -130,8 +130,8 @@ google-credentials = { group = "androidx.credentials", name = "credentials", ver
 google-play-credentials = { group = "androidx.credentials", name = "credentials-play-services-auth", version.ref = "googleCredentials" }
 google-identity = { group = "com.google.android.libraries.identity.googleid", name = "googleid", version.ref = "googleIdentity" }
 
-# editor
-richeditor-compose = { module = "com.mohamedrejeb.richeditor:richeditor-compose", version.ref = "richeditorCompose" }
+# markdown
+markdown-renderer = { module = "com.mikepenz:multiplatform-markdown-renderer-m3", version.ref = "markdownRenderer" }
 
 # secrets
 secrets-gradle-plugin = { module = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin", version.ref = "secretsGradlePlugin" }

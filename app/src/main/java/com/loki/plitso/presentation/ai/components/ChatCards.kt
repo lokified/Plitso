@@ -26,9 +26,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.loki.plitso.R
 import com.loki.plitso.presentation.components.TypeWriterTextEffect
-import com.mohamedrejeb.richeditor.annotation.ExperimentalRichTextApi
-import com.mohamedrejeb.richeditor.model.rememberRichTextState
-import com.mohamedrejeb.richeditor.ui.material3.RichText
+import com.mikepenz.markdown.m3.Markdown
 
 @Composable
 fun MessengerItemCard(
@@ -52,7 +50,6 @@ fun MessengerItemCard(
     }
 }
 
-@OptIn(ExperimentalRichTextApi::class)
 @Composable
 fun ReceiverMessageItemCard(
     modifier: Modifier = Modifier,
@@ -93,35 +90,22 @@ fun ReceiverMessageItemCard(
             shape = RoundedCornerShape(topStart = 25.dp, topEnd = 25.dp, bottomEnd = 25.dp),
             color = MaterialTheme.colorScheme.surface,
         ) {
-            val richTextState = rememberRichTextState()
-            val cleanedText =
-                message
-                    .replace(" **", "**")
-                    .replace("*", " ")
-
-            richTextState.setMarkdown(cleanedText)
-            richTextState.config.codeSpanColor = MaterialTheme.colorScheme.primary.copy(.6f)
-            richTextState.config.codeSpanStrokeColor = Color.Transparent
-            richTextState.config.codeSpanBackgroundColor = MaterialTheme.colorScheme.background
-            richTextState.config.linkColor = Color.Blue
-            richTextState.config.listIndent = 10
-
             if (isEffectActive && !isEffectComplete) {
                 TypeWriterTextEffect(
-                    text = richTextState.toText(),
+                    text = message,
                     onEffectComplete = {
                         onEffectComplete()
                         isEffectComplete = true
                     },
                 ) { text ->
-                    Text(
-                        text = text,
+                    Markdown(
+                        content = text,
                         modifier = Modifier.padding(12.dp),
                     )
                 }
             } else {
-                RichText(
-                    state = richTextState,
+                Markdown(
+                    content = message,
                     modifier = Modifier.padding(12.dp),
                 )
             }

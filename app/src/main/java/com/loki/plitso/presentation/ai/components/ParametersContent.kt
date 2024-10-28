@@ -92,7 +92,11 @@ fun ParametersContent(
             Button(
                 onClick = onSuggestClick,
                 modifier = Modifier.align(Alignment.End),
-                enabled = !uiState.isLoading,
+                enabled =
+                    !uiState.isLoading || (
+                        parameters.mealType.isNotEmpty() &&
+                            parameters.cuisine.isNotEmpty() && parameters.mood.isNotEmpty()
+                    ),
             ) {
                 if (uiState.isLoading) {
                     CircularProgressIndicator(

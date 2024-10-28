@@ -28,9 +28,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import coil.compose.AsyncImage
 import com.loki.plitso.R
 import com.loki.plitso.presentation.ai.AiViewModel
 import com.loki.plitso.presentation.ai.ChatUiState
+import com.loki.plitso.presentation.document.MealType
 import com.loki.plitso.util.showToast
 
 @Composable
@@ -75,6 +77,10 @@ fun ChatContent(
                     modifier
                         .fillMaxSize(),
             ) {
+                if (state.messages.isEmpty()) {
+                    StartNewChartContent()
+                }
+
                 LazyColumn(
                     modifier = modifier.fillMaxWidth(),
                     state = lazyListState,
@@ -115,6 +121,36 @@ fun ChatContent(
                     )
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun StartNewChartContent(modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center,
+    ) {
+        Column(
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+            ) {
+                MealType.entries.forEach {
+                    AsyncImage(
+                        model = it.image,
+                        contentDescription = it.name,
+                    )
+                }
+            }
+
+            Text(
+                text = stringResource(R.string.start_a_chat),
+                color = MaterialTheme.colorScheme.onBackground.copy(.5f),
+                style = MaterialTheme.typography.displaySmall,
+            )
         }
     }
 }
