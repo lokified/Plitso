@@ -22,7 +22,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.loki.plitso.PlitsoViewModel
 import com.loki.plitso.R
+import com.loki.plitso.presentation.components.NetworkContainer
 import com.loki.plitso.presentation.login.components.GoogleButtonUiContainer
 import com.loki.plitso.presentation.login.components.GoogleSignInButton
 import com.loki.plitso.util.showToast
@@ -30,9 +32,11 @@ import com.loki.plitso.util.showToast
 @Composable
 fun LoginScreen(
     loginViewModel: LoginViewModel,
+    plitsoViewModel: PlitsoViewModel,
     navigateBack: () -> Unit,
 ) {
     val context = LocalContext.current
+    val isNetworkAvailable by plitsoViewModel.isNetworkAvailable.collectAsStateWithLifecycle()
     val loginState by loginViewModel.state.collectAsStateWithLifecycle()
     val googleAuthProvider = loginViewModel.googleAuthProvider
 
@@ -48,18 +52,18 @@ fun LoginScreen(
         IconButton(
             onClick = navigateBack,
             modifier =
-                Modifier
-                    .padding(8.dp)
-                    .align(Alignment.TopEnd),
+            Modifier
+                .padding(8.dp)
+                .align(Alignment.TopEnd),
         ) {
             Icon(imageVector = Icons.Outlined.Close, contentDescription = null)
         }
 
         Column(
             modifier =
-                Modifier
-                    .align(Alignment.Center)
-                    .padding(16.dp),
+            Modifier
+                .align(Alignment.Center)
+                .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(text = stringResource(id = R.string.app_name), fontSize = 28.sp)
@@ -74,7 +78,7 @@ fun LoginScreen(
                 },
             ) {
                 GoogleSignInButton(
-                    isEnabled = !loginState.isLoading,
+                    isEnabled = !loginState.isLoading && isNetworkAvailable,
                     onClick = {
                         this.onClick()
                     },
@@ -84,6 +88,10 @@ fun LoginScreen(
             if (loginState.isLoading) {
                 CircularProgressIndicator()
             }
+        }
+
+        if(!isNetworkAvailable) {
+            NetworkContainer()
         }
     }
 }

@@ -194,6 +194,7 @@ fun Navigation(
             composable(Screen.LoginScreen.route) {
                 val loginViewModel = koinViewModel<LoginViewModel>()
                 LoginScreen(
+                    plitsoViewModel = plitsoViewModel,
                     loginViewModel = loginViewModel,
                     navigateBack = appState::navigateUp,
                 )
