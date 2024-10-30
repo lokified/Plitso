@@ -1,7 +1,13 @@
 package com.loki.plitso.presentation.navigation
 
+import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.SavedStateHandle
@@ -14,7 +20,10 @@ import com.loki.plitso.PlitsoViewModel
 import com.loki.plitso.presentation.account.AccountScreen
 import com.loki.plitso.presentation.account.AccountViewModel
 import com.loki.plitso.presentation.ai.AIScreen
-import com.loki.plitso.presentation.ai.AiViewModel
+import com.loki.plitso.presentation.ai.chat.ChatScreen
+import com.loki.plitso.presentation.ai.chat.ChatViewModel
+import com.loki.plitso.presentation.ai.generative.GenerativeScreen
+import com.loki.plitso.presentation.ai.generative.GenerativeViewModel
 import com.loki.plitso.presentation.bookmark.BookmarkScreen
 import com.loki.plitso.presentation.bookmark.BookmarkViewmodel
 import com.loki.plitso.presentation.document.DocumentScreen
@@ -88,6 +97,18 @@ fun Navigation(
                             type = NavType.StringType
                         },
                     ),
+                enterTransition = {
+                    slideInVertically(
+                        initialOffsetY = { fullHeight -> fullHeight },
+                        animationSpec = tween(200),
+                    )
+                },
+                exitTransition = {
+                    slideOutVertically(
+                        targetOffsetY = { fullHeight -> fullHeight },
+                        animationSpec = tween(200),
+                    )
+                },
             ) {
                 val recipesViewModel =
                     koinViewModel<RecipesViewModel> { parametersOf(SavedStateHandle()) }
@@ -145,7 +166,21 @@ fun Navigation(
                 )
             }
 
-            composable(Screen.FoodDocumentsScreen.route) {
+            composable(
+                route = Screen.FoodDocumentsScreen.route,
+                enterTransition = {
+                    slideIntoContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Left,
+                        tween(300),
+                    )
+                },
+                exitTransition = {
+                    slideOutOfContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Right,
+                        tween(300),
+                    )
+                },
+            ) {
                 FoodDocumentsScreen(
                     foodDocuments = foodDocuments,
                     documentViewModel = documentViewModel,
@@ -153,14 +188,89 @@ fun Navigation(
                 )
             }
 
-            composable(Screen.AIScreen.route) {
-                val aiViewModel = koinViewModel<AiViewModel>()
+            composable(
+                route = Screen.AIScreen.route,
+                enterTransition = {
+                    slideInVertically(
+                        initialOffsetY = { fullHeight -> fullHeight },
+                        animationSpec = tween(300),
+                    )
+                },
+                exitTransition = {
+                    slideOutVertically(
+                        targetOffsetY = { fullHeight -> fullHeight },
+                        animationSpec = tween(300),
+                    )
+                },
+                popEnterTransition = {
+                    slideInHorizontally(
+                        initialOffsetX = { fullWidth -> -fullWidth },
+                        animationSpec = tween(300),
+                    )
+                },
+                popExitTransition = {
+                    slideOutHorizontally(
+                        targetOffsetX = { fullWidth -> fullWidth },
+                        animationSpec = tween(300),
+                    )
+                },
+            ) {
                 AIScreen(
-                    aiViewModel = aiViewModel,
                     plitsoViewModel = plitsoViewModel,
                     navigateToLogin = {
                         appState.navigate(Screen.LoginScreen)
                     },
+                    navigateToChatScreen = {
+                        appState.navigate(Screen.ChatScreen)
+                    },
+                    navigateToGenerativeScreen = {
+                        appState.navigate(Screen.GenerativeScreen)
+                    },
+                    navigateBack = appState::navigateUp,
+                )
+            }
+
+            composable(
+                route = Screen.ChatScreen.route,
+                enterTransition = {
+                    slideIntoContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Left,
+                        tween(300),
+                    )
+                },
+                exitTransition = {
+                    slideOutOfContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Right,
+                        tween(300),
+                    )
+                },
+            ) {
+                val chatViewModel = koinViewModel<ChatViewModel>()
+                ChatScreen(
+                    plitsoViewModel = plitsoViewModel,
+                    chatViewModel = chatViewModel,
+                    navigateBack = appState::navigateUp,
+                )
+            }
+
+            composable(
+                route = Screen.GenerativeScreen.route,
+                enterTransition = {
+                    slideIntoContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Left,
+                        tween(300),
+                    )
+                },
+                exitTransition = {
+                    slideOutOfContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Right,
+                        tween(300),
+                    )
+                },
+            ) {
+                val generativeViewModel = koinViewModel<GenerativeViewModel>()
+                GenerativeScreen(
+                    generativeViewModel = generativeViewModel,
                     navigateBack = appState::navigateUp,
                 )
             }
@@ -191,7 +301,21 @@ fun Navigation(
                 )
             }
 
-            composable(Screen.LoginScreen.route) {
+            composable(
+                route = Screen.LoginScreen.route,
+                enterTransition = {
+                    slideInVertically(
+                        initialOffsetY = { fullHeight -> fullHeight },
+                        animationSpec = tween(200),
+                    )
+                },
+                exitTransition = {
+                    slideOutVertically(
+                        targetOffsetY = { fullHeight -> fullHeight },
+                        animationSpec = tween(200),
+                    )
+                },
+            ) {
                 val loginViewModel = koinViewModel<LoginViewModel>()
                 LoginScreen(
                     plitsoViewModel = plitsoViewModel,

@@ -52,18 +52,18 @@ fun LoginScreen(
         IconButton(
             onClick = navigateBack,
             modifier =
-            Modifier
-                .padding(8.dp)
-                .align(Alignment.TopEnd),
+                Modifier
+                    .padding(8.dp)
+                    .align(Alignment.TopEnd),
         ) {
             Icon(imageVector = Icons.Outlined.Close, contentDescription = null)
         }
 
         Column(
             modifier =
-            Modifier
-                .align(Alignment.Center)
-                .padding(16.dp),
+                Modifier
+                    .align(Alignment.Center)
+                    .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(text = stringResource(id = R.string.app_name), fontSize = 28.sp)
@@ -90,7 +90,7 @@ fun LoginScreen(
             }
         }
 
-        if(!isNetworkAvailable) {
+        if (!isNetworkAvailable) {
             NetworkContainer()
         }
     }

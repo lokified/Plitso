@@ -44,8 +44,8 @@ import com.loki.plitso.R
 @Composable
 fun FirstOpenContent(
     modifier: Modifier = Modifier,
-    onPreviewChatScreen: () -> Unit,
-    onPreviewGenScreen: () -> Unit,
+    onNavigateToChatScreen: () -> Unit,
+    onNavigateToGenScreen: () -> Unit,
 ) {
     Column(
         modifier =
@@ -68,7 +68,7 @@ fun FirstOpenContent(
             title = stringResource(R.string.generate_new_meal),
             description = stringResource(R.string.personalized_meal),
             accentColor = MaterialTheme.colorScheme.primary,
-            onClick = onPreviewGenScreen,
+            onClick = onNavigateToGenScreen,
             modifier = Modifier.weight(1f),
         )
 
@@ -77,7 +77,7 @@ fun FirstOpenContent(
             title = "Chat with AI",
             description = stringResource(R.string.get_answers),
             accentColor = MaterialTheme.colorScheme.secondary,
-            onClick = onPreviewChatScreen,
+            onClick = onNavigateToChatScreen,
             modifier = Modifier.weight(1f),
         )
     }

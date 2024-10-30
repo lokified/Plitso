@@ -8,8 +8,9 @@ import com.loki.plitso.data.local.PlitsoDatabase
 import com.loki.plitso.data.local.dao.AiAnswerDao
 import com.loki.plitso.data.local.dao.ChatHistoryDao
 import com.loki.plitso.presentation.ai.AiData
-import com.loki.plitso.presentation.ai.AiViewModel
 import com.loki.plitso.presentation.ai.PromptUtil
+import com.loki.plitso.presentation.ai.chat.ChatViewModel
+import com.loki.plitso.presentation.ai.generative.GenerativeViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -37,5 +38,6 @@ val aiModule =
         single<AiAnswerDao> { get<PlitsoDatabase>().aiAnswerDao }
         single<ChatHistoryDao> { get<PlitsoDatabase>().chatHistoryDao }
         single { AiData(get(), get()) }
-        viewModel { AiViewModel(get(), get(), get(), get()) }
+        viewModel { ChatViewModel(get(), get(), get()) }
+        viewModel { GenerativeViewModel(get(), get()) }
     }

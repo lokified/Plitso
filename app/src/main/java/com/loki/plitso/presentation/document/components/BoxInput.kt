@@ -63,4 +63,5 @@ fun textFieldColors() =
         unfocusedContainerColor = Color.Transparent,
         focusedIndicatorColor = Color.Transparent,
         unfocusedIndicatorColor = Color.Transparent,
+        disabledIndicatorColor = Color.Transparent,
     )

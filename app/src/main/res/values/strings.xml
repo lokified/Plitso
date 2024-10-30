@@ -79,5 +79,6 @@
     <!-- search screen -->
     <string name="try_search">Try search</string>
     <string name="search_placeholder">Search eg. ingredients, food</string>
+    <string name="ask_ai">Ask AI</string>
 
 </resources>

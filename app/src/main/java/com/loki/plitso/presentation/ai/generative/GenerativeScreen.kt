@@ -1,5 +1,6 @@
-package com.loki.plitso.presentation.ai.components
+package com.loki.plitso.presentation.ai.generative
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -15,15 +16,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.loki.plitso.presentation.ai.AiViewModel
+import com.loki.plitso.presentation.ai.components.AiTopBar
+import com.loki.plitso.presentation.ai.components.ParametersContent
+import com.loki.plitso.presentation.ai.components.ReceiverMessageItemCard
 import com.loki.plitso.util.showToast
 
 @Composable
-fun GenerativeContent(
-    modifier: Modifier = Modifier,
-    aiViewModel: AiViewModel,
+fun GenerativeScreen(
+    generativeViewModel: GenerativeViewModel,
+    navigateBack: () -> Unit,
 ) {
-    val uiState by aiViewModel.genState.collectAsStateWithLifecycle()
+    val uiState by generativeViewModel.genState.collectAsStateWithLifecycle()
 
     var showSuggestion by rememberSaveable {
         mutableStateOf(false)
@@ -36,11 +39,18 @@ fun GenerativeContent(
         }
     }
 
+    if (showSuggestion) {
+        BackHandler {
+            showSuggestion = false
+        }
+    }
+
     Column(
         modifier =
-            modifier
+            Modifier
                 .fillMaxSize(),
     ) {
+        AiTopBar(navigateBack = navigateBack)
         if (showSuggestion) {
             Column(
                 modifier = Modifier.verticalScroll(rememberScrollState()),
@@ -53,9 +63,9 @@ fun GenerativeContent(
             }
         } else {
             ParametersContent(
-                aiViewModel = aiViewModel,
+                generativeViewModel = generativeViewModel,
                 onSuggestClick = {
-                    aiViewModel.generateSuggestions {
+                    generativeViewModel.generateSuggestions {
                         showSuggestion = true
                     }
                 },

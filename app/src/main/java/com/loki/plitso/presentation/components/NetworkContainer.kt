@@ -20,24 +20,23 @@ import androidx.compose.ui.unit.dp
 import com.loki.plitso.R
 
 @Composable
-fun NetworkContainer(
-    modifier: Modifier = Modifier
-) {
+fun NetworkContainer(modifier: Modifier = Modifier) {
     Surface(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(16.dp),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .padding(16.dp),
         shape = RoundedCornerShape(8.dp),
-        color = MaterialTheme.colorScheme.onErrorContainer
+        color = MaterialTheme.colorScheme.onErrorContainer,
     ) {
         Row(
             modifier = Modifier.padding(8.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(
                 imageVector = Icons.Outlined.SignalWifiConnectedNoInternet4,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.errorContainer
+                tint = MaterialTheme.colorScheme.errorContainer,
             )
             Spacer(modifier = Modifier.width(4.dp))
             Text(

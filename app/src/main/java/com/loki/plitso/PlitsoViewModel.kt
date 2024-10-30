@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.stateIn
 
 class PlitsoViewModel(
     private val datastoreStorage: DatastoreStorage,
-    private val networkMonitor: NetworkMonitor
+    private val networkMonitor: NetworkMonitor,
 ) : ViewModel() {
     val theme =
         datastoreStorage.getAppTheme().stateIn(
@@ -31,6 +31,6 @@ class PlitsoViewModel(
         networkMonitor.networkStatus.stateIn(
             viewModelScope,
             SharingStarted.WhileSubscribed(5000L),
-            true
+            true,
         )
 }
