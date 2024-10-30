@@ -41,16 +41,16 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.loki.plitso.R
 import com.loki.plitso.data.local.models.ChatHistory
-import com.loki.plitso.presentation.ai.AiViewModel
+import com.loki.plitso.presentation.ai.chat.ChatViewModel
 import kotlinx.coroutines.launch
 
 @Composable
 fun DrawerContent(
     modifier: Modifier = Modifier,
     drawerState: DrawerState,
-    aiViewModel: AiViewModel,
+    chatViewModel: ChatViewModel,
 ) {
-    val chatHistory by aiViewModel.chatHistory.collectAsStateWithLifecycle()
+    val chatHistory by chatViewModel.chatHistory.collectAsStateWithLifecycle()
     val coroutineScope = rememberCoroutineScope()
 
     Column(
@@ -58,7 +58,7 @@ fun DrawerContent(
     ) {
         NewChatButton(
             onClick = {
-                aiViewModel.onStartNewChat()
+                chatViewModel.onStartNewChat()
                 coroutineScope.launch {
                     drawerState.close()
                 }
@@ -75,10 +75,10 @@ fun DrawerContent(
             ChatHistoryList(
                 chats = chatHistory,
                 onChatSelected = { chat ->
-                    aiViewModel.setCurrentChat(chat.id)
+                    chatViewModel.setCurrentChat(chat.id)
                     coroutineScope.launch { drawerState.close() }
                 },
-                onDeleteChat = { aiViewModel.deleteChat(it.id) },
+                onDeleteChat = { chatViewModel.deleteChat(it.id) },
             )
         }
     }

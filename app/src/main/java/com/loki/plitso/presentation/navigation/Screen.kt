@@ -25,6 +25,10 @@ sealed class Screen(
 
     data object AIScreen : Screen("ai_screen")
 
+    data object ChatScreen : Screen("chat_screen")
+
+    data object GenerativeScreen : Screen("generative_screen")
+
     data object BookmarkScreen : Screen("bookmark_screen")
 
     data object LoginScreen : Screen("login_screen")

@@ -26,18 +26,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.loki.plitso.R
-import com.loki.plitso.presentation.ai.AiViewModel
+import com.loki.plitso.presentation.ai.generative.GenerativeViewModel
 import com.loki.plitso.presentation.components.TypeWriterTextEffect
 import com.loki.plitso.presentation.document.MealType
 
 @Composable
 fun ParametersContent(
     modifier: Modifier = Modifier,
-    aiViewModel: AiViewModel,
+    generativeViewModel: GenerativeViewModel,
     onSuggestClick: () -> Unit,
 ) {
-    val parameters by aiViewModel.parameters.collectAsStateWithLifecycle()
-    val uiState by aiViewModel.genState.collectAsStateWithLifecycle()
+    val parameters by generativeViewModel.parameters.collectAsStateWithLifecycle()
+    val uiState by generativeViewModel.genState.collectAsStateWithLifecycle()
 
     Column(
         modifier =
@@ -63,28 +63,28 @@ fun ParametersContent(
 
             MealTypeSection(
                 selectedType = parameters.mealType,
-                onChangeSelected = aiViewModel::onMealTypeChange,
+                onChangeSelected = generativeViewModel::onMealTypeChange,
             )
 
             CuisineSection(
-                countries = aiViewModel.aiData.countries.distinct(),
+                countries = generativeViewModel.aiData.countries.distinct(),
                 selectedCuisine = parameters.cuisine,
-                onChangeSelected = aiViewModel::onCuisineChange,
+                onChangeSelected = generativeViewModel::onCuisineChange,
             )
 
             MoodSection(
                 selectedMood = parameters.mood,
-                onChangeSelected = aiViewModel::onMoodChange,
+                onChangeSelected = generativeViewModel::onMoodChange,
             )
 
             DietarySection(
                 selectedDietary = parameters.dietary,
-                onChangeSelected = aiViewModel::onDietaryChange,
+                onChangeSelected = generativeViewModel::onDietaryChange,
             )
 
             QuickSection(
                 selectedQuick = parameters.isQuick,
-                onChangeSelected = aiViewModel::isQuickMealChange,
+                onChangeSelected = generativeViewModel::isQuickMealChange,
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -93,7 +93,7 @@ fun ParametersContent(
                 onClick = onSuggestClick,
                 modifier = Modifier.align(Alignment.End),
                 enabled =
-                    !uiState.isLoading || (
+                    !uiState.isLoading && (
                         parameters.mealType.isNotEmpty() &&
                             parameters.cuisine.isNotEmpty() && parameters.mood.isNotEmpty()
                     ),

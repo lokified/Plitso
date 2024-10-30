@@ -3,6 +3,7 @@ package com.loki.plitso.di
 import androidx.room.Room
 import com.loki.plitso.PlitsoViewModel
 import com.loki.plitso.data.local.PlitsoDatabase
+import com.loki.plitso.data.network.NetworkMonitor
 import com.loki.plitso.data.remote.mealdb.MealdbApi
 import com.loki.plitso.data.worker.SyncDataManager
 import com.loki.plitso.data.worker.SyncDataManagerImpl
@@ -38,5 +39,7 @@ val appModule =
 
         single<SyncDataManager> { SyncDataManagerImpl(get()) }
 
-        viewModel { PlitsoViewModel(get()) }
+        single { NetworkMonitor(get()) }
+
+        viewModel { PlitsoViewModel(get(), get()) }
     }

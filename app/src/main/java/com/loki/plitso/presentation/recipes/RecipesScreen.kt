@@ -132,7 +132,7 @@ private fun SharedTransitionScope.RecipeItem(
                             state = rememberSharedContentState(key = "image/${recipe.recipeId}"),
                             animatedVisibilityScope = animatedVisibilityScope,
                             boundsTransform = { _, _ ->
-                                tween(durationMillis = 200)
+                                tween(durationMillis = 100)
                             },
                         ),
                 loading = {
@@ -158,7 +158,7 @@ private fun SharedTransitionScope.RecipeItem(
                         ),
                         animatedVisibilityScope,
                         boundsTransform = { _, _ ->
-                            tween(durationMillis = 200)
+                            tween(durationMillis = 100)
                         },
                     ),
         )

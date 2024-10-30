@@ -3,6 +3,7 @@
     <string name="notification_permission_request">Notification Permission Request</string>
     <string name="permission_is_required_to_show_app_notifications">Permission is required to show app notifications</string>
     <string name="request">Request</string>
+    <string name="no_network_available">No network available!</string>
 
     <!--Account Screen-->
     <string name="account">Account</string>
@@ -78,5 +79,6 @@
     <!-- search screen -->
     <string name="try_search">Try search</string>
     <string name="search_placeholder">Search eg. ingredients, food</string>
+    <string name="ask_ai">Ask AI</string>
 
 </resources>

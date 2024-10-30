@@ -118,7 +118,7 @@ private fun SharedTransitionScope.TopSection(
                             state = rememberSharedContentState(key = "image/${recipe.recipeId}"),
                             animatedVisibilityScope = animatedVisibilityScope,
                             boundsTransform = { _, _ ->
-                                tween(durationMillis = 200)
+                                tween(durationMillis = 100)
                             },
                         ),
             )
@@ -208,7 +208,7 @@ private fun SharedTransitionScope.ContentSection(
                                 ),
                                 animatedVisibilityScope,
                                 boundsTransform = { _, _ ->
-                                    tween(durationMillis = 200)
+                                    tween(durationMillis = 100)
                                 },
                             ),
                 )

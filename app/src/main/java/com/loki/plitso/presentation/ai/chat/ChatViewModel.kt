@@ -1,4 +1,4 @@
-package com.loki.plitso.presentation.ai
+package com.loki.plitso.presentation.ai.chat
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,7 +9,8 @@ import com.loki.plitso.data.local.dao.AiAnswerDao
 import com.loki.plitso.data.local.dao.ChatHistoryDao
 import com.loki.plitso.data.local.models.AiAnswer
 import com.loki.plitso.data.local.models.ChatHistory
-import kotlinx.coroutines.Dispatchers
+import com.loki.plitso.presentation.ai.ChatUiState
+import com.loki.plitso.presentation.ai.PromptUtil
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -26,11 +27,10 @@ import java.util.Date
 import java.util.UUID
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class AiViewModel(
+class ChatViewModel(
     private val aiAnswerDao: AiAnswerDao,
     private val chatHistoryDao: ChatHistoryDao,
     private val generativeModel: GenerativeModel,
-    val aiData: AiData,
 ) : ViewModel() {
     val chatHistory =
         chatHistoryDao.getAllChats().stateIn(
@@ -39,17 +39,11 @@ class AiViewModel(
             emptyList(),
         )
 
-    private val _genState = MutableStateFlow(GenerativeState())
-    val genState = _genState.asStateFlow()
-
     private val _chatState = MutableStateFlow<ChatUiState>(ChatUiState.Success())
     val chatState = _chatState.asStateFlow()
 
     private val _newMessageId = MutableStateFlow<String?>(null)
     val newMessageId = _newMessageId.asStateFlow()
-
-    private val _parameters = MutableStateFlow(GenerativeParameters())
-    val parameters = _parameters.asStateFlow()
 
     private val currentChat = MutableStateFlow<ChatHistory?>(null)
 
@@ -80,10 +74,6 @@ class AiViewModel(
         }
     }
 
-    fun resetChat() {
-        currentChat.value = null
-    }
-
     fun resetMessageId() {
         _newMessageId.value = null
     }
@@ -111,9 +101,9 @@ class AiViewModel(
             val chat = currentChat.value ?: return@launch
 
             try {
-                _chatState.update {
-                    (it as? ChatUiState.Success)?.copy(isProcessing = true) ?: it
-                }
+                _chatState.value =
+                    (_chatState.value as? ChatUiState.Success)?.copy(isProcessing = true)
+                        ?: _chatState.value
 
                 // Save chat if new
                 if (chatHistoryDao.getChat(chat.id).firstOrNull() == null) {
@@ -149,19 +139,16 @@ class AiViewModel(
                 }
 
                 // Clear any existing error
-                _chatState.update {
-                    (it as? ChatUiState.Success)?.copy(
-                        isProcessing = false,
-                        error = null,
-                    ) ?: it
-                }
+                _chatState.value = (_chatState.value as? ChatUiState.Success)?.copy(
+                    isProcessing = false,
+                    error = null,
+                ) ?: _chatState.value
             } catch (e: Exception) {
-                _chatState.update {
-                    (it as? ChatUiState.Success)?.copy(
+                _chatState.value =
+                    (_chatState.value as? ChatUiState.Success)?.copy(
                         isProcessing = false,
                         error = e.localizedMessage ?: "Something went wrong!",
-                    ) ?: it
-                }
+                    ) ?: _chatState.value
             }
         }
     }
@@ -213,96 +200,6 @@ class AiViewModel(
             chatHistoryDao.deleteChat(id)
             if (currentChat.value?.id == id) {
                 currentChat.value = null
-            }
-        }
-    }
-
-    fun onMealTypeChange(newValue: String) {
-        _parameters.value =
-            _parameters.value.copy(
-                mealType = newValue,
-            )
-    }
-
-    fun onCuisineChange(newValue: String) {
-        _parameters.value =
-            _parameters.value.copy(
-                cuisine = newValue,
-            )
-    }
-
-    fun onMoodChange(newValue: String) {
-        _parameters.value =
-            _parameters.value.copy(
-                mood = newValue,
-            )
-    }
-
-    fun onDietaryChange(newValue: String) {
-        _parameters.value =
-            _parameters.value.copy(
-                dietary = newValue,
-            )
-    }
-
-    fun isQuickMealChange(newValue: Boolean) {
-        _parameters.value =
-            _parameters.value.copy(
-                isQuick = newValue,
-            )
-    }
-
-    fun generateSuggestions(onSuccess: () -> Unit) {
-        if (
-            _parameters.value.mealType.isEmpty() ||
-            _parameters.value.mood.isEmpty() ||
-            _parameters.value.cuisine.isEmpty()
-        ) {
-            _genState.value =
-                _genState.value.copy(
-                    errorMessage = "Please select required",
-                )
-            return
-        }
-
-        viewModelScope.launch(Dispatchers.IO) {
-            _genState.update {
-                it.copy(
-                    isLoading = true,
-                    errorMessage = "",
-                )
-            }
-
-            try {
-                val response =
-                    generativeModel.generateContent(
-                        content {
-                            text(
-                                PromptUtil.generativePrompt(
-                                    recipeData = aiData.recipes,
-                                    pastMeal = aiData.pastMeals,
-                                    parameters = _parameters.value,
-                                ),
-                            )
-                        },
-                    )
-
-                response.text?.let { modelResponse ->
-                    _genState.update {
-                        it.copy(
-                            isLoading = false,
-                            generativeAnswer = modelResponse,
-                        )
-                    }
-                }
-                onSuccess()
-            } catch (e: Exception) {
-                _genState.update {
-                    it.copy(
-                        isLoading = false,
-                        errorMessage = e.localizedMessage ?: "Something went wrong!",
-                    )
-                }
             }
         }
     }
