@@ -7,7 +7,7 @@ interface BookmarkApi {
 
     val bookmarks: Flow<List<String>>
 
-    suspend fun saveBookmark(recipeId: String): Boolean
+    suspend fun saveBookmark(recipeId: String)
 
     suspend fun deleteBookmark(recipeId: String)
 

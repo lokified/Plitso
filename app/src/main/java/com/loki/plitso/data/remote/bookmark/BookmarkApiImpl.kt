@@ -2,15 +2,17 @@ package com.loki.plitso.data.remote.bookmark
 
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-private const val BOOKMARKS_FIELD = "bookmarks"
+const val BOOKMARKS_FIELD = "bookmarks"
 
 class BookmarkApiImpl(userId: String): BookmarkApi {
 
@@ -34,13 +36,13 @@ class BookmarkApiImpl(userId: String): BookmarkApi {
         }
 
 
-    override suspend fun saveBookmark(recipeId: String): Boolean {
-        return suspendCoroutine {continuation ->
-            bookmarkRef.update(BOOKMARKS_FIELD, FieldValue.arrayUnion(recipeId))
+    override suspend fun saveBookmark(recipeId: String) {
+        return suspendCancellableCoroutine {continuation ->
+            bookmarkRef.set(mapOf(BOOKMARKS_FIELD to FieldValue.arrayUnion(recipeId)), SetOptions.merge())
                 .addOnSuccessListener {
-                    continuation.resume(true)
-                }.addOnFailureListener {
-                    continuation.resume(false)
+                    continuation.resume(Unit)
+                }.addOnFailureListener { exception ->
+                    continuation.resumeWithException(exception)
                 }
         }
     }
