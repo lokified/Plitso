@@ -2,9 +2,11 @@ package com.loki.plitso.data.remote.bookmark
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.firebase.Firebase
+import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.firestore
 import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.assertFalse
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -19,6 +21,7 @@ class BookmarkApiImplTest{
 
     private val user = "testUser"
     private val bookmarkApi = BookmarkApiImpl(user)
+
 
     @Test
     fun addBookmarkNoExistingDocument() = runBlocking{
@@ -83,6 +86,54 @@ class BookmarkApiImplTest{
         val bookmarks = bookmarkApi.bookmarks.first()
         assertEquals(1, bookmarks.size)
         assertEquals(1, bookmarks.count{it == expected})
+    }
+
+
+    @Test
+    fun deleteBookmarkFromNonExistingDocument() = runBlocking{
+        val recipeId = "recipe12"
+        val exception = runCatching { bookmarkApi.deleteBookmark(recipeId)}.exceptionOrNull()
+        assert(exception is FirebaseFirestoreException)
+    }
+
+    @Test
+    fun deleteBookmarkFromExistingDocumentWithNonExistingBookmarkField() = runBlocking{
+        suspendCancellableCoroutine { c ->
+            Firebase.firestore.document("users/$user")
+                .set(
+                    mapOf(
+                        "name" to "John Doe",
+                    )
+                )
+                .addOnCompleteListener {
+                    c.resume(Unit)
+                }
+        }
+        val recipeId = "recipe12"
+        bookmarkApi.deleteBookmark(recipeId)
+        val bookmarks = bookmarkApi.bookmarks.first()
+        assertEquals(0, bookmarks.size)
+    }
+
+    @Test
+    fun deleteBookmarkWithExistingField() = runBlocking{
+        suspendCancellableCoroutine { c ->
+            Firebase.firestore.document("users/$user")
+                .set(
+                    mapOf(
+                        "name" to "John Doe",
+                        BOOKMARKS_FIELD to listOf("recipe12", "rec2", "eiwe2")
+                    )
+                )
+                .addOnCompleteListener {
+                    c.resume(Unit)
+                }
+        }
+        val recipeId = "recipe12"
+        bookmarkApi.deleteBookmark(recipeId)
+        val bookmarks = bookmarkApi.bookmarks.first()
+        assertEquals(2, bookmarks.size)
+        assertFalse(bookmarks.contains(recipeId))
     }
 
     @After
