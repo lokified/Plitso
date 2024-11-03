@@ -11,6 +11,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.time.withTimeoutOrNull
+import kotlinx.coroutines.withTimeoutOrNull
 import org.junit.After
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -22,6 +24,59 @@ class BookmarkApiImplTest{
     private val user = "testUser"
     private val bookmarkApi = BookmarkApiImpl(user)
 
+    @Test
+    fun getBookmarkNoExistingDocument() = runBlocking{
+        val bookmarks = withTimeoutOrNull(5000){ bookmarkApi.bookmarks.first()}
+        assertEquals(null, bookmarks)
+    }
+
+    @Test
+    fun getBookmarkExistingDocumentNoBookmarkField() = runBlocking{
+        suspendCancellableCoroutine { c ->
+            Firebase.firestore.document("users/$user")
+                .set("name" to "John Doe")
+                .addOnCompleteListener {
+                    c.resume(Unit)
+                }
+        }
+        val bookmarks = bookmarkApi.bookmarks.first()
+        assertEquals(0, bookmarks.size)
+    }
+
+    @Test
+    fun getBookmarkExistingDocumentWithEmptyBookmarkField() = runBlocking{
+        suspendCancellableCoroutine { c ->
+            Firebase.firestore.document("users/$user")
+                .set(
+                    mapOf(
+                        "name" to "John Doe",
+                        BOOKMARKS_FIELD to emptyList<String>()
+                    )
+                )
+                .addOnCompleteListener {
+                    c.resume(Unit)
+                }
+        }
+        val bookmarks = bookmarkApi.bookmarks.first()
+        assertEquals(0, bookmarks.size)
+    }
+
+    @Test
+    fun getBookmarkExistingDocumentWithPrepopulatedBookmarkField() = runBlocking{
+        suspendCancellableCoroutine { c ->
+            Firebase.firestore.document("users/$user")
+                .set(
+                    mapOf(
+                        "name" to "John Doe",
+                        BOOKMARKS_FIELD to listOf("1", "2")
+                    )
+                ).addOnCompleteListener {
+                    c.resume(Unit)
+                }
+        }
+        val bookmarks = bookmarkApi.bookmarks.first()
+        assertEquals(2, bookmarks.size)
+    }
 
     @Test
     fun addBookmarkNoExistingDocument() = runBlocking{
