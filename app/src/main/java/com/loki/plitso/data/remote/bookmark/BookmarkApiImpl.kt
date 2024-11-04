@@ -62,8 +62,8 @@ class BookmarkApiImpl(userId: String): BookmarkApi {
         return suspendCoroutine { continuation ->
             bookmarkRef.get()
                 .addOnSuccessListener {document ->
-                    val bookmarks = document.get(BOOKMARKS_FIELD) as List<*>
-                    continuation.resume(bookmarks.contains(recipeId))
+                    val bookmarks = document.get(BOOKMARKS_FIELD) as List<*>?
+                    continuation.resume(bookmarks?.contains(recipeId) ?: false)
                 }.addOnFailureListener { _ ->
                     continuation.resume(false)
                 }
