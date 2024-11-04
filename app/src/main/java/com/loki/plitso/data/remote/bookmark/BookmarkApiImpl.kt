@@ -14,31 +14,33 @@ import kotlin.coroutines.suspendCoroutine
 
 const val BOOKMARKS_FIELD = "bookmarks"
 
-class BookmarkApiImpl(userId: String): BookmarkApi {
-
+class BookmarkApiImpl(userId: String) : BookmarkApi {
     private val bookmarkRef = Firebase.firestore.document("users/$userId")
 
     override val bookmarks: Flow<List<String>>
         get() {
             return callbackFlow {
-                val listenerRegistration = bookmarkRef.addSnapshotListener { snapshot, error ->
-                    if (error != null) {
-                        close(error)
-                        return@addSnapshotListener
+                val listenerRegistration =
+                    bookmarkRef.addSnapshotListener { snapshot, error ->
+                        if (error != null) {
+                            close(error)
+                            return@addSnapshotListener
+                        }
+                        if (snapshot != null && snapshot.exists()) {
+                            val recipeIds = snapshot.get(BOOKMARKS_FIELD) as? List<*>
+                            trySend(recipeIds?.map { it.toString() } ?: emptyList())
+                        }
                     }
-                    if (snapshot != null && snapshot.exists()) {
-                        val recipeIds = snapshot.get(BOOKMARKS_FIELD) as? List<String> ?: emptyList()
-                        trySend(recipeIds)
-                    }
-                }
                 awaitClose { listenerRegistration.remove() }
             }
         }
 
-
     override suspend fun saveBookmark(recipeId: String) {
-        return suspendCancellableCoroutine {continuation ->
-            bookmarkRef.set(mapOf(BOOKMARKS_FIELD to FieldValue.arrayUnion(recipeId)), SetOptions.merge())
+        return suspendCancellableCoroutine { continuation ->
+            bookmarkRef.set(
+                mapOf(BOOKMARKS_FIELD to FieldValue.arrayUnion(recipeId)),
+                SetOptions.merge(),
+            )
                 .addOnSuccessListener {
                     continuation.resume(Unit)
                 }.addOnFailureListener { exception ->
@@ -61,7 +63,7 @@ class BookmarkApiImpl(userId: String): BookmarkApi {
     override suspend fun isBookmarked(recipeId: String): Boolean {
         return suspendCoroutine { continuation ->
             bookmarkRef.get()
-                .addOnSuccessListener {document ->
+                .addOnSuccessListener { document ->
                     val bookmarks = document.get(BOOKMARKS_FIELD) as List<*>?
                     continuation.resume(bookmarks?.contains(recipeId) ?: false)
                 }.addOnFailureListener { _ ->
