@@ -191,6 +191,62 @@ class BookmarkApiImplTest{
         assertFalse(bookmarks.contains(recipeId))
     }
 
+    @Test
+    fun isBookmarkedNoExistingDocument() = runBlocking{
+        val recipeId = "recipe12"
+        val isBookmarked = withTimeoutOrNull(5000){ bookmarkApi.isBookmarked(recipeId)}
+        assertEquals(false, isBookmarked)
+    }
+
+    @Test
+    fun isBookmarkedExistingDocumentNoBookmarkField() = runBlocking{
+        val recipeId = "recipe12"
+        suspendCancellableCoroutine { c ->
+            Firebase.firestore.document("users/$user")
+                .set("name" to "John Doe")
+                .addOnCompleteListener {
+                    c.resume(Unit)
+                }
+        }
+        val bookmarks = bookmarkApi.bookmarks.first()
+        assertEquals(false, bookmarkApi.isBookmarked(recipeId = recipeId))
+    }
+
+    @Test
+    fun isBookmarkedExistingDocumentWithEmptyBookmarkField() = runBlocking{
+        val recipeId = "recipe12"
+        suspendCancellableCoroutine { c ->
+            Firebase.firestore.document("users/$user")
+                .set(
+                    mapOf(
+                        "name" to "John Doe",
+                        BOOKMARKS_FIELD to emptyList<String>()
+                    )
+                )
+                .addOnCompleteListener {
+                    c.resume(Unit)
+                }
+        }
+        assertEquals(false, bookmarkApi.isBookmarked(recipeId))
+    }
+
+    @Test
+    fun isBookmarkedExistingDocumentWithPrepopulatedBookmarkField() = runBlocking{
+        val recipeId = "recipe12"
+        suspendCancellableCoroutine { c ->
+            Firebase.firestore.document("users/$user")
+                .set(
+                    mapOf(
+                        "name" to "John Doe",
+                        BOOKMARKS_FIELD to listOf("1", "2", recipeId)
+                    )
+                ).addOnCompleteListener {
+                    c.resume(Unit)
+                }
+        }
+        assertEquals(true, bookmarkApi.isBookmarked(recipeId))
+    }
+
     @After
     fun cleanUp() = runBlocking{
         suspendCancellableCoroutine<Unit> { continuation ->
