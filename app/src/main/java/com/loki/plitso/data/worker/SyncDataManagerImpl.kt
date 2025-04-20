@@ -20,7 +20,7 @@ class SyncDataManagerImpl(
         WorkManager
             .getInstance(context)
             .getWorkInfosForUniqueWorkLiveData(SYNC_DATA_WORK_NAME)
-            .map(MutableList<WorkInfo>::anyRunning)
+            .map(List<WorkInfo>::anyRunning)
             .asFlow()
             .conflate()
 

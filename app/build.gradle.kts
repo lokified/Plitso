@@ -11,12 +11,12 @@ plugins {
 
 android {
     namespace = "com.loki.plitso"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.loki.plitso"
         minSdk = 23
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -82,12 +82,11 @@ dependencies {
     implementation(libs.bundles.worker)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.datastore)
-    implementation(libs.pager)
-    implementation(libs.palette)
-    implementation(libs.room.ktx)
+    implementation(libs.bundles.room)
     ksp(libs.room.compiler)
     implementation(libs.bundles.retrofit)
     implementation(libs.markdown.renderer)
     implementation(libs.generativeai)
+
     implementation(kotlin("reflect"))
 }
